@@ -18,10 +18,12 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
     query: { queryKey: getGetMarkersQueryKey() }
   });
 
-  const filteredMarkers = markers.filter(marker => {
-    if (activeFilter === "all") return true;
-    return marker.category === activeFilter;
-  });
+  const filteredMarkers = markers
+    .filter(marker => {
+      if (activeFilter === "all") return true;
+      return marker.category === activeFilter;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   const farmstands = (stats as any)?.farmstands ?? 0;
 
