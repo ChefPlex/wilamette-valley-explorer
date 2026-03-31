@@ -1,5 +1,5 @@
 import { useGetMarkerStats, useGetMarkers, getGetMarkersQueryKey, getGetMarkerStatsQueryKey } from "@workspace/api-client-react";
-import { Wine, Utensils, MapPin, Loader2, Leaf } from "lucide-react";
+import { Wine, Utensils, MapPin, Loader2, Leaf, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
@@ -148,8 +148,22 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
                     {marker.note}
                   </p>
                 )}
-                <div className="text-[10px] text-muted-foreground font-mono uppercase tracking-wider">
-                  Added {format(new Date(marker.createdAt), 'MMM d, yyyy')}
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-[10px] text-muted-foreground font-mono uppercase tracking-wider">
+                    Added {format(new Date(marker.createdAt), 'MMM d, yyyy')}
+                  </div>
+                  {marker.website && (
+                    <a
+                      href={marker.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-[10px] font-medium text-primary hover:underline shrink-0"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <ExternalLink className="w-2.5 h-2.5" />
+                      Website
+                    </a>
+                  )}
                 </div>
               </div>
             ))

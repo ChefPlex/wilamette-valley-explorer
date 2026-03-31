@@ -14,5 +14,6 @@ export interface Marker {
   category: MarkerCategory;
   lat: number;
   lng: number;
+  website?: string | null;
   createdAt: string;
 }

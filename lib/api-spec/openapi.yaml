@@ -342,11 +342,14 @@ components:
           type: string
         category:
           type: string
-          enum: [winery, restaurant]
+          enum: [winery, restaurant, farmstand]
         lat:
           type: number
         lng:
           type: number
+        website:
+          type: string
+          nullable: true
         createdAt:
           type: string
       required:
@@ -366,11 +369,14 @@ components:
           type: string
         category:
           type: string
-          enum: [winery, restaurant]
+          enum: [winery, restaurant, farmstand]
         lat:
           type: number
         lng:
           type: number
+        website:
+          type: string
+          nullable: true
       required:
         - name
         - note
@@ -387,6 +393,9 @@ components:
         category:
           type: string
           enum: [winery, restaurant, farmstand]
+        website:
+          type: string
+          nullable: true
     MarkerStats:
       type: object
       properties:

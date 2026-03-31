@@ -12,4 +12,5 @@ export type UpdateMarkerInputCategory =
 export const UpdateMarkerInputCategory = {
   winery: "winery",
   restaurant: "restaurant",
+  farmstand: "farmstand",
 } as const;

@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Trash2, MapPin, Wine, Utensils, Leaf } from "lucide-react";
+import { Loader2, Trash2, MapPin, Wine, Utensils, Leaf, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 
 // Fix Leaflet default icon issues
@@ -153,6 +153,18 @@ export function MapComponent({ activeFilter }: { activeFilter: string }) {
               <h3 className="font-serif text-lg font-bold text-foreground mb-1 leading-tight">{marker.name}</h3>
               {marker.note && (
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{marker.note}</p>
+              )}
+              {marker.website && (
+                <a
+                  href={marker.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-medium text-primary hover:underline mb-3"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  Visit website
+                </a>
               )}
               <div className="pt-3 mt-1 border-t border-border flex justify-end">
                 <Button 

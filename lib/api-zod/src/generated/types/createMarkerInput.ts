@@ -13,4 +13,5 @@ export interface CreateMarkerInput {
   category: CreateMarkerInputCategory;
   lat: number;
   lng: number;
+  website?: string | null;
 }

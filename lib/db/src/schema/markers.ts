@@ -9,6 +9,7 @@ export const markersTable = pgTable("markers", {
   category: text("category").notNull(),
   lat: real("lat").notNull(),
   lng: real("lng").notNull(),
+  website: text("website"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 

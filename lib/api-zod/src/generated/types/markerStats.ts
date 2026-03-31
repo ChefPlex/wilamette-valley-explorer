@@ -10,4 +10,5 @@ export interface MarkerStats {
   total: number;
   wineries: number;
   restaurants: number;
+  farmstands: number;
 }

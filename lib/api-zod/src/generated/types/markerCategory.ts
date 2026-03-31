@@ -12,4 +12,5 @@ export type MarkerCategory =
 export const MarkerCategory = {
   winery: "winery",
   restaurant: "restaurant",
+  farmstand: "farmstand",
 } as const;

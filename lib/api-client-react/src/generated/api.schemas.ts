@@ -48,6 +48,7 @@ export type MarkerCategory =
 export const MarkerCategory = {
   winery: "winery",
   restaurant: "restaurant",
+  farmstand: "farmstand",
 } as const;
 
 export interface Marker {
@@ -57,6 +58,7 @@ export interface Marker {
   category: MarkerCategory;
   lat: number;
   lng: number;
+  website?: string | null;
   createdAt: string;
 }
 
@@ -66,6 +68,7 @@ export type CreateMarkerInputCategory =
 export const CreateMarkerInputCategory = {
   winery: "winery",
   restaurant: "restaurant",
+  farmstand: "farmstand",
 } as const;
 
 export interface CreateMarkerInput {
@@ -74,6 +77,7 @@ export interface CreateMarkerInput {
   category: CreateMarkerInputCategory;
   lat: number;
   lng: number;
+  website?: string | null;
 }
 
 export type UpdateMarkerInputCategory =
@@ -82,16 +86,19 @@ export type UpdateMarkerInputCategory =
 export const UpdateMarkerInputCategory = {
   winery: "winery",
   restaurant: "restaurant",
+  farmstand: "farmstand",
 } as const;
 
 export interface UpdateMarkerInput {
   name?: string;
   note?: string;
   category?: UpdateMarkerInputCategory;
+  website?: string | null;
 }
 
 export interface MarkerStats {
   total: number;
   wineries: number;
   restaurants: number;
+  farmstands: number;
 }

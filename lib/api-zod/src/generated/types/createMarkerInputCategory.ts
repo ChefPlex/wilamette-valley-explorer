@@ -12,4 +12,5 @@ export type CreateMarkerInputCategory =
 export const CreateMarkerInputCategory = {
   winery: "winery",
   restaurant: "restaurant",
+  farmstand: "farmstand",
 } as const;
