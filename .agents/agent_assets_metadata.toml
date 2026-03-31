@@ -1,0 +1,14 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "ymqVxr4Jy3kefHwvKT0vG"
+uri = "file://artifacts/sonoma-mobile/assets/images/icon.png"
+type = "image"
+title = "generated_image"
+
+[[generated]]
+id = "0PVm5LehU1QypfSatHpT2"
+uri = "file://artifacts/sonoma-mobile/assets/images/splash-icon.png"
+type = "image"
+title = "generated_image"
