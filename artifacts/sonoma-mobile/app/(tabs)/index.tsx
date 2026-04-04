@@ -11,12 +11,14 @@ import {
   Alert,
   Platform,
   Linking,
+  useWindowDimensions,
 } from "react-native";
 import MapView, { Marker, LongPressEvent } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useColors } from "@/hooks/useColors";
+import { useIsTablet } from "@/hooks/useIsTablet";
 import {
   useGetMarkers,
   useCreateMarker,
@@ -60,12 +62,13 @@ function getCategoryIcon(category: Category): IoniconsName {
   return CATEGORY_ICON_MAP[category] ?? "location";
 }
 
+// ── Spot detail: phone modal ──────────────────────────────────────────────────
 interface SpotSheetProps {
   spot: MarkerType | null;
   onClose: () => void;
 }
 
-function SpotDetailSheet({ spot, onClose }: SpotSheetProps) {
+function SpotDetailModal({ spot, onClose }: SpotSheetProps) {
   const colors = useColors();
   if (!spot) return null;
 
@@ -113,6 +116,50 @@ function SpotDetailSheet({ spot, onClose }: SpotSheetProps) {
   );
 }
 
+// ── Spot detail: tablet inline panel ─────────────────────────────────────────
+function SpotDetailPanel({ spot, onClose }: SpotSheetProps) {
+  const colors = useColors();
+  if (!spot) return null;
+
+  const catColor = getCategoryColor(spot.category as Category, colors);
+  const catIcon = getCategoryIcon(spot.category as Category);
+  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : "Farm";
+
+  return (
+    <View style={[styles.tabletPanel, { backgroundColor: colors.card, borderLeftColor: colors.border }]}>
+      <View style={styles.sheetHeader}>
+        <View style={[styles.categoryBadge, { backgroundColor: catColor + "20" }]}>
+          <Ionicons name={catIcon} size={14} color={catColor} />
+          <Text style={[styles.categoryLabel, { color: catColor }]}>{catLabel}</Text>
+        </View>
+        <TouchableOpacity onPress={onClose} style={styles.closeBtn} testID="close-panel">
+          <Ionicons name="close" size={22} color={colors.mutedForeground} />
+        </TouchableOpacity>
+      </View>
+
+      <Text style={[styles.spotName, { color: colors.foreground }]}>{spot.name}</Text>
+
+      {spot.note ? (
+        <ScrollView style={styles.panelNoteScroll} showsVerticalScrollIndicator={false}>
+          <Text style={[styles.spotNote, { color: colors.mutedForeground }]}>{spot.note}</Text>
+        </ScrollView>
+      ) : null}
+
+      {spot.website ? (
+        <TouchableOpacity
+          style={[styles.websiteBtn, { borderColor: colors.primary }]}
+          onPress={() => Linking.openURL(spot.website!)}
+          testID="website-link"
+        >
+          <Ionicons name="globe-outline" size={16} color={colors.primary} />
+          <Text style={[styles.websiteBtnText, { color: colors.primary }]}>Visit Website</Text>
+        </TouchableOpacity>
+      ) : null}
+    </View>
+  );
+}
+
+// ── Add-spot sheet ────────────────────────────────────────────────────────────
 interface AddSpotSheetProps {
   coordinate: { latitude: number; longitude: number } | null;
   onClose: () => void;
@@ -122,6 +169,7 @@ interface AddSpotSheetProps {
 
 function AddSpotSheet({ coordinate, onClose, onSave, saving }: AddSpotSheetProps) {
   const colors = useColors();
+  const isTablet = useIsTablet();
   const [name, setName] = useState("");
   const [note, setNote] = useState("");
   const [category, setCategory] = useState<Category>("winery");
@@ -140,12 +188,13 @@ function AddSpotSheet({ coordinate, onClose, onSave, saving }: AddSpotSheetProps
     <Modal
       visible={!!coordinate}
       animationType="slide"
-      presentationStyle="pageSheet"
+      presentationStyle={isTablet ? "formSheet" : "pageSheet"}
       onRequestClose={onClose}
     >
       <ScrollView
         style={[styles.sheetContainer, { backgroundColor: colors.background }]}
         keyboardShouldPersistTaps="handled"
+        contentContainerStyle={isTablet ? styles.sheetContentTablet : undefined}
       >
         <View style={[styles.sheetHandle, { backgroundColor: colors.border }]} />
         <View style={styles.sheetHeader}>
@@ -236,14 +285,67 @@ function AddSpotSheet({ coordinate, onClose, onSave, saving }: AddSpotSheetProps
   );
 }
 
+// ── Filter bar ────────────────────────────────────────────────────────────────
 interface MapFilterBarProps {
   active: MapFilter;
   onSelect: (f: MapFilter) => void;
   counts: Record<MapFilter, number>;
   colors: ReturnType<typeof useColors>;
+  isTablet: boolean;
 }
 
-function MapFilterBar({ active, onSelect, counts, colors }: MapFilterBarProps) {
+function MapFilterBar({ active, onSelect, counts, colors, isTablet }: MapFilterBarProps) {
+  const pills = MAP_FILTERS.map((f) => {
+    const isActive = active === f.key;
+    const cnt = counts[f.key];
+    return (
+      <TouchableOpacity
+        key={f.key}
+        style={[
+          styles.filterPill,
+          {
+            backgroundColor: isActive ? colors.primary : colors.card,
+            borderColor: isActive ? colors.primary : colors.border,
+            shadowColor: "#000",
+            shadowOffset: { width: 0, height: 2 },
+            shadowOpacity: 0.12,
+            shadowRadius: 6,
+            elevation: 3,
+          },
+        ]}
+        onPress={() => {
+          Haptics.selectionAsync();
+          onSelect(f.key);
+        }}
+        testID={`map-filter-${f.key}`}
+      >
+        <Ionicons
+          name={f.icon}
+          size={13}
+          color={isActive ? colors.primaryForeground : colors.mutedForeground}
+        />
+        <Text style={[styles.filterPillText, { color: isActive ? colors.primaryForeground : colors.foreground }]}>
+          {f.label}
+        </Text>
+        {cnt > 0 && (
+          <View style={[styles.filterPillCount, { backgroundColor: isActive ? "rgba(255,255,255,0.25)" : colors.muted }]}>
+            <Text style={[styles.filterPillCountText, { color: isActive ? colors.primaryForeground : colors.mutedForeground }]}>
+              {cnt}
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
+    );
+  });
+
+  if (isTablet) {
+    return (
+      <View style={styles.filterBarTablet}>
+        {pills}
+      </View>
+    );
+  }
+
   return (
     <ScrollView
       horizontal
@@ -251,55 +353,17 @@ function MapFilterBar({ active, onSelect, counts, colors }: MapFilterBarProps) {
       contentContainerStyle={styles.filterBarContent}
       style={styles.filterBarScroll}
     >
-      {MAP_FILTERS.map((f) => {
-        const isActive = active === f.key;
-        const cnt = counts[f.key];
-        return (
-          <TouchableOpacity
-            key={f.key}
-            style={[
-              styles.filterPill,
-              {
-                backgroundColor: isActive ? colors.primary : colors.card,
-                borderColor: isActive ? colors.primary : colors.border,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.12,
-                shadowRadius: 6,
-                elevation: 3,
-              },
-            ]}
-            onPress={() => {
-              Haptics.selectionAsync();
-              onSelect(f.key);
-            }}
-            testID={`map-filter-${f.key}`}
-          >
-            <Ionicons
-              name={f.icon}
-              size={13}
-              color={isActive ? colors.primaryForeground : colors.mutedForeground}
-            />
-            <Text style={[styles.filterPillText, { color: isActive ? colors.primaryForeground : colors.foreground }]}>
-              {f.label}
-            </Text>
-            {cnt > 0 && (
-              <View style={[styles.filterPillCount, { backgroundColor: isActive ? "rgba(255,255,255,0.25)" : colors.muted }]}>
-                <Text style={[styles.filterPillCountText, { color: isActive ? colors.primaryForeground : colors.mutedForeground }]}>
-                  {cnt}
-                </Text>
-              </View>
-            )}
-          </TouchableOpacity>
-        );
-      })}
+      {pills}
     </ScrollView>
   );
 }
 
+// ── Main screen ───────────────────────────────────────────────────────────────
 export default function MapScreen() {
   const insets = useSafeAreaInsets();
   const colors = useColors();
+  const isTablet = useIsTablet();
+  const { width } = useWindowDimensions();
   const queryClient = useQueryClient();
 
   const { data: markers = [], isLoading } = useGetMarkers();
@@ -361,6 +425,9 @@ export default function MapScreen() {
 
   const topInset = Platform.OS === "web" ? 67 : insets.top;
   const bottomInset = Platform.OS === "web" ? 84 : insets.bottom;
+
+  // Tablet panel width
+  const PANEL_WIDTH = Math.min(360, width * 0.35);
 
   if (Platform.OS === "web") {
     return (
@@ -428,6 +495,7 @@ export default function MapScreen() {
 
   return (
     <View style={styles.container} testID="map-screen">
+      {/* Map fills the full screen */}
       <MapView
         style={StyleSheet.absoluteFill}
         initialRegion={{
@@ -473,6 +541,7 @@ export default function MapScreen() {
         </View>
       )}
 
+      {/* Header pill — left on phone, centered-left on tablet */}
       <View style={[styles.headerPill, { top: topInset + 8, backgroundColor: colors.card }]}>
         <Ionicons name="map" size={16} color={colors.primary} />
         <Text style={[styles.headerPillText, { color: colors.foreground }]}>Sonoma</Text>
@@ -483,26 +552,44 @@ export default function MapScreen() {
         </View>
       </View>
 
-      <View style={[styles.filterBarWrapper, { top: topInset + 56 }]}>
+      {/* Filter bar */}
+      <View style={[
+        styles.filterBarWrapper,
+        { top: topInset + 56 },
+        isTablet && styles.filterBarWrapperTablet,
+      ]}>
         <MapFilterBar
           active={mapFilter}
           onSelect={setMapFilter}
           counts={counts}
           colors={colors}
+          isTablet={isTablet}
         />
       </View>
 
-      <View style={[styles.hintBanner, { bottom: bottomInset + 8 }]}>
-        <View style={[styles.hintPill, { backgroundColor: colors.card + "E8" }]}>
-          <Ionicons name="hand-right-outline" size={13} color={colors.mutedForeground} />
-          <Text style={[styles.hintText, { color: colors.mutedForeground }]}>Long press to add a spot</Text>
+      {/* Hint — only on phone (tablet users are more exploratory) */}
+      {!isTablet && (
+        <View style={[styles.hintBanner, { bottom: bottomInset + 8 }]}>
+          <View style={[styles.hintPill, { backgroundColor: colors.card + "E8" }]}>
+            <Ionicons name="hand-right-outline" size={13} color={colors.mutedForeground} />
+            <Text style={[styles.hintText, { color: colors.mutedForeground }]}>Long press to add a spot</Text>
+          </View>
         </View>
-      </View>
+      )}
 
-      <SpotDetailSheet
-        spot={selectedSpot}
-        onClose={() => setSelectedSpot(null)}
-      />
+      {/* Spot detail: inline panel on tablet, modal on phone */}
+      {isTablet ? (
+        selectedSpot ? (
+          <View style={[styles.tabletPanelWrapper, { width: PANEL_WIDTH, top: topInset, bottom: bottomInset }]}>
+            <SpotDetailPanel spot={selectedSpot} onClose={() => setSelectedSpot(null)} />
+          </View>
+        ) : null
+      ) : (
+        <SpotDetailModal
+          spot={selectedSpot}
+          onClose={() => setSelectedSpot(null)}
+        />
+      )}
 
       <AddSpotSheet
         coordinate={addCoord}
@@ -518,6 +605,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  // ── Web fallback ────────────────────────────────────────────────────────────
   webHeader: {
     paddingHorizontal: 16,
     paddingBottom: 14,
@@ -562,6 +650,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     marginTop: 4,
   },
+  // ── Loading ─────────────────────────────────────────────────────────────────
   loadingOverlay: {
     position: "absolute",
     left: 0,
@@ -586,6 +675,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontFamily: "Inter_400Regular",
   },
+  // ── Header pill ──────────────────────────────────────────────────────────────
   headerPill: {
     position: "absolute",
     left: 16,
@@ -618,11 +708,15 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Inter_700Bold",
   },
+  // ── Filter bar ──────────────────────────────────────────────────────────────
   filterBarWrapper: {
     position: "absolute",
     left: 0,
     right: 0,
     zIndex: 10,
+  },
+  filterBarWrapperTablet: {
+    alignItems: "center",
   },
   filterBarScroll: {
     flexGrow: 0,
@@ -632,12 +726,18 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingVertical: 4,
   },
+  filterBarTablet: {
+    flexDirection: "row",
+    gap: 10,
+    paddingVertical: 4,
+    paddingHorizontal: 20,
+  },
   filterPill: {
     flexDirection: "row",
     alignItems: "center",
     gap: 5,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
     borderRadius: 100,
     borderWidth: 1.5,
   },
@@ -657,6 +757,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Inter_700Bold",
   },
+  // ── Hint ────────────────────────────────────────────────────────────────────
   hintBanner: {
     position: "absolute",
     left: 0,
@@ -676,6 +777,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: "Inter_400Regular",
   },
+  // ── Map markers ──────────────────────────────────────────────────────────────
   markerContainer: {
     alignItems: "center",
   },
@@ -700,26 +802,32 @@ const styles = StyleSheet.create({
     borderLeftColor: "transparent",
     borderRightColor: "transparent",
   },
+  // ── Spot detail sheet (phone modal) ─────────────────────────────────────────
   sheetContainer: {
     flex: 1,
-    paddingHorizontal: 20,
-    paddingTop: 12,
+    padding: 20,
+  },
+  sheetContentTablet: {
+    maxWidth: 560,
+    alignSelf: "center",
+    width: "100%",
+    paddingHorizontal: 32,
   },
   sheetHandle: {
     width: 36,
     height: 4,
     borderRadius: 2,
     alignSelf: "center",
-    marginBottom: 16,
+    marginBottom: 20,
   },
   sheetHeader: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   sheetTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontFamily: "Inter_700Bold",
   },
   closeBtn: {
@@ -744,15 +852,15 @@ const styles = StyleSheet.create({
     letterSpacing: 0.5,
   },
   spotName: {
-    fontSize: 26,
+    fontSize: 22,
     fontFamily: "Inter_700Bold",
-    marginBottom: 12,
-    lineHeight: 32,
+    marginBottom: 10,
+    lineHeight: 28,
   },
   spotNote: {
     fontSize: 15,
     fontFamily: "Inter_400Regular",
-    lineHeight: 22,
+    lineHeight: 23,
     marginBottom: 20,
   },
   websiteBtn: {
@@ -760,61 +868,80 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 8,
     paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 10,
+    paddingHorizontal: 18,
+    borderRadius: 12,
     borderWidth: 1.5,
-    marginBottom: 20,
     alignSelf: "flex-start",
   },
   websiteBtnText: {
     fontSize: 14,
     fontFamily: "Inter_600SemiBold",
   },
+  // ── Add spot sheet ───────────────────────────────────────────────────────────
   fieldLabel: {
-    fontSize: 12,
+    fontSize: 13,
     fontFamily: "Inter_600SemiBold",
-    textTransform: "uppercase",
-    letterSpacing: 0.8,
     marginBottom: 6,
     marginTop: 16,
   },
   textInput: {
     borderWidth: 1.5,
-    borderRadius: 10,
+    borderRadius: 12,
     paddingHorizontal: 14,
     paddingVertical: 12,
     fontSize: 15,
     fontFamily: "Inter_400Regular",
   },
   textArea: {
-    minHeight: 90,
+    height: 100,
   },
   categoryRow: {
     flexDirection: "row",
-    gap: 8,
+    gap: 10,
+    flexWrap: "wrap",
     marginTop: 4,
   },
   categoryChip: {
-    flex: 1,
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
-    gap: 5,
+    gap: 6,
+    paddingHorizontal: 14,
     paddingVertical: 10,
-    borderRadius: 10,
+    borderRadius: 12,
     borderWidth: 1.5,
   },
   categoryChipText: {
-    fontSize: 11,
+    fontSize: 14,
     fontFamily: "Inter_600SemiBold",
   },
   saveBtn: {
-    marginTop: 24,
-    paddingVertical: 15,
-    borderRadius: 12,
+    marginTop: 28,
+    paddingVertical: 16,
+    borderRadius: 14,
     alignItems: "center",
   },
   saveBtnText: {
     fontSize: 16,
     fontFamily: "Inter_700Bold",
+  },
+  // ── Tablet inline panel ──────────────────────────────────────────────────────
+  tabletPanelWrapper: {
+    position: "absolute",
+    right: 0,
+    zIndex: 20,
+  },
+  tabletPanel: {
+    flex: 1,
+    padding: 24,
+    borderLeftWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: { width: -4, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  panelNoteScroll: {
+    flex: 1,
+    marginBottom: 16,
   },
 });

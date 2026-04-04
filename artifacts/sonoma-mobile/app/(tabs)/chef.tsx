@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
+  useWindowDimensions,
 } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,6 +16,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { fetch } from "expo/fetch";
 import { useColors } from "@/hooks/useColors";
+import { useIsTablet } from "@/hooks/useIsTablet";
 import { getApiUrl } from "@/lib/api";
 
 interface Message {
@@ -105,7 +107,7 @@ function TypingIndicator() {
   );
 }
 
-function MessageBubble({ msg }: { msg: Message }) {
+function MessageBubble({ msg, isTablet }: { msg: Message; isTablet: boolean }) {
   const colors = useColors();
   const isUser = msg.role === "user";
   return (
@@ -121,12 +123,14 @@ function MessageBubble({ msg }: { msg: Message }) {
           isUser
             ? [styles.userBubble, { backgroundColor: colors.primary }]
             : [styles.assistantBubble, { backgroundColor: colors.card, borderColor: colors.border }],
+          isTablet && styles.bubbleTablet,
         ]}
       >
         <Text
           style={[
             styles.bubbleText,
             { color: isUser ? colors.primaryForeground : colors.foreground },
+            isTablet && styles.bubbleTextTablet,
           ]}
         >
           {msg.content}
@@ -139,6 +143,9 @@ function MessageBubble({ msg }: { msg: Message }) {
 export default function ChefScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const isTablet = useIsTablet();
+  const { width } = useWindowDimensions();
+
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
@@ -220,6 +227,9 @@ export default function ChefScreen() {
   const topInset = Platform.OS === "web" ? 67 : insets.top;
   const bottomInset = Platform.OS === "web" ? 34 : insets.bottom;
 
+  // On tablet, constrain the chat content width
+  const CHAT_MAX_WIDTH = isTablet ? Math.min(720, width - 64) : undefined;
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: colors.background }]}
@@ -227,6 +237,7 @@ export default function ChefScreen() {
       keyboardVerticalOffset={0}
       testID="chef-screen"
     >
+      {/* Header */}
       <View
         style={[
           styles.header,
@@ -237,7 +248,7 @@ export default function ChefScreen() {
           },
         ]}
       >
-        <View style={styles.headerContent}>
+        <View style={[styles.headerContent, isTablet && { maxWidth: CHAT_MAX_WIDTH, alignSelf: "center", width: "100%" }]}>
           <View style={[styles.chefAvatar, { backgroundColor: colors.primary }]}>
             <Ionicons name="restaurant" size={18} color={colors.primaryForeground} />
           </View>
@@ -255,14 +266,16 @@ export default function ChefScreen() {
         </View>
       </View>
 
+      {/* Message list */}
       <FlatList
         data={messages}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <MessageBubble msg={item} />}
+        renderItem={({ item }) => <MessageBubble msg={item} isTablet={isTablet} />}
         inverted={messages.length > 0}
         contentContainerStyle={[
           styles.messageList,
           { paddingBottom: 12 },
+          isTablet && { maxWidth: CHAT_MAX_WIDTH, alignSelf: "center", width: "100%" },
         ]}
         ListHeaderComponent={showTyping ? <TypingIndicator /> : null}
         keyboardDismissMode="interactive"
@@ -271,7 +284,7 @@ export default function ChefScreen() {
         scrollEnabled={messages.length > 0}
         ListFooterComponent={
           messages.length === 0 ? (
-            <View style={styles.emptyState}>
+            <View style={[styles.emptyState, isTablet && styles.emptyStateTablet]}>
               <View style={[styles.emptyIcon, { backgroundColor: colors.wineRedLight }]}>
                 <Ionicons name="restaurant" size={28} color={colors.primary} />
               </View>
@@ -281,11 +294,16 @@ export default function ChefScreen() {
               <Text style={[styles.emptySubtitle, { color: colors.mutedForeground }]}>
                 The land. The labor. The flavor.
               </Text>
-              <View style={styles.promptsGrid}>
+              {/* 2-column grid on tablet, 1-column on phone */}
+              <View style={[styles.promptsGrid, isTablet && styles.promptsGridTablet]}>
                 {PROMPTS.map((p) => (
                   <TouchableOpacity
                     key={p}
-                    style={[styles.promptChip, { backgroundColor: colors.card, borderColor: colors.border }]}
+                    style={[
+                      styles.promptChip,
+                      { backgroundColor: colors.card, borderColor: colors.border },
+                      isTablet && styles.promptChipTablet,
+                    ]}
                     onPress={() => handleSend(p)}
                     testID={`prompt-${p.substring(0, 20)}`}
                   >
@@ -298,6 +316,7 @@ export default function ChefScreen() {
         }
       />
 
+      {/* Input bar */}
       <View
         style={[
           styles.inputContainer,
@@ -308,40 +327,45 @@ export default function ChefScreen() {
           },
         ]}
       >
-        <TextInput
-          ref={inputRef}
-          style={[styles.input, { backgroundColor: colors.background, color: colors.foreground, borderColor: colors.border }]}
-          placeholder="Ask about wineries, farms, pairings…"
-          placeholderTextColor={colors.mutedForeground}
-          value={input}
-          onChangeText={setInput}
-          multiline
-          blurOnSubmit={false}
-          onSubmitEditing={() => handleSend(input)}
-          editable={!isStreaming}
-          testID="chef-input"
-        />
-        <TouchableOpacity
-          style={[
-            styles.sendBtn,
-            {
-              backgroundColor: colors.primary,
-              opacity: !input.trim() || isStreaming ? 0.4 : 1,
-            },
-          ]}
-          onPress={() => {
-            handleSend(input);
-            inputRef.current?.focus();
-          }}
-          disabled={!input.trim() || isStreaming}
-          testID="send-btn"
-        >
-          {isStreaming ? (
-            <ActivityIndicator size="small" color={colors.primaryForeground} />
-          ) : (
-            <Ionicons name="arrow-up" size={20} color={colors.primaryForeground} />
-          )}
-        </TouchableOpacity>
+        <View style={[
+          styles.inputInner,
+          isTablet && { maxWidth: CHAT_MAX_WIDTH, alignSelf: "center", width: "100%" },
+        ]}>
+          <TextInput
+            ref={inputRef}
+            style={[styles.input, { backgroundColor: colors.background, color: colors.foreground, borderColor: colors.border }]}
+            placeholder="Ask about wineries, farms, pairings…"
+            placeholderTextColor={colors.mutedForeground}
+            value={input}
+            onChangeText={setInput}
+            multiline
+            blurOnSubmit={false}
+            onSubmitEditing={() => handleSend(input)}
+            editable={!isStreaming}
+            testID="chef-input"
+          />
+          <TouchableOpacity
+            style={[
+              styles.sendBtn,
+              {
+                backgroundColor: colors.primary,
+                opacity: !input.trim() || isStreaming ? 0.4 : 1,
+              },
+            ]}
+            onPress={() => {
+              handleSend(input);
+              inputRef.current?.focus();
+            }}
+            disabled={!input.trim() || isStreaming}
+            testID="send-btn"
+          >
+            {isStreaming ? (
+              <ActivityIndicator size="small" color={colors.primaryForeground} />
+            ) : (
+              <Ionicons name="arrow-up" size={20} color={colors.primaryForeground} />
+            )}
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -411,10 +435,13 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   bubble: {
-    maxWidth: "80%",
+    maxWidth: "78%",
     paddingHorizontal: 14,
     paddingVertical: 10,
     borderRadius: 18,
+  },
+  bubbleTablet: {
+    maxWidth: "60%",
   },
   userBubble: {
     borderBottomRightRadius: 4,
@@ -427,6 +454,10 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontFamily: "Inter_400Regular",
     lineHeight: 22,
+  },
+  bubbleTextTablet: {
+    fontSize: 16,
+    lineHeight: 24,
   },
   typingDots: {
     flexDirection: "row",
@@ -452,6 +483,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     gap: 10,
   },
+  emptyStateTablet: {
+    paddingVertical: 60,
+    paddingHorizontal: 40,
+  },
   emptyIcon: {
     width: 64,
     height: 64,
@@ -473,11 +508,20 @@ const styles = StyleSheet.create({
     width: "100%",
     gap: 8,
   },
+  promptsGridTablet: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 12,
+  },
   promptChip: {
     paddingHorizontal: 14,
     paddingVertical: 12,
     borderRadius: 12,
     borderWidth: 1.5,
+  },
+  promptChipTablet: {
+    flex: 1,
+    minWidth: "45%",
   },
   promptText: {
     fontSize: 14,
@@ -485,12 +529,14 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   inputContainer: {
+    borderTopWidth: 1,
+    paddingHorizontal: 16,
+    paddingTop: 12,
+  },
+  inputInner: {
     flexDirection: "row",
     alignItems: "flex-end",
     gap: 10,
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    borderTopWidth: 1,
   },
   input: {
     flex: 1,

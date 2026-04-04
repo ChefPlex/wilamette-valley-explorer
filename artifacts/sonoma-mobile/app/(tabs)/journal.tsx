@@ -7,10 +7,13 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   Platform,
+  ScrollView,
+  Linking,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useColors } from "@/hooks/useColors";
+import { useIsTablet } from "@/hooks/useIsTablet";
 import { useGetMarkers, useGetMarkerStats } from "@workspace/api-client-react";
 import type { Marker } from "@workspace/api-client-react";
 
@@ -72,7 +75,12 @@ function getCategoryIcon(category: string): IoniconsName {
   return CATEGORY_ICON_MAP[category] ?? "location";
 }
 
-function SpotRow({ item }: { item: Marker }) {
+interface SpotRowProps {
+  item: Marker;
+  isTablet?: boolean;
+}
+
+function SpotRow({ item, isTablet }: SpotRowProps) {
   const colors = useColors();
   const catColor = getCategoryColor(item.category, colors);
   const catBg = getCategoryBg(item.category, colors);
@@ -80,18 +88,34 @@ function SpotRow({ item }: { item: Marker }) {
   const catIcon = getCategoryIcon(item.category);
 
   return (
-    <View style={[styles.spotRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
-      <View style={[styles.spotIcon, { backgroundColor: catBg }]}>
-        <Ionicons name={catIcon} size={18} color={catColor} />
+    <View style={[
+      styles.spotRow,
+      { backgroundColor: colors.card, borderColor: colors.border },
+      isTablet && styles.spotRowTablet,
+    ]}>
+      <View style={[styles.spotIcon, { backgroundColor: catBg }, isTablet && styles.spotIconTablet]}>
+        <Ionicons name={catIcon} size={isTablet ? 22 : 18} color={catColor} />
       </View>
       <View style={styles.spotInfo}>
-        <Text style={[styles.spotName, { color: colors.foreground }]} numberOfLines={1}>
+        <Text style={[styles.spotName, { color: colors.foreground }, isTablet && styles.spotNameTablet]} numberOfLines={1}>
           {item.name}
         </Text>
         {item.note ? (
-          <Text style={[styles.spotNote, { color: colors.mutedForeground }]} numberOfLines={2}>
+          <Text
+            style={[styles.spotNote, { color: colors.mutedForeground }, isTablet && styles.spotNoteTablet]}
+            numberOfLines={isTablet ? 4 : 2}
+          >
             {item.note}
           </Text>
+        ) : null}
+        {isTablet && item.website ? (
+          <TouchableOpacity
+            style={styles.inlineWebsiteLink}
+            onPress={() => Linking.openURL(item.website!)}
+          >
+            <Ionicons name="globe-outline" size={13} color={catColor} />
+            <Text style={[styles.inlineWebsiteLinkText, { color: catColor }]}>Visit Website</Text>
+          </TouchableOpacity>
         ) : null}
       </View>
       <View style={[styles.catBadge, { backgroundColor: catBg }]}>
@@ -112,9 +136,97 @@ function SectionHeader({ title, count, colors }: { title: string; count: number;
   );
 }
 
+// ── Sidebar (tablet only) ────────────────────────────────────────────────────
+interface SidebarProps {
+  activeFilter: FilterType;
+  onFilter: (f: FilterType) => void;
+  getCount: (f: FilterType) => number;
+  sections: { key: string; data: Marker[] }[];
+  regionCounts: Record<RegionKey, number>;
+  onJumpToRegion: (r: RegionKey) => void;
+  colors: ReturnType<typeof useColors>;
+  topInset: number;
+}
+
+function TabletSidebar({
+  activeFilter, onFilter, getCount, sections, regionCounts, onJumpToRegion, colors, topInset,
+}: SidebarProps) {
+  return (
+    <View style={[styles.sidebar, { paddingTop: topInset + 12, backgroundColor: colors.card, borderRightColor: colors.border }]}>
+      <Text style={[styles.headerTitle, { color: colors.foreground }]}>Journal</Text>
+      <Text style={[styles.headerSubtitle, { color: colors.mutedForeground }]}>
+        The places worth knowing
+      </Text>
+
+      <Text style={[styles.sidebarSectionLabel, { color: colors.mutedForeground }]}>CATEGORY</Text>
+      <View style={styles.sidebarFilters}>
+        {FILTERS.map((f) => {
+          const active = f.key === activeFilter;
+          const cnt = getCount(f.key);
+          return (
+            <TouchableOpacity
+              key={f.key}
+              style={[
+                styles.sidebarFilterBtn,
+                {
+                  backgroundColor: active ? colors.primary + "18" : "transparent",
+                  borderColor: active ? colors.primary : "transparent",
+                },
+              ]}
+              onPress={() => onFilter(f.key)}
+              testID={`filter-${f.key}`}
+            >
+              <Ionicons
+                name={f.icon}
+                size={16}
+                color={active ? colors.primary : colors.mutedForeground}
+              />
+              <Text style={[styles.sidebarFilterLabel, { color: active ? colors.primary : colors.foreground }]}>
+                {f.label}
+              </Text>
+              <View style={[styles.filterCount, { backgroundColor: active ? colors.primary + "22" : colors.muted }]}>
+                <Text style={[styles.filterCountText, { color: active ? colors.primary : colors.mutedForeground }]}>
+                  {cnt}
+                </Text>
+              </View>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
+      {sections.length > 0 && (
+        <>
+          <Text style={[styles.sidebarSectionLabel, { color: colors.mutedForeground, marginTop: 20 }]}>JUMP TO</Text>
+          <View style={styles.sidebarRegions}>
+            {REGIONS.map((r) => {
+              const cnt = regionCounts[r.key];
+              if (cnt === 0) return null;
+              return (
+                <TouchableOpacity
+                  key={r.key}
+                  style={[styles.sidebarRegionBtn, { borderColor: colors.border }]}
+                  onPress={() => onJumpToRegion(r.key)}
+                  testID={`region-jump-${r.key}`}
+                >
+                  <Ionicons name="location-outline" size={14} color={colors.mutedForeground} />
+                  <Text style={[styles.sidebarRegionLabel, { color: colors.foreground }]}>{r.fullLabel}</Text>
+                  <View style={[styles.regionBtnCount, { backgroundColor: colors.muted }]}>
+                    <Text style={[styles.regionBtnCountText, { color: colors.mutedForeground }]}>{cnt}</Text>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        </>
+      )}
+    </View>
+  );
+}
+
 export default function JournalScreen() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
+  const isTablet = useIsTablet();
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
   const listRef = useRef<SectionList<Marker>>(null);
 
@@ -173,6 +285,69 @@ export default function JournalScreen() {
     return counts;
   }, [sections]);
 
+  const listContent = isLoading ? (
+    <View style={styles.center}>
+      <ActivityIndicator color={colors.primary} size="large" />
+      <Text style={[styles.loadingText, { color: colors.mutedForeground }]}>Loading journal…</Text>
+    </View>
+  ) : totalVisible === 0 ? (
+    <View style={styles.center}>
+      <Ionicons name="map-outline" size={40} color={colors.border} />
+      <Text style={[styles.emptyTitle, { color: colors.foreground }]}>No spots yet</Text>
+      <Text style={[styles.emptySubtitle, { color: colors.mutedForeground }]}>
+        Long press the map to add your first spot
+      </Text>
+    </View>
+  ) : (
+    <SectionList
+      ref={listRef}
+      sections={sections}
+      keyExtractor={(item) => item.id.toString()}
+      renderItem={({ item }) => <SpotRow item={item} isTablet={isTablet} />}
+      renderSectionHeader={({ section }) => (
+        <SectionHeader
+          title={section.title}
+          count={section.data.length}
+          colors={colors}
+        />
+      )}
+      contentContainerStyle={[
+        styles.listContent,
+        { paddingBottom: bottomInset + 16 },
+        isTablet && styles.listContentTablet,
+      ]}
+      stickySectionHeadersEnabled
+      showsVerticalScrollIndicator={false}
+      testID="journal-list"
+      ItemSeparatorComponent={() => <View style={{ height: isTablet ? 12 : 10 }} />}
+      SectionSeparatorComponent={() => <View style={{ height: 4 }} />}
+    />
+  );
+
+  // ── Tablet: two-column layout ──────────────────────────────────────────────
+  if (isTablet) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background }]} testID="journal-screen">
+        <View style={styles.tabletLayout}>
+          <TabletSidebar
+            activeFilter={activeFilter}
+            onFilter={setActiveFilter}
+            getCount={getCount}
+            sections={sections}
+            regionCounts={regionCounts}
+            onJumpToRegion={jumpToRegion}
+            colors={colors}
+            topInset={topInset}
+          />
+          <View style={styles.tabletContent}>
+            {listContent}
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  // ── Phone: single-column layout ───────────────────────────────────────────
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]} testID="journal-screen">
       <View style={[styles.header, { paddingTop: topInset + 12, backgroundColor: colors.card, borderBottomColor: colors.border }]}>
@@ -181,7 +356,6 @@ export default function JournalScreen() {
           The places worth knowing
         </Text>
 
-        {/* Category filter chips */}
         <View style={styles.filtersRow}>
           {FILTERS.map((f) => {
             const active = f.key === activeFilter;
@@ -219,7 +393,6 @@ export default function JournalScreen() {
           })}
         </View>
 
-        {/* Region jump bar */}
         {!isLoading && totalVisible > 0 && (
           <View style={[styles.regionBar, { borderTopColor: colors.border }]}>
             {REGIONS.map((r) => {
@@ -243,43 +416,7 @@ export default function JournalScreen() {
         )}
       </View>
 
-      {isLoading ? (
-        <View style={styles.center}>
-          <ActivityIndicator color={colors.primary} size="large" />
-          <Text style={[styles.loadingText, { color: colors.mutedForeground }]}>Loading journal…</Text>
-        </View>
-      ) : totalVisible === 0 ? (
-        <View style={styles.center}>
-          <Ionicons name="map-outline" size={40} color={colors.border} />
-          <Text style={[styles.emptyTitle, { color: colors.foreground }]}>No spots yet</Text>
-          <Text style={[styles.emptySubtitle, { color: colors.mutedForeground }]}>
-            Long press the map to add your first spot
-          </Text>
-        </View>
-      ) : (
-        <SectionList
-          ref={listRef}
-          sections={sections}
-          keyExtractor={(item) => item.id.toString()}
-          renderItem={({ item }) => <SpotRow item={item} />}
-          renderSectionHeader={({ section }) => (
-            <SectionHeader
-              title={section.title}
-              count={section.data.length}
-              colors={colors}
-            />
-          )}
-          contentContainerStyle={[
-            styles.listContent,
-            { paddingBottom: bottomInset + 16 },
-          ]}
-          stickySectionHeadersEnabled
-          showsVerticalScrollIndicator={false}
-          testID="journal-list"
-          ItemSeparatorComponent={() => <View style={{ height: 10 }} />}
-          SectionSeparatorComponent={() => <View style={{ height: 4 }} />}
-        />
-      )}
+      {listContent}
     </View>
   );
 }
@@ -288,6 +425,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
+  // ── Phone header ─────────────────────────────────────────────────────────────
   header: {
     paddingHorizontal: 16,
     paddingBottom: 0,
@@ -346,7 +484,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 5,
     paddingVertical: 10,
-    borderRightWidth: 0,
   },
   regionBtnLabel: {
     fontSize: 12,
@@ -365,6 +502,62 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Inter_700Bold",
   },
+  // ── Tablet layout ────────────────────────────────────────────────────────────
+  tabletLayout: {
+    flex: 1,
+    flexDirection: "row",
+  },
+  sidebar: {
+    width: 260,
+    paddingHorizontal: 20,
+    paddingBottom: 24,
+    borderRightWidth: 1,
+  },
+  sidebarSectionLabel: {
+    fontSize: 10,
+    fontFamily: "Inter_700Bold",
+    letterSpacing: 1.2,
+    marginBottom: 8,
+    marginTop: 4,
+  },
+  sidebarFilters: {
+    gap: 2,
+  },
+  sidebarFilterBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  sidebarFilterLabel: {
+    fontSize: 14,
+    fontFamily: "Inter_600SemiBold",
+    flex: 1,
+  },
+  sidebarRegions: {
+    gap: 2,
+  },
+  sidebarRegionBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    borderRadius: 10,
+    borderWidth: 1,
+  },
+  sidebarRegionLabel: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    flex: 1,
+  },
+  tabletContent: {
+    flex: 1,
+  },
+  // ── Section headers ──────────────────────────────────────────────────────────
   sectionHeader: {
     flexDirection: "row",
     alignItems: "center",
@@ -391,10 +584,15 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Inter_700Bold",
   },
+  // ── List ─────────────────────────────────────────────────────────────────────
   listContent: {
     paddingHorizontal: 16,
     paddingTop: 4,
   },
+  listContentTablet: {
+    paddingHorizontal: 20,
+  },
+  // ── Spot rows ────────────────────────────────────────────────────────────────
   spotRow: {
     flexDirection: "row",
     alignItems: "flex-start",
@@ -403,6 +601,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     borderWidth: 1,
   },
+  spotRowTablet: {
+    padding: 18,
+    gap: 16,
+    borderRadius: 16,
+  },
   spotIcon: {
     width: 40,
     height: 40,
@@ -410,6 +613,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
+  },
+  spotIconTablet: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
   },
   spotInfo: {
     flex: 1,
@@ -420,10 +628,28 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_600SemiBold",
     lineHeight: 20,
   },
+  spotNameTablet: {
+    fontSize: 16,
+    lineHeight: 22,
+  },
   spotNote: {
     fontSize: 13,
     fontFamily: "Inter_400Regular",
     lineHeight: 18,
+  },
+  spotNoteTablet: {
+    fontSize: 14,
+    lineHeight: 21,
+  },
+  inlineWebsiteLink: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+    marginTop: 6,
+  },
+  inlineWebsiteLinkText: {
+    fontSize: 12,
+    fontFamily: "Inter_600SemiBold",
   },
   catBadge: {
     paddingHorizontal: 8,
@@ -435,6 +661,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontFamily: "Inter_600SemiBold",
   },
+  // ── Empty / loading ──────────────────────────────────────────────────────────
   center: {
     flex: 1,
     alignItems: "center",
