@@ -42,7 +42,6 @@ function ClassicTabLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.mutedForeground,
         tabBarStyle: {
-          position: "absolute",
           backgroundColor: isIOS ? "transparent" : colors.card,
           borderTopWidth: isWeb ? 1 : 0,
           borderTopColor: colors.border,
