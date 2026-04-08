@@ -3,11 +3,10 @@ import {
   View,
   Text,
   StyleSheet,
-  SectionList,
+  ScrollView,
   TouchableOpacity,
   ActivityIndicator,
   Platform,
-  ScrollView,
   Linking,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -242,8 +241,8 @@ export default function JournalScreen() {
   const insets = useSafeAreaInsets();
   const isTablet = useIsTablet();
   const [activeFilter, setActiveFilter] = useState<FilterType>("all");
-  const listRef = useRef<SectionList<Marker>>(null);
-  const pendingRegionRef = useRef<RegionKey | null>(null);
+  const scrollRef = useRef<ScrollView>(null);
+  const sectionYRef = useRef<Record<string, number>>({});
 
   const { data: markers = [], isLoading } = useGetMarkers();
   const { data: stats } = useGetMarkerStats();
@@ -282,20 +281,11 @@ export default function JournalScreen() {
   const totalVisible = sections.reduce((sum, s) => sum + s.data.length, 0);
 
   const jumpToRegion = useCallback((regionKey: RegionKey) => {
-    const sectionIndex = sections.findIndex((s) => s.key === regionKey);
-    if (sectionIndex === -1) return;
-    pendingRegionRef.current = regionKey;
-    try {
-      listRef.current?.scrollToLocation({
-        sectionIndex,
-        itemIndex: 0,
-        animated: true,
-        viewOffset: 0,
-      });
-    } catch {
-      // onScrollToIndexFailed will handle retry
+    const y = sectionYRef.current[regionKey];
+    if (y !== undefined) {
+      scrollRef.current?.scrollTo({ y, animated: true });
     }
-  }, [sections]);
+  }, []);
 
   const regionCounts: Record<RegionKey, number> = useMemo(() => {
     const counts: Record<RegionKey, number> = { north: 0, central: 0, south: 0 };
@@ -319,46 +309,41 @@ export default function JournalScreen() {
       </Text>
     </View>
   ) : (
-    <SectionList
-      ref={listRef}
-      sections={sections}
-      keyExtractor={(item) => item.id.toString()}
-      renderItem={({ item }) => <SpotRow item={item} isTablet={isTablet} />}
-      renderSectionHeader={({ section }) => (
-        <SectionHeader
-          title={section.title}
-          count={section.data.length}
-          colors={colors}
-        />
-      )}
+    <ScrollView
+      ref={scrollRef}
       contentContainerStyle={[
         styles.listContent,
         { paddingBottom: bottomInset + 16 },
         isTablet && styles.listContentTablet,
       ]}
-      stickySectionHeadersEnabled
       showsVerticalScrollIndicator={false}
       testID="journal-list"
-      onScrollToIndexFailed={() => {
-        const region = pendingRegionRef.current;
-        if (!region) return;
-        setTimeout(() => {
-          const sectionIndex = sections.findIndex((s) => s.key === region);
-          if (sectionIndex === -1) return;
-          try {
-            listRef.current?.scrollToLocation({
-              sectionIndex,
-              itemIndex: 0,
-              animated: true,
-              viewOffset: 0,
-            });
-          } catch { /* ignore */ }
-          pendingRegionRef.current = null;
-        }, 300);
-      }}
-      ItemSeparatorComponent={() => <View style={{ height: isTablet ? 12 : 10 }} />}
-      SectionSeparatorComponent={() => <View style={{ height: 4 }} />}
-    />
+      keyboardShouldPersistTaps="handled"
+    >
+      {sections.map((section, sectionIdx) => (
+        <View
+          key={section.key}
+          onLayout={(e) => {
+            sectionYRef.current[section.key] = e.nativeEvent.layout.y;
+          }}
+        >
+          <SectionHeader
+            title={section.title}
+            count={section.data.length}
+            colors={colors}
+          />
+          {section.data.map((item, itemIdx) => (
+            <React.Fragment key={item.id}>
+              <SpotRow item={item} isTablet={isTablet} />
+              {itemIdx < section.data.length - 1 && (
+                <View style={{ height: isTablet ? 12 : 10 }} />
+              )}
+            </React.Fragment>
+          ))}
+          {sectionIdx < sections.length - 1 && <View style={{ height: 4 }} />}
+        </View>
+      ))}
+    </ScrollView>
   );
 
   // ── Tablet: two-column layout ──────────────────────────────────────────────
