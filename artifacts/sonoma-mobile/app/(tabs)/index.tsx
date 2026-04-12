@@ -914,11 +914,11 @@ export default function MapScreen() {
         />
       </View>
 
-      {/* ? Help button — to the left of My List button */}
+      {/* ? Help button — top right, filter bar row */}
       <TouchableOpacity
         style={[
           styles.helpBtn,
-          { top: topInset + 56, backgroundColor: colors.card, shadowColor: "#000" },
+          { top: topInset + 56, right: 16, backgroundColor: colors.card, shadowColor: "#000" },
         ]}
         onPress={() => setShowWelcome(true)}
         testID="help-btn"
@@ -926,11 +926,15 @@ export default function MapScreen() {
         <Text style={[styles.helpBtnText, { color: colors.mutedForeground }]}>?</Text>
       </TouchableOpacity>
 
-      {/* My List button — top right, same level as filter bar */}
+      {/* My List button — bottom right, floating above Near Me / GPS button */}
       <TouchableOpacity
         style={[
           styles.myListBtn,
-          { top: topInset + 56, backgroundColor: colors.card, shadowColor: "#000" },
+          {
+            bottom: bottomInset + (isTablet ? 72 : 112),
+            backgroundColor: colors.card,
+            shadowColor: "#000",
+          },
         ]}
         onPress={() => setShowMyList(true)}
         testID="my-list-btn"
@@ -1542,7 +1546,6 @@ const styles = StyleSheet.create({
   // ── ? Help button ─────────────────────────────────────────────────────────────
   helpBtn: {
     position: "absolute",
-    right: 64,
     width: 40,
     height: 40,
     borderRadius: 20,
