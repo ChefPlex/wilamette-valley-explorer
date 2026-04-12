@@ -29,8 +29,8 @@ export default function Home() {
         />
         <SonomaChef />
 
-        {/* Bottom-left control stack */}
-        <div className="absolute bottom-6 left-6 z-[999] flex flex-col items-center gap-2">
+        {/* Right-side controls — stacked above the Chef FAB */}
+        <div className="fixed bottom-[72px] right-6 z-[999] flex flex-col items-end gap-2">
           {/* My List panel + trigger */}
           <MyList
             saved={saved}

@@ -165,7 +165,7 @@ export function SonomaChef() {
     <>
       {/* First-time tooltip */}
       {!open && showTooltip && (
-        <div className="fixed bottom-[72px] right-6 z-[1001] w-[220px] bg-card border border-border rounded-xl shadow-xl p-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+        <div className="fixed bottom-[180px] right-6 z-[1001] w-[220px] bg-card border border-border rounded-xl shadow-xl p-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <button
             onClick={dismissTooltip}
             className="absolute top-2.5 right-2.5 h-5 w-5 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"

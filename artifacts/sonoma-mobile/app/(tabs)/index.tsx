@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import {
   Share,
   useWindowDimensions,
 } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import MapView, { Marker, LongPressEvent } from "react-native-maps";
 import * as Location from "expo-location";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -24,6 +25,7 @@ import { useIsTablet } from "@/hooks/useIsTablet";
 import {
   useGetMarkers,
   useCreateMarker,
+  useDeleteMarker,
   getGetMarkersQueryKey,
   getGetMarkerStatsQueryKey,
 } from "@workspace/api-client-react";
@@ -64,10 +66,69 @@ function getCategoryIcon(category: Category): IoniconsName {
   return CATEGORY_ICON_MAP[category] ?? "location";
 }
 
+// ── My List (AsyncStorage) ────────────────────────────────────────────────────
+const MY_LIST_KEY = "sonoma-my-list-mobile";
+
+interface SavedSpot {
+  id: number;
+  name: string;
+  category: string;
+}
+
+function useMobileMyList() {
+  const [saved, setSaved] = useState<Map<number, SavedSpot>>(new Map());
+
+  useEffect(() => {
+    AsyncStorage.getItem(MY_LIST_KEY).then((raw) => {
+      if (!raw) return;
+      try {
+        const arr: SavedSpot[] = JSON.parse(raw);
+        setSaved(new Map(arr.map((s) => [s.id, s])));
+      } catch {}
+    });
+  }, []);
+
+  const persist = (next: Map<number, SavedSpot>) => {
+    AsyncStorage.setItem(MY_LIST_KEY, JSON.stringify([...next.values()]));
+  };
+
+  const toggle = useCallback((spot: SavedSpot) => {
+    setSaved((prev) => {
+      const next = new Map(prev);
+      if (next.has(spot.id)) next.delete(spot.id);
+      else next.set(spot.id, spot);
+      persist(next);
+      return next;
+    });
+  }, []);
+
+  const remove = useCallback((id: number) => {
+    setSaved((prev) => {
+      const next = new Map(prev);
+      next.delete(id);
+      persist(next);
+      return next;
+    });
+  }, []);
+
+  const clearAll = useCallback(() => {
+    setSaved(new Map());
+    AsyncStorage.removeItem(MY_LIST_KEY);
+  }, []);
+
+  const isSaved = useCallback((id: number) => saved.has(id), [saved]);
+
+  return { saved, toggle, remove, clearAll, isSaved };
+}
+
 // ── Spot detail: phone modal ──────────────────────────────────────────────────
 interface SpotSheetProps {
   spot: MarkerType | null;
   onClose: () => void;
+  onToggleSave: (spot: SavedSpot) => void;
+  isSaved: (id: number) => boolean;
+  onDelete: (id: number) => void;
+  isDeleting: boolean;
 }
 
 function buildShareMessage(spot: MarkerType) {
@@ -82,19 +143,35 @@ function buildShareMessage(spot: MarkerType) {
   return parts.join("\n");
 }
 
-function SpotDetailModal({ spot, onClose }: SpotSheetProps) {
+function SpotDetailModal({ spot, onClose, onToggleSave, isSaved, onDelete, isDeleting }: SpotSheetProps) {
   const colors = useColors();
   if (!spot) return null;
 
   const catColor = getCategoryColor(spot.category as Category, colors);
   const catIcon = getCategoryIcon(spot.category as Category);
   const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : "Farm";
+  const saved = isSaved(spot.id);
 
   const handleShare = async () => {
     try {
       await Haptics.selectionAsync();
       await Share.share({ message: buildShareMessage(spot) });
     } catch {}
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Remove spot",
+      `Remove "${spot.name}" from the map?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Remove",
+          style: "destructive",
+          onPress: () => { onDelete(spot.id); onClose(); },
+        },
+      ]
+    );
   };
 
   return (
@@ -112,6 +189,13 @@ function SpotDetailModal({ spot, onClose }: SpotSheetProps) {
             <Text style={[styles.categoryLabel, { color: catColor }]}>{catLabel}</Text>
           </View>
           <View style={styles.sheetHeaderActions}>
+            <TouchableOpacity
+              onPress={() => onToggleSave({ id: spot.id, name: spot.name, category: spot.category })}
+              style={styles.closeBtn}
+              testID="save-btn"
+            >
+              <Ionicons name={saved ? "bookmark" : "bookmark-outline"} size={22} color={saved ? colors.primary : colors.mutedForeground} />
+            </TouchableOpacity>
             <TouchableOpacity onPress={handleShare} style={styles.closeBtn} testID="share-btn">
               <Ionicons name="share-outline" size={22} color={colors.mutedForeground} />
             </TouchableOpacity>
@@ -137,25 +221,55 @@ function SpotDetailModal({ spot, onClose }: SpotSheetProps) {
             <Text style={[styles.websiteBtnText, { color: colors.primary }]}>Visit Website</Text>
           </TouchableOpacity>
         ) : null}
+
+        <TouchableOpacity
+          style={[styles.deleteBtn, { borderColor: colors.border }]}
+          onPress={handleDelete}
+          disabled={isDeleting}
+          testID="delete-btn"
+        >
+          {isDeleting ? (
+            <ActivityIndicator size="small" color={colors.destructive} />
+          ) : (
+            <Ionicons name="trash-outline" size={16} color={colors.destructive} />
+          )}
+          <Text style={[styles.deleteBtnText, { color: colors.destructive }]}>Remove spot</Text>
+        </TouchableOpacity>
       </View>
     </Modal>
   );
 }
 
 // ── Spot detail: tablet inline panel ─────────────────────────────────────────
-function SpotDetailPanel({ spot, onClose }: SpotSheetProps) {
+function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDeleting }: SpotSheetProps) {
   const colors = useColors();
   if (!spot) return null;
 
   const catColor = getCategoryColor(spot.category as Category, colors);
   const catIcon = getCategoryIcon(spot.category as Category);
   const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : "Farm";
+  const saved = isSaved(spot.id);
 
   const handleShare = async () => {
     try {
       await Haptics.selectionAsync();
       await Share.share({ message: buildShareMessage(spot) });
     } catch {}
+  };
+
+  const handleDelete = () => {
+    Alert.alert(
+      "Remove spot",
+      `Remove "${spot.name}" from the map?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Remove",
+          style: "destructive",
+          onPress: () => { onDelete(spot.id); onClose(); },
+        },
+      ]
+    );
   };
 
   return (
@@ -166,6 +280,13 @@ function SpotDetailPanel({ spot, onClose }: SpotSheetProps) {
           <Text style={[styles.categoryLabel, { color: catColor }]}>{catLabel}</Text>
         </View>
         <View style={styles.sheetHeaderActions}>
+          <TouchableOpacity
+            onPress={() => onToggleSave({ id: spot.id, name: spot.name, category: spot.category })}
+            style={styles.closeBtn}
+            testID="save-btn"
+          >
+            <Ionicons name={saved ? "bookmark" : "bookmark-outline"} size={22} color={saved ? colors.primary : colors.mutedForeground} />
+          </TouchableOpacity>
           <TouchableOpacity onPress={handleShare} style={styles.closeBtn} testID="share-btn">
             <Ionicons name="share-outline" size={22} color={colors.mutedForeground} />
           </TouchableOpacity>
@@ -193,6 +314,20 @@ function SpotDetailPanel({ spot, onClose }: SpotSheetProps) {
           <Text style={[styles.websiteBtnText, { color: colors.primary }]}>Visit Website</Text>
         </TouchableOpacity>
       ) : null}
+
+      <TouchableOpacity
+        style={[styles.deleteBtn, { borderColor: colors.border }]}
+        onPress={handleDelete}
+        disabled={isDeleting}
+        testID="delete-btn"
+      >
+        {isDeleting ? (
+          <ActivityIndicator size="small" color={colors.destructive} />
+        ) : (
+          <Ionicons name="trash-outline" size={16} color={colors.destructive} />
+        )}
+        <Text style={[styles.deleteBtnText, { color: colors.destructive }]}>Remove spot</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -406,6 +541,9 @@ export default function MapScreen() {
 
   const { data: markers = [], isLoading } = useGetMarkers();
   const createMarker = useCreateMarker();
+  const deleteMarkerMutation = useDeleteMarker();
+
+  const { saved: myListSaved, toggle: toggleSave, isSaved, remove: removeFromList, clearAll: clearMyList } = useMobileMyList();
 
   const mapRef = useRef<MapView>(null);
   const [locationLoading, setLocationLoading] = useState(false);
@@ -413,6 +551,7 @@ export default function MapScreen() {
   const [selectedSpot, setSelectedSpot] = useState<MarkerType | null>(null);
   const [addCoord, setAddCoord] = useState<{ latitude: number; longitude: number } | null>(null);
   const [mapFilter, setMapFilter] = useState<MapFilter>("all");
+  const [showMyList, setShowMyList] = useState(false);
 
   const filteredMarkers = mapFilter === "all"
     ? markers
@@ -434,6 +573,20 @@ export default function MapScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setAddCoord(e.nativeEvent.coordinate);
   }, []);
+
+  const handleDelete = useCallback((id: number) => {
+    deleteMarkerMutation.mutate(
+      { id },
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries({ queryKey: getGetMarkersQueryKey() });
+          queryClient.invalidateQueries({ queryKey: getGetMarkerStatsQueryKey() });
+          removeFromList(id);
+          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+        },
+      }
+    );
+  }, [deleteMarkerMutation, queryClient, removeFromList]);
 
   const handleSaveSpot = useCallback(
     (data: { name: string; note: string; category: Category }) => {
@@ -646,6 +799,100 @@ export default function MapScreen() {
         />
       </View>
 
+      {/* My List button — top right, same level as filter bar */}
+      <TouchableOpacity
+        style={[
+          styles.myListBtn,
+          { top: topInset + 56, backgroundColor: colors.card, shadowColor: "#000" },
+        ]}
+        onPress={() => setShowMyList(true)}
+        testID="my-list-btn"
+      >
+        <Ionicons
+          name={myListSaved.size > 0 ? "bookmark" : "bookmark-outline"}
+          size={18}
+          color={myListSaved.size > 0 ? colors.primary : colors.mutedForeground}
+        />
+        {myListSaved.size > 0 && (
+          <View style={[styles.myListBadge, { backgroundColor: colors.primary }]}>
+            <Text style={[styles.myListBadgeText, { color: colors.primaryForeground }]}>
+              {myListSaved.size}
+            </Text>
+          </View>
+        )}
+      </TouchableOpacity>
+
+      {/* My List modal */}
+      <Modal
+        visible={showMyList}
+        animationType="slide"
+        presentationStyle="pageSheet"
+        onRequestClose={() => setShowMyList(false)}
+      >
+        <View style={[styles.sheetContainer, { backgroundColor: colors.background }]}>
+          <View style={[styles.sheetHandle, { backgroundColor: colors.border }]} />
+          <View style={styles.sheetHeader}>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
+              <Ionicons name="bookmark" size={18} color={colors.primary} />
+              <Text style={[styles.sheetTitle, { color: colors.foreground }]}>My List</Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+              {myListSaved.size > 0 && (
+                <TouchableOpacity
+                  style={[styles.closeBtn, { marginRight: 4 }]}
+                  onPress={() => { clearMyList(); }}
+                  testID="clear-my-list"
+                >
+                  <Text style={{ color: colors.destructive, fontSize: 13 }}>Clear all</Text>
+                </TouchableOpacity>
+              )}
+              <TouchableOpacity onPress={() => setShowMyList(false)} style={styles.closeBtn}>
+                <Ionicons name="close" size={22} color={colors.mutedForeground} />
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {myListSaved.size === 0 ? (
+            <View style={styles.myListEmpty}>
+              <Ionicons name="bookmark-outline" size={40} color={colors.border} />
+              <Text style={[styles.myListEmptyTitle, { color: colors.foreground }]}>No saved spots yet</Text>
+              <Text style={[styles.myListEmptyText, { color: colors.mutedForeground }]}>
+                Tap the bookmark icon on any spot to save it here.
+              </Text>
+            </View>
+          ) : (
+            <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 24 }}>
+              {[...myListSaved.values()].map((s) => {
+                const catColor = getCategoryColor(s.category as Category, colors);
+                const catIcon = getCategoryIcon(s.category as Category);
+                const catLabel = s.category === "winery" ? "Winery" : s.category === "restaurant" ? "Dining" : "Farm";
+                return (
+                  <View
+                    key={s.id}
+                    style={[styles.myListItem, { borderBottomColor: colors.border }]}
+                  >
+                    <View style={[styles.myListItemIcon, { backgroundColor: catColor + "20" }]}>
+                      <Ionicons name={catIcon} size={16} color={catColor} />
+                    </View>
+                    <View style={{ flex: 1 }}>
+                      <Text style={[styles.myListItemName, { color: colors.foreground }]}>{s.name}</Text>
+                      <Text style={[styles.myListItemCat, { color: catColor }]}>{catLabel}</Text>
+                    </View>
+                    <TouchableOpacity
+                      onPress={() => removeFromList(s.id)}
+                      style={styles.closeBtn}
+                      testID={`remove-saved-${s.id}`}
+                    >
+                      <Ionicons name="bookmark" size={20} color={colors.primary} />
+                    </TouchableOpacity>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          )}
+        </View>
+      </Modal>
+
       {/* Near Me button — bottom right */}
       <TouchableOpacity
         style={[
@@ -682,13 +929,24 @@ export default function MapScreen() {
       {isTablet ? (
         selectedSpot ? (
           <View style={[styles.tabletPanelWrapper, { width: PANEL_WIDTH, top: topInset, bottom: bottomInset }]}>
-            <SpotDetailPanel spot={selectedSpot} onClose={() => setSelectedSpot(null)} />
+            <SpotDetailPanel
+              spot={selectedSpot}
+              onClose={() => setSelectedSpot(null)}
+              onToggleSave={toggleSave}
+              isSaved={isSaved}
+              onDelete={handleDelete}
+              isDeleting={deleteMarkerMutation.isPending}
+            />
           </View>
         ) : null
       ) : (
         <SpotDetailModal
           spot={selectedSpot}
           onClose={() => setSelectedSpot(null)}
+          onToggleSave={toggleSave}
+          isSaved={isSaved}
+          onDelete={handleDelete}
+          isDeleting={deleteMarkerMutation.isPending}
         />
       )}
 
@@ -1064,5 +1322,92 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 4,
+  },
+  // ── Delete button ─────────────────────────────────────────────────────────────
+  deleteBtn: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+    marginTop: 16,
+    marginHorizontal: 20,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    borderRadius: 10,
+    borderWidth: 1,
+    justifyContent: "center",
+  },
+  deleteBtnText: {
+    fontSize: 14,
+    fontWeight: "500",
+  },
+  // ── My List button (top-right, filter bar row) ────────────────────────────────
+  myListBtn: {
+    position: "absolute",
+    right: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 10,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  myListBadge: {
+    position: "absolute",
+    top: -2,
+    right: -2,
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  myListBadgeText: {
+    fontSize: 10,
+    fontWeight: "700",
+  },
+  // ── My List modal content ─────────────────────────────────────────────────────
+  myListEmpty: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 12,
+    paddingHorizontal: 32,
+  },
+  myListEmptyTitle: {
+    fontSize: 17,
+    fontWeight: "600",
+    textAlign: "center",
+  },
+  myListEmptyText: {
+    fontSize: 14,
+    textAlign: "center",
+    lineHeight: 20,
+  },
+  myListItem: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+    paddingHorizontal: 20,
+    paddingVertical: 14,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  myListItemIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  myListItemName: {
+    fontSize: 15,
+    fontWeight: "500",
+  },
+  myListItemCat: {
+    fontSize: 12,
+    marginTop: 2,
   },
 });

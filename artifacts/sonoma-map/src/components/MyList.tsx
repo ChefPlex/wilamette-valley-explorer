@@ -45,7 +45,7 @@ export function MyList({ saved, onRemove, onClearAll, open, onToggleOpen }: MyLi
 
       {/* Panel */}
       {open && (
-        <div className="absolute bottom-[52px] left-0 z-[1000] w-[280px] sm:w-[320px] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-150">
+        <div className="absolute bottom-[52px] right-0 z-[1000] w-[280px] sm:w-[320px] bg-card border border-border rounded-2xl shadow-2xl overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-150">
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-3.5 border-b border-border">
             <div className="flex items-center gap-2.5">
