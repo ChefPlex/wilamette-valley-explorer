@@ -1,4 +1,5 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
+import type { SavedSpot } from "@/hooks/useMyList";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import { 
@@ -13,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Trash2, MapPin, Wine, Utensils, Leaf, ExternalLink } from "lucide-react";
+import { Loader2, Trash2, MapPin, Wine, Utensils, Leaf, ExternalLink, Bookmark } from "lucide-react";
 import { format } from "date-fns";
 
 // Fix Leaflet default icon issues
@@ -66,7 +67,13 @@ function MapEventsComponent({ onMapClick }: MapEventsProps) {
   return null;
 }
 
-export function MapComponent({ activeFilter }: { activeFilter: string }) {
+interface MapComponentProps {
+  activeFilter: string;
+  onToggleSave: (spot: SavedSpot) => void;
+  isSaved: (id: number) => boolean;
+}
+
+export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapComponentProps) {
   const queryClient = useQueryClient();
   const { data: markers = [], isLoading } = useGetMarkers({
     query: { queryKey: getGetMarkersQueryKey() }
@@ -166,7 +173,25 @@ export function MapComponent({ activeFilter }: { activeFilter: string }) {
                   Visit website
                 </a>
               )}
-              <div className="pt-3 mt-1 border-t border-border flex justify-end">
+              <div className="pt-3 mt-1 border-t border-border flex items-center justify-between">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className={`h-8 px-2 gap-1.5 ${isSaved(marker.id) ? "text-primary hover:text-primary hover:bg-primary/10" : "text-muted-foreground hover:text-foreground"}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleSave({
+                      id: marker.id,
+                      name: marker.name,
+                      category: marker.category,
+                      city: (marker as any).city ?? null,
+                    });
+                  }}
+                  title={isSaved(marker.id) ? "Remove from My List" : "Save to My List"}
+                >
+                  <Bookmark className={`w-3.5 h-3.5 ${isSaved(marker.id) ? "fill-primary" : ""}`} />
+                  {isSaved(marker.id) ? "Saved" : "Save"}
+                </Button>
                 <Button 
                   variant="ghost" 
                   size="sm" 

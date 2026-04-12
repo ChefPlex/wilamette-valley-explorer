@@ -5,6 +5,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChefHat, X, Send, Loader2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+const CHEF_TOOLTIP_KEY = "sonoma-chef-tooltip-seen";
+
 interface Message {
   role: "user" | "assistant";
   content: string;
@@ -78,6 +80,19 @@ export function SonomaChef() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  const [showTooltip, setShowTooltip] = useState(
+    () => !localStorage.getItem(CHEF_TOOLTIP_KEY)
+  );
+  const dismissTooltip = useCallback(() => {
+    localStorage.setItem(CHEF_TOOLTIP_KEY, "1");
+    setShowTooltip(false);
+  }, []);
+  useEffect(() => {
+    if (!showTooltip) return;
+    const t = setTimeout(dismissTooltip, 7000);
+    return () => clearTimeout(t);
+  }, [showTooltip, dismissTooltip]);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
@@ -148,10 +163,33 @@ export function SonomaChef() {
 
   return (
     <>
+      {/* First-time tooltip */}
+      {!open && showTooltip && (
+        <div className="fixed bottom-[72px] right-6 z-[1001] w-[220px] bg-card border border-border rounded-xl shadow-xl p-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <button
+            onClick={dismissTooltip}
+            className="absolute top-2.5 right-2.5 h-5 w-5 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+          >
+            <X className="w-3 h-3" />
+          </button>
+          <div className="flex items-center gap-2 mb-1.5">
+            <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+              <ChefHat className="w-3.5 h-3.5 text-primary" />
+            </div>
+            <p className="text-xs font-semibold text-foreground">Meet Sonoma Chef</p>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            An AI that knows every winery, farm, and table on this map. Ask it anything.
+          </p>
+          {/* Arrow pointing down */}
+          <div className="absolute -bottom-[7px] right-6 w-3 h-3 bg-card border-r border-b border-border rotate-45" />
+        </div>
+      )}
+
       {/* Floating trigger button */}
       {!open && (
         <button
-          onClick={() => setOpen(true)}
+          onClick={() => { setOpen(true); dismissTooltip(); }}
           className="fixed bottom-6 right-6 z-[1000] flex items-center gap-2.5 bg-primary text-primary-foreground px-4 py-3 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-105 transition-all duration-200 font-medium text-sm"
         >
           <ChefHat className="w-4 h-4" />
