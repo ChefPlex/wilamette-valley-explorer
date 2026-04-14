@@ -17,3 +17,9 @@ id = "fVd5FcmG_m8R9Eo5_qHMP"
 uri = "file://afternoon_changes.txt"
 type = "text"
 title = "Afternoon Changes — Reusable Feature Guide"
+
+[[outputs]]
+id = "wdV8Bu_SgrYHhQSyfTVII"
+uri = "file://sonoma_db_dump.txt"
+type = "text"
+title = "Sonoma DB Dump — 135 Entries"
