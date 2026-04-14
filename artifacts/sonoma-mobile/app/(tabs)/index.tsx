@@ -353,7 +353,7 @@ const PIN_LEGEND = [
   {
     category: "farmstand" as Category,
     label: "Farm Stands & Markets",
-    description: "Where the real ingredients come from",
+    description: "Farms, roadside stands, and markets behind the best tables",
   },
   {
     category: "producer" as Category,
@@ -386,7 +386,7 @@ function WelcomeSplashModal({ visible, onClose }: { visible: boolean; onClose: (
               Sonoma County
             </Text>
             <Text style={[styles.welcomeSubtitle, { color: colors.mutedForeground }]}>
-              155 personally curated spots — wineries, restaurants, farm stands, and artisan producers — verified by a professional chef who actually goes to all of them.
+              155 personally curated spots — 50 wineries, 63 restaurants, 37 farm stands, and 5 artisan producers (creameries, cideries, spirits, and more) — verified by a professional chef who actually goes to all of them.
             </Text>
           </View>
 
@@ -417,8 +417,12 @@ function WelcomeSplashModal({ visible, onClose }: { visible: boolean; onClose: (
               {" "}to read the chef's notes and visit the website.
             </Text>
             <Text style={[styles.welcomeTip, { color: colors.mutedForeground }]}>
-              <Text style={[styles.welcomeTipBold, { color: colors.foreground }]}>Long press</Text>
-              {" "}anywhere on the map to add your own spot.
+              <Text style={[styles.welcomeTipBold, { color: colors.foreground }]}>Ask the Chef</Text>
+              {" "}— an AI that knows this map inside out.
+            </Text>
+            <Text style={[styles.welcomeTip, { color: colors.mutedForeground }]}>
+              <Text style={[styles.welcomeTipBold, { color: colors.foreground }]}>Near Me</Text>
+              {" "}to find spots closest to where you are right now.
             </Text>
             <Text style={[styles.welcomeTip, { color: colors.mutedForeground }]}>
               <Text style={[styles.welcomeTipBold, { color: colors.foreground }]}>Bookmark spots</Text>
