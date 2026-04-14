@@ -377,7 +377,7 @@ function WelcomeSplashModal({ visible, onClose }: { visible: boolean; onClose: (
               Sonoma County
             </Text>
             <Text style={[styles.welcomeSubtitle, { color: colors.mutedForeground }]}>
-              147 personally curated spots — wineries, restaurants, and farm stands — verified by a professional chef who actually goes to all of them.
+              149 personally curated spots — wineries, restaurants, and farm stands — verified by a professional chef who actually goes to all of them.
             </Text>
           </View>
 
