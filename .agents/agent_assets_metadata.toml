@@ -23,3 +23,9 @@ id = "wdV8Bu_SgrYHhQSyfTVII"
 uri = "file://sonoma_db_dump.txt"
 type = "text"
 title = "Sonoma DB Dump — 135 Entries"
+
+[[outputs]]
+id = "uDUoRhicRLUibV4AVF1xI"
+uri = "file://SONOMA_EXPLORER_PROJECT_NOTES.txt"
+type = "text"
+title = "Sonoma Explorer — Project Notes"

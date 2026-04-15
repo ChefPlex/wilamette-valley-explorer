@@ -1,0 +1,167 @@
+SONOMA EXPLORER — PROJECT NOTES
+================================
+Last updated: April 2026
+
+
+PROJECT OVERVIEW
+----------------
+Personalized interactive Sonoma County map app built with Leaflet.js + React/Vite.
+Curated spots: wineries, restaurants, farmstands, and artisan producers.
+Includes an AI "Sonoma Chef" assistant and a companion Expo mobile app.
+The user is a professional chef/curator. GPS pin accuracy, website link accuracy,
+and description accuracy are all critical.
+
+GitHub (primary): ChefPlex/sonoma-explorer
+GitHub (backup repos): ChefPlex/napa-county-explorer, ChefPlex/wilamette-valley-explorer,
+                        ChefPlex/eldorado-county-explorer, ChefPlex/monterey-county-explorer
+
+
+CURRENT SPOT COUNT (live from /api/markers/stats)
+--------------------------------------------------
+~161 spots total:
+  - 53 wineries
+  - 65 restaurants
+  - 38 farmstands
+  - 5 artisan producers
+
+Splash screen counts are DYNAMIC — pulled live from the API.
+No need to update hardcoded numbers when spots are added.
+
+
+GPS COORDINATE VERIFICATION PROTOCOL
+--------------------------------------
+ALWAYS use this three-step process before committing any pin coordinate.
+
+STEP 1 — OSM Nominatim (search by business name first):
+  https://nominatim.openstreetmap.org/search?q=<Business+Name+City+CA>&format=json&limit=3
+
+  If a POI result is returned (type: amenity, tourism, etc.), prefer it —
+  it's the actual building footprint, not an address interpolation.
+
+STEP 2 — Photon cross-check (corroborate Nominatim):
+  https://photon.komoot.io/api/?q=<Business+Name>&limit=3
+
+  Both sources should agree within ~50 metres.
+  If they diverge, investigate further before committing.
+
+STEP 3 — Fallback geocoders (use only if no POI exists in OSM/Photon):
+
+  US Census TIGER geocoder (address-based, very accurate for US):
+    https://geocoding.geo.census.gov/geocoder/locations/address
+      ?street=<STREET>&city=<CITY>&state=CA&benchmark=2020&format=json
+
+  Google Maps: extract coordinates from the URL using the !3d<LAT>!4d<LON> pattern.
+  For restaurant/winery sites built on Squarespace, check the site's config JSON
+  for embedded lat/lon values — often more precise than any geocoder.
+
+RULE: Never use address geocoding alone as the sole source.
+Always cross-check at least two independent sources.
+
+
+CATEGORY SYSTEM
+---------------
+4 categories (stored as plain text in DB — no enum constraint):
+
+  winery      Wine red      Tailwind 'primary'    Icon: wine glass
+  restaurant  Amber         Tailwind 'secondary'  Icon: utensils
+  farmstand   Sage green    #6f7d3c               Icon: leaf
+  producer    Terracotta    #c06a2d               Icon: store
+
+"producer" = artisan makers (creameries, cideries, spirits, etc.)
+that don't fit cleanly into the other three categories.
+
+
+DATABASE & SEED WORKFLOW
+------------------------
+- All new spot additions go into: artifacts/api-server/src/seed.ts
+- Run the seed script after adding entries to populate the dev DB.
+- Production DB is read-only. Production sync is triggered on deploy
+  via correctCoordinates().
+- Pins at the same physical property must be offset by ~0.0003°
+  so they don't stack on the map.
+  Example: Preston Farm & Winery has two pins —
+    winery:    38.7030, -122.9674
+    farmstand: 38.7033, -122.9671
+
+
+MOBILE APP DETAILS
+------------------
+Bundle ID:   com.sonomachefapp.sonoma
+Platform:    iOS (App Store) + Android
+Framework:   Expo (React Native)
+Config file: artifacts/sonoma-mobile/app.json
+
+App Store version rules:
+  - CFBundleShortVersionString must ALWAYS be higher than the last approved build.
+  - Current version is set in app.json (check this before any EAS submission).
+  - Build number is auto-incremented by EAS — do NOT hardcode it.
+  - To ship a new version: run "eas build --platform ios" then "eas submit --platform ios".
+  - Replit deployment republishes the existing binary — it does NOT trigger a new EAS build.
+
+
+SONOMA CHEF AI ASSISTANT
+------------------------
+- Floating chat panel embedded at bottom-right of the web map.
+- Powered by GPT via Replit's OpenAI integration (no API key needed).
+- Persona: culinary authority with Slow Food values, ingredient-forward,
+  seasonally aware. Knows this map inside out.
+- Server route: artifacts/api-server/src/routes/ (chat endpoint)
+
+
+KEY FILES
+---------
+artifacts/api-server/src/seed.ts          — all curated spots live here
+artifacts/api-server/src/routes/markers.ts — markers API (CRUD + /stats)
+artifacts/sonoma-map/src/components/Map.tsx
+artifacts/sonoma-map/src/components/WelcomeOverlay.tsx
+artifacts/sonoma-map/src/components/Sidebar.tsx
+artifacts/sonoma-map/src/pages/home.tsx
+artifacts/sonoma-mobile/app/(tabs)/index.tsx — main mobile map screen
+artifacts/sonoma-mobile/app.json           — version, bundle ID
+lib/db/src/schema/markers.ts              — DB schema
+lib/api-client-react/src/generated/api.ts — generated React Query hooks
+
+
+KNOWN COORDINATE FLAGS
+----------------------
+Epicurean Connection (Sonoma):
+  OSM POI still shows OLD address: 122 W Napa St
+  CORRECT location: 19670 8th St E, Sonoma
+  CORRECT coordinates: 38.2869338, -122.4342651
+  — Update this pin the next time that entry is edited.
+
+
+PREVIOUSLY VERIFIED PIN CORRECTIONS (for reference)
+----------------------------------------------------
+Cyrus Restaurant:
+  Final coordinates: 38.706427, -122.9005122  (OSM POI confirmed)
+
+Locals Tasting Room:
+  Address: 21060 Geyserville Ave, Geyserville
+  Coordinates: 38.706447, -122.9038695  (user-provided Google Maps pin)
+
+Catelli's:
+  Address: 21047 Geyserville Ave, Geyserville
+  Coordinates: 38.7066592, -122.9046923  (Squarespace site config)
+
+Lo & Behold Bar + Kitchen:
+  Address: 214 Healdsburg Ave, Healdsburg
+  Coordinates: 38.609016, -122.870078  (Census TIGER)
+
+Preston Farm & Winery farmstand:
+  Address: 9282 W Dry Creek Rd, Healdsburg
+  Coordinates: 38.7033, -122.9671  (offset from winery pin)
+
+
+TECH STACK SUMMARY
+------------------
+Monorepo:    pnpm workspaces
+Language:    TypeScript 5.9
+API:         Express 5
+Database:    PostgreSQL + Drizzle ORM
+Validation:  Zod v4 + drizzle-zod
+API codegen: Orval (from OpenAPI spec)
+Web map:     React + Vite + Leaflet.js
+Mobile:      Expo (React Native)
+AI:          OpenAI GPT via Replit integration proxy
+Build:       esbuild (CJS bundle for API server)
