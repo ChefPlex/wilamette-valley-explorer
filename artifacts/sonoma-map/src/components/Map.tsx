@@ -130,8 +130,8 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
 
   return (
     <MapContainer 
-      center={[38.5, -122.8]} 
-      zoom={11} 
+      center={[45.1, -123.0]} 
+      zoom={9} 
       className="w-full h-full z-0"
       zoomControl={false}
     >

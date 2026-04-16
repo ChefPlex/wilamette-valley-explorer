@@ -23,13 +23,13 @@ const PIN_TYPES = [
   {
     icon: Leaf,
     label: "Farm Stands & Markets",
-    description: "Farms, roadside stands, and markets behind the best tables",
+    description: "Hazelnut orchards, berry farms, and markets behind the best tables",
     color: "bg-[#6f7d3c]",
   },
   {
     icon: Store,
     label: "Artisan Producers",
-    description: "Makers of cider, spirits, cheese, and more",
+    description: "Makers of cider, truffle goods, cheese, and more",
     color: "bg-[#c06a2d]",
   },
 ];
@@ -60,10 +60,10 @@ export function WelcomeOverlay({ open, onClose }: WelcomeOverlayProps) {
             A Chef's Guide
           </p>
           <h1 className="font-serif text-2xl font-bold text-foreground leading-tight">
-            Sonoma County
+            Willamette Valley
           </h1>
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-            {total} personally curated spots — {wineries} wineries, {restaurants} restaurants, {farmstands} farm stands, and {producers} artisan producers (creameries, cideries, spirits, and more) — verified by a professional chef who actually goes to all of them.
+            {total} personally curated spots — {wineries} wineries, {restaurants} restaurants, {farmstands} farm stands, and {producers} artisan producers (truffle dealers, hazelnut roasters, cheesemakers, cidermakers, and more) — verified by a professional chef who actually goes to all of them.
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export function WelcomeOverlay({ open, onClose }: WelcomeOverlayProps) {
               <span className="font-medium text-foreground">Tap any pin</span> to read the chef's notes and visit the website.
             </p>
             <p className="text-xs text-muted-foreground leading-snug">
-              <span className="font-medium text-foreground">Ask Sonoma Chef</span> (bottom right) — an AI that knows this map inside out.
+              <span className="font-medium text-foreground">Ask Valley Chef</span> (bottom right) — an AI that knows this map inside out.
             </p>
             <p className="text-xs text-muted-foreground leading-snug">
               <span className="font-medium text-foreground">Bookmark spots</span> to build your personal list for the day.

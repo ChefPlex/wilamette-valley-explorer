@@ -32,7 +32,7 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
     <div className="w-80 h-full bg-card border-r border-border shadow-xl flex flex-col z-10 relative">
       {/* Header */}
       <div className="p-6 border-b border-border bg-card">
-        <h1 className="font-serif text-2xl font-bold text-foreground mb-2">Sonoma Journal</h1>
+        <h1 className="font-serif text-2xl font-bold text-foreground mb-2">Valley Journal</h1>
         <p className="text-sm text-muted-foreground leading-relaxed">
           The places worth knowing. Wineries, kitchens, farms. Yours to map.
         </p>
@@ -195,7 +195,7 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
       {/* Footer Instructions */}
       <div className="p-4 border-t border-border bg-muted/30 text-center">
         <p className="text-xs text-muted-foreground">
-          Click the map to mark a spot · Ask Sonoma Chef below
+          Click the map to mark a spot · Ask Valley Chef below
         </p>
       </div>
     </div>

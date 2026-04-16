@@ -105,11 +105,11 @@ React client-side hooks for voice chat (`useVoiceRecorder`, `useVoiceStream`, `u
 
 ### `artifacts/sonoma-map` (`@workspace/sonoma-map`)
 
-React + Vite frontend. Leaflet.js interactive map of Sonoma County. Features:
+React + Vite frontend. Leaflet.js interactive map of Willamette Valley, Oregon. Features:
 - Custom winery/restaurant map markers with earthy terracotta/sage palette (Playfair Display + Plus Jakarta Sans)
 - Sidebar with stats, filtering, and spot list
 - Click-to-add markers with name, notes, category
-- **Sonoma Chef AI assistant** — floating chat panel powered by GPT, uses the full Sonoma Chef persona (culinary authority, Slow Food values, ingredient-forward, seasonal awareness). Embedded at bottom-right of the map.
+- **Valley Chef AI assistant** — floating chat panel powered by GPT, uses the full Valley Chef persona (culinary authority, Willamette Valley and PNW expertise, Slow Food values, Oregon truffle/hazelnut/berry culture, ingredient-forward, seasonal awareness). Embedded at bottom-right of the map.
 
 ### `scripts` (`@workspace/scripts`)
 
@@ -117,7 +117,7 @@ Utility scripts package. Each script is a `.ts` file in `src/` with a correspond
 
 ---
 
-## Sonoma Explorer — Project Notes
+## Willamette Valley Explorer — Project Notes
 
 ### GPS Coordinate Verification Protocol
 
@@ -166,13 +166,15 @@ Producers = artisan makers (creameries, cideries, spirits, etc.) that don't fit 
 - All spot additions go into `artifacts/api-server/src/seed.ts` first, then run the seed script.
 - Production DB is read-only; production sync is triggered on deploy via `correctCoordinates()`.
 - Splash screen counts are **dynamic** — pulled live from `GET /api/markers/stats`. No need to update hardcoded numbers when spots are added.
-- Pins at the same property (e.g. Preston Farm & Winery winery + farmstand) must be offset by ~0.0003° so they don't stack.
+- Pins at the same property must be offset by ~0.0003° so they don't stack.
+- The `correctCoordinates()` function also removes any markers not present in the current `SEED_DATA` — this was used to purge Sonoma-era data on re-localization.
+- Map default center: `[45.1, -123.0]`, zoom `9` (covers the full valley from Portland to Eugene).
 
 ---
 
 ### Mobile App
 
-- Bundle ID: `com.sonomachefapp.sonoma`
+- Bundle ID: `com.chefplex.willametteexplorer`
 - GitHub: `ChefPlex/sonoma-explorer` (primary repo)
 - App Store version must always be higher than the last approved build. Current version tracked in `artifacts/sonoma-mobile/app.json`.
 - Build number is auto-incremented by EAS — do not hardcode it.

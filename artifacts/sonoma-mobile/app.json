@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Sonoma",
+    "name": "Willamette Valley",
     "slug": "sonoma-mobile",
     "version": "1.7.1",
     "orientation": "default",
@@ -16,11 +16,11 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Used to show your location on the Sonoma map and find nearby spots."
+        "NSLocationWhenInUseUsageDescription": "Used to show your location on the Willamette Valley map and find nearby spots."
       }
     },
     "android": {
-      "package": "com.sonomachefapp.sonoma",
+      "package": "com.chefplex.willametteexplorer",
       "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"]
     },
     "web": {
@@ -38,7 +38,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Used to show your location on the Sonoma map and find nearby spots."
+          "locationWhenInUsePermission": "Used to show your location on the Willamette Valley map and find nearby spots."
         }
       ]
     ],

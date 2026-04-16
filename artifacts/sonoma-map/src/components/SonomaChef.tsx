@@ -5,7 +5,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChefHat, X, Send, Loader2, RotateCcw } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const CHEF_TOOLTIP_KEY = "sonoma-chef-tooltip-seen";
+const CHEF_TOOLTIP_KEY = "valley-chef-tooltip-seen";
 
 interface Message {
   role: "user" | "assistant";
@@ -19,7 +19,7 @@ async function createConversation(): Promise<number> {
   const res = await fetch(`${API_BASE}/openai/conversations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title: "Sonoma Chef Chat" }),
+    body: JSON.stringify({ title: "Valley Chef Chat" }),
   });
   if (!res.ok) throw new Error("Failed to create conversation");
   const data = await res.json();
@@ -65,10 +65,10 @@ async function* streamMessage(
 }
 
 const PROMPTS = [
-  "What's in season right now in Sonoma?",
-  "Pair a wine with dry-farmed heirloom tomatoes",
-  "Best under-the-radar spots in Healdsburg?",
-  "What makes Dry Creek Kitchen worth it?",
+  "What's in season right now in the Willamette Valley?",
+  "Pair a wine with Oregon black truffles",
+  "Best under-the-radar spots in McMinnville?",
+  "What makes the Joel Palmer House worth it?",
 ];
 
 export function SonomaChef() {
@@ -176,7 +176,7 @@ export function SonomaChef() {
             <div className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
               <ChefHat className="w-3.5 h-3.5 text-primary" />
             </div>
-            <p className="text-xs font-semibold text-foreground">Meet Sonoma Chef</p>
+            <p className="text-xs font-semibold text-foreground">Meet Valley Chef</p>
           </div>
           <p className="text-xs text-muted-foreground leading-relaxed">
             An AI that knows every winery, farm, and table on this map. Ask it anything.
@@ -193,7 +193,7 @@ export function SonomaChef() {
           className="fixed bottom-6 right-6 z-[1000] flex items-center gap-2.5 bg-primary text-primary-foreground px-4 py-3 rounded-2xl shadow-lg hover:shadow-xl hover:brightness-105 transition-all duration-200 font-medium text-sm"
         >
           <ChefHat className="w-4 h-4" />
-          Ask Sonoma Chef
+          Ask Valley Chef
         </button>
       )}
 
@@ -208,7 +208,7 @@ export function SonomaChef() {
                 <ChefHat className="w-4 h-4 text-primary" />
               </div>
               <div>
-                <p className="font-serif font-semibold text-foreground text-sm leading-tight">Sonoma Chef</p>
+                <p className="font-serif font-semibold text-foreground text-sm leading-tight">Valley Chef</p>
                 <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Culinary Authority</p>
               </div>
             </div>
@@ -244,7 +244,7 @@ export function SonomaChef() {
               <div className="space-y-4">
                 <div className="text-center pt-4 pb-2">
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-[280px] mx-auto">
-                    The land. The labor. The flavor. Ask anything about Sonoma's food and wine ecosystem.
+                    The land. The labor. The flavor. Ask anything about the Willamette Valley's food and wine ecosystem.
                   </p>
                 </div>
                 <div className="space-y-2">
@@ -297,7 +297,7 @@ export function SonomaChef() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Ask about wineries, farms, pairings..."
+                placeholder="Ask about wineries, farms, truffles, pairings..."
                 className="resize-none min-h-[42px] max-h-[120px] text-sm bg-background rounded-xl leading-relaxed"
                 rows={1}
                 disabled={loading}
