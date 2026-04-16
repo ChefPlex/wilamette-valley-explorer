@@ -27,21 +27,21 @@ const FILTERS: { key: FilterType; label: string; icon: IoniconsName }[] = [
   { key: "farmstand", label: "Farms", icon: "leaf-outline" },
 ];
 
-// Regional latitude boundaries
-// North  ≥ 38.55:  Healdsburg, Alexander Valley, Geyserville, Dry Creek, Cloverdale
-// Central 38.35–38.55: Santa Rosa, Sebastopol, Russian River Valley, West County, Windsor, Glen Ellen
-// Southern < 38.35: Sonoma town, Petaluma, Carneros, Coast, Point Reyes
+// Regional latitude boundaries for Willamette Valley
+// North  ≥ 45.32: Chehalem Mountains, Ribbon Ridge, Portland metro
+// Central 45.10–45.32: Dundee Hills, Yamhill-Carlton, McMinnville AVA
+// South  < 45.10: Eola-Amity Hills, Salem, Eugene, southern valley
 const REGIONS = [
-  { key: "north", label: "North", fullLabel: "North Sonoma" },
-  { key: "central", label: "Central", fullLabel: "Central Sonoma" },
-  { key: "south", label: "Southern", fullLabel: "Southern Sonoma" },
+  { key: "north", label: "North", fullLabel: "North Valley" },
+  { key: "central", label: "Central", fullLabel: "Central Valley" },
+  { key: "south", label: "South", fullLabel: "South Valley" },
 ] as const;
 
 type RegionKey = typeof REGIONS[number]["key"];
 
 function getRegion(lat: number): RegionKey {
-  if (lat >= 38.55) return "north";
-  if (lat >= 38.35) return "central";
+  if (lat >= 45.32) return "north";
+  if (lat >= 45.10) return "central";
   return "south";
 }
 

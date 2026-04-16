@@ -112,8 +112,8 @@ export async function correctCoordinates() {
       }
     }
 
-    // Remove ALL existing Sonoma-era markers before inserting new Willamette Valley data
-    // This ensures a clean slate when re-seeding for the new region
+    // Remove any obsolete markers not in the current curated seed list
+    // This ensures a clean slate when adding or removing spots
     const allRows = await db.select({ name: markersTable.name, category: markersTable.category }).from(markersTable);
     const seedKeys = new Set(SEED_DATA.map((s) => `${s.name}||${s.category}`));
     const obsolete = allRows.filter((r) => !seedKeys.has(`${r.name}||${r.category}`));

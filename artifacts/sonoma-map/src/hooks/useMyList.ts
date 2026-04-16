@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-const STORAGE_KEY = "sonoma-my-list";
+const STORAGE_KEY = "willamette-my-list";
 
 export interface SavedSpot {
   id: number;

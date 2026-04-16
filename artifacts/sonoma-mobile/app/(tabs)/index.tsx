@@ -72,7 +72,7 @@ function getCategoryIcon(category: Category): IoniconsName {
 }
 
 // ── My List (AsyncStorage) ────────────────────────────────────────────────────
-const MY_LIST_KEY = "sonoma-my-list-mobile";
+const MY_LIST_KEY = "willamette-my-list-mobile";
 
 interface SavedSpot {
   id: number;
@@ -139,12 +139,12 @@ interface SpotSheetProps {
 function buildShareMessage(spot: MarkerType) {
   const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Producer" : "Farm Stand";
   const parts: string[] = [
-    `${spot.name} — ${catLabel} in Sonoma County`,
+    `${spot.name} — ${catLabel} in Willamette Valley`,
     "",
   ];
   if (spot.note) parts.push(spot.note, "");
   if (spot.website) parts.push(spot.website);
-  parts.push("", "Shared via the Sonoma Chef app");
+  parts.push("", "Shared via the Valley Chef app");
   return parts.join("\n");
 }
 
@@ -338,7 +338,7 @@ function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
 }
 
 // ── Welcome splash modal ──────────────────────────────────────────────────────
-const WELCOME_KEY = "sonoma-welcome-seen-mobile";
+const WELCOME_KEY = "willamette-welcome-seen-mobile";
 
 const PIN_LEGEND = [
   {
@@ -392,7 +392,7 @@ function WelcomeSplashModal({ visible, onClose }: { visible: boolean; onClose: (
               A CHEF'S GUIDE
             </Text>
             <Text style={[styles.welcomeTitle, { color: colors.foreground }]}>
-              Sonoma County
+              Willamette Valley
             </Text>
             <Text style={[styles.welcomeSubtitle, { color: colors.mutedForeground }]}>
               {total} personally curated spots — {wineries} wineries, {restaurants} restaurants, {farmstands} farm stands, and {producers} artisan producers (creameries, cideries, spirits, and more) — verified by a professional chef who actually goes to all of them.
@@ -804,7 +804,7 @@ export default function MapScreen() {
         <View style={[styles.webHeader, { paddingTop: topInset + 12, backgroundColor: colors.card, borderBottomColor: colors.border }]}>
           <View style={styles.webHeaderRow}>
             <Ionicons name="map" size={20} color={colors.primary} />
-            <Text style={[styles.webHeaderTitle, { color: colors.foreground }]}>Sonoma Map</Text>
+            <Text style={[styles.webHeaderTitle, { color: colors.foreground }]}>Willamette Valley</Text>
             <View style={[styles.countBadge, { backgroundColor: colors.primary }]}>
               <Text style={[styles.countBadgeText, { color: colors.primaryForeground }]}>
                 {filteredMarkers.length}
@@ -914,7 +914,7 @@ export default function MapScreen() {
       {/* Header pill — left on phone, centered-left on tablet */}
       <View style={[styles.headerPill, { top: topInset + 8, backgroundColor: colors.card }]}>
         <Ionicons name="map" size={16} color={colors.primary} />
-        <Text style={[styles.headerPillText, { color: colors.foreground }]}>Sonoma</Text>
+        <Text style={[styles.headerPillText, { color: colors.foreground }]}>Valley</Text>
         <View style={[styles.countBadge, { backgroundColor: colors.primary }]}>
           <Text style={[styles.countBadgeText, { color: colors.primaryForeground }]}>
             {filteredMarkers.length}

@@ -32,17 +32,17 @@ function generateId(): string {
 }
 
 const PROMPTS = [
-  "What's in season right now in Sonoma?",
-  "Pair a wine with dry-farmed heirloom tomatoes",
-  "Best under-the-radar spots in Healdsburg?",
-  "What makes Dry Creek Kitchen worth it?",
+  "What's in season right now in the Willamette Valley?",
+  "Pair a wine with Oregon white truffles",
+  "Best under-the-radar spots near Carlton?",
+  "What makes Joel Palmer House worth it?",
 ];
 
 async function createConversation(apiUrl: string): Promise<number> {
   const res = await fetch(`${apiUrl}api/openai/conversations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title: "Sonoma Chef Mobile" }),
+    body: JSON.stringify({ title: "Valley Chef Mobile" }),
   });
   if (!res.ok) throw new Error("Failed to create conversation");
   const data = await res.json();
@@ -253,7 +253,7 @@ export default function ChefScreen() {
             <Ionicons name="restaurant" size={18} color={colors.primaryForeground} />
           </View>
           <View style={styles.headerText}>
-            <Text style={[styles.headerTitle, { color: colors.foreground }]}>Sonoma Chef</Text>
+            <Text style={[styles.headerTitle, { color: colors.foreground }]}>Valley Chef</Text>
             <Text style={[styles.headerSubtitle, { color: colors.mutedForeground }]}>
               Culinary authority
             </Text>
@@ -289,7 +289,7 @@ export default function ChefScreen() {
                 <Ionicons name="restaurant" size={28} color={colors.primary} />
               </View>
               <Text style={[styles.emptyTitle, { color: colors.foreground }]}>
-                Ask the Sonoma Chef
+                Ask the Valley Chef
               </Text>
               <Text style={[styles.emptySubtitle, { color: colors.mutedForeground }]}>
                 The land. The labor. The flavor.
