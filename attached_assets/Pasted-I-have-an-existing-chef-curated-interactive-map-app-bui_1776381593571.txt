@@ -1,0 +1,55 @@
+I have an existing chef-curated interactive map app built in this repo — currently configured for Sonoma County, California. I need you to re-localize it completely for the Willamette Valley, Oregon — America's Pinot Noir heartland. The tech stack, structure, and design stay identical. Here is everything you need to know:
+
+WHAT TO CHANGE
+
+    Replace all references to "Sonoma County" with "Willamette Valley" throughout the app (UI, splash screen, AI persona, page titles, app name)
+    Replace "Sonoma Chef" AI assistant with "Valley Chef" — same structure, Willamette Valley and Pacific Northwest expertise
+    Clear out all existing seed data (the 161 Sonoma spots) — start with an empty database, or a small set of real Willamette Valley seed spots if you can verify them accurately
+    Update the mobile app name, bundle ID (suggest: com.chefplex.wilametteexplorer), and splash screen copy
+    Update the map's default center coordinates and zoom to focus on the Willamette Valley (roughly 45.1, -123.0, zoom 9 — the valley runs 150 miles Portland to Eugene so zoom out a bit more than the Sonoma default)
+
+GEOGRAPHY TO COVER
+
+The Willamette Valley is a long north-south corridor. Priority areas:
+
+    Dundee Hills — volcanic Jory soil, the historic heart of Oregon Pinot Noir (Domaine Drouhin, Argyle, Winderlea, Sokol Blosser)
+    Eola-Amity Hills — cooled by the Van Duzer wind corridor, elegant and mineral-driven Pinot; Cristom, Bethel Heights, Witness Tree
+    Chehalem Mountains — three distinct soil types across one appellation; Adelsheim, Bergström, Rex Hill
+    Ribbon Ridge — tiny, fog-prone, and coveted; Beaux Frères, Brick House, Patricia Green
+    McMinnville AVA — volcanic basalt soils, home to Evening Land, Eyrie (the pioneer, est. 1966), and Nick's Italian Café
+    Yamhill-Carlton — ancient marine sedimentary soils, warm and structured; Penner-Ash, WillaKenzie, Carlton Winemakers Studio
+    Van Duzer Corridor — wind-driven, fresh, and bright; newer AVA gaining attention
+    Newberg / Dayton / Carlton — restaurant and tasting room hub towns
+    Salem corridor — southern anchor, Eola Hills, access to farm country
+    Eugene area — southern tip of the valley; King Estate, Lane County farm culture
+
+AI CHEF PERSONA — KEY CHANGES
+
+Update the system prompt to reflect Willamette Valley's specific food culture:
+
+    Expertise: Oregon Pinot Noir viticulture and winemaking philosophy (low-intervention, Burgundian), Pacific Northwest foraging (Oregon white and black truffles, chanterelles, morels, matsutake), Willamette Valley farm and berry culture, Pacific coast seafood influence
+    Oregon truffle culture is central — the Joel Palmer House in Dayton is a pilgrimage destination; the Oregon Truffle Festival (January–February) is the defining winter food event
+    Oregon is 99% of US hazelnut production — Willamette Valley orchards are everywhere, and hazelnuts belong in the food conversation the way almonds belong in California
+    Berry culture: Marionberries, loganberries, boysenberries, and Tayberries are Oregon originals — a Willamette chef treats them the way a Sonoma chef treats Gravenstein apples
+    Wine focus: Pinot Noir above all, plus Pinot Gris, Pinot Blanc, Chardonnay, Riesling, Grüner Veltliner. Nothing Zinfandel, Cabernet, or big-red California thinking
+    Seasonal rhythm: spring asparagus and morels → summer berries and farmers markets → fall truffle season begins, harvest, Marionberry jam → winter truffles, root vegetables, braised everything
+    Tone stays the same: Bourdain-grounded, Slow Food values, ingredient-forward. PNW sensibility — understated, deeply serious about ingredients, skeptical of hype. No wine-country gloss
+    Key people to know: David Lett (Eyrie, "Papa Pinot," planted the first Pinot Noir in 1966), Joel Palmer (truffle chef), the Drouhin family (Oregon-Burgundy connection)
+
+CATEGORIES — KEEP EXACTLY THE SAME
+
+    winery (wine red) — will be heavily used; this is the Pinot Noir capital of the US
+    restaurant (amber)
+    farmstand (sage green #6f7d3c) — hazelnut farms, berry u-picks, Willamette Valley farm stands
+    producer (terracotta #c06a2d) — truffle dealers, hazelnut roasters, cheesemakers, cider producers
+
+COORDINATE VERIFICATION — CRITICAL
+GPS accuracy is non-negotiable. Use the same three-step protocol in replit.md for every pin: OSM Nominatim → Photon cross-check → Census TIGER fallback. Oregon wine country addresses can be particularly tricky — many wineries share rural highway frontage along 99W, and tasting rooms are often set back from the road. Always cross-check two sources.
+
+DO NOT CHANGE
+
+    Tech stack (React/Vite/Leaflet, Express, PostgreSQL, Drizzle, Expo)
+    Design system, color palette, font choices
+    Category system and map pin colors
+    Dynamic splash screen count (pulls from /api/markers/stats — already wired)
+    Sidebar, filtering, bookmarking, and AI chat panel structure
