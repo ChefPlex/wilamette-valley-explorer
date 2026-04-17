@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Willamette Valley — Sonoma Chef Field Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1c1814;
+    --parchment: #f5f0e8;
+    --wine: #6b2737;
+    --pinot: #8b3a4a;
+    --forest: #3b5443;
+    --gold: #b8963e;
+    --smoke: #8a857e;
+    --fog: #e8e2d8;
+    --cream: #faf7f2;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--forest);
+    color: var(--parchment);
+    padding: 5rem 2rem 4rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 60%, rgba(107,39,55,0.35) 0%, transparent 65%),
+                radial-gradient(ellipse at 80% 20%, rgba(184,150,62,0.15) 0%, transparent 55%);
+  }
+
+  .hero-label {
+    font-family: 'Jost', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    position: relative;
+  }
+
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.8rem, 6vw, 5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    position: relative;
+    margin-bottom: 0.4rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--gold);
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 1.15rem;
+    color: rgba(245,240,232,0.7);
+    margin-top: 1rem;
+    position: relative;
+  }
+
+  .hero-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+    margin: 1.8rem auto;
+    position: relative;
+  }
+
+  .hero-intro {
+    max-width: 600px;
+    margin: 0 auto;
+    font-size: 0.95rem;
+    color: rgba(245,240,232,0.82);
+    line-height: 1.8;
+    position: relative;
+  }
+
+  /* SLOW FOOD CALLOUT */
+  .slow-food-bar {
+    background: var(--wine);
+    color: var(--parchment);
+    padding: 1.2rem 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .slow-food-bar a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(184,150,62,0.4);
+  }
+
+  /* MAIN LAYOUT */
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* SECTION HEADERS */
+  .section {
+    padding: 4rem 0 2rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--fog);
+    padding-bottom: 1rem;
+  }
+
+  .section-icon {
+    font-size: 1.4rem;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.9rem;
+    font-weight: 400;
+    color: var(--forest);
+    letter-spacing: 0.01em;
+  }
+
+  .section-tag {
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  /* CARDS */
+  .cards {
+    display: grid;
+    gap: 1.5rem;
+  }
+
+  .cards-2col {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (max-width: 640px) {
+    .cards-2col { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: var(--parchment);
+    border: 1px solid var(--fog);
+    border-radius: 2px;
+    padding: 1.6rem 1.8rem;
+    position: relative;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 4px 24px rgba(28,24,20,0.08);
+    transform: translateY(-2px);
+  }
+
+  .card-accent {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px;
+    height: 100%;
+    border-radius: 2px 0 0 2px;
+  }
+
+  .accent-wine { background: var(--wine); }
+  .accent-forest { background: var(--forest); }
+  .accent-gold { background: var(--gold); }
+  .accent-pinot { background: var(--pinot); }
+
+  .card-label {
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: 0.4rem;
+  }
+
+  .card-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 0.2rem;
+    line-height: 1.2;
+  }
+
+  .card-location {
+    font-size: 0.75rem;
+    color: var(--smoke);
+    margin-bottom: 0.9rem;
+    font-style: italic;
+  }
+
+  .card-body {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: #3d3830;
+  }
+
+  .card-note {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--wine);
+    border: 1px solid rgba(107,39,55,0.25);
+    padding: 0.25rem 0.6rem;
+    border-radius: 1px;
+  }
+
+  /* HIGHLIGHT / STAR CARD */
+  .card-feature {
+    background: var(--forest);
+    color: var(--parchment);
+    border: none;
+  }
+
+  .card-feature .card-name { color: var(--parchment); }
+  .card-feature .card-location { color: rgba(245,240,232,0.6); }
+  .card-feature .card-body { color: rgba(245,240,232,0.85); }
+  .card-feature .card-label { color: var(--gold); }
+  .card-feature .card-note {
+    color: var(--gold);
+    border-color: rgba(184,150,62,0.4);
+  }
+
+  /* SLOW FOOD SECTION */
+  .sf-box {
+    background: var(--wine);
+    color: var(--parchment);
+    border-radius: 2px;
+    padding: 2rem 2.2rem;
+    margin-bottom: 3rem;
+  }
+
+  .sf-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 0.8rem;
+    color: var(--gold);
+  }
+
+  .sf-box p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.85);
+  }
+
+  .sf-chapters {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .sf-chapters { grid-template-columns: 1fr; }
+  }
+
+  .sf-chapter {
+    background: rgba(245,240,232,0.1);
+    border: 1px solid rgba(245,240,232,0.2);
+    padding: 1rem 1.1rem;
+    border-radius: 1px;
+  }
+
+  .sf-chapter strong {
+    display: block;
+    font-weight: 500;
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+    color: var(--parchment);
+  }
+
+  .sf-chapter span {
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.65);
+    font-style: italic;
+  }
+
+  /* PULL QUOTE */
+  .pull-quote {
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.5rem;
+    margin: 2.5rem 0;
+    background: var(--fog);
+  }
+
+  .pull-quote p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--forest);
+    line-height: 1.5;
+  }
+
+  .pull-quote cite {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.72rem;
+    font-style: normal;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--smoke);
+  }
+
+  /* FOOTER */
+  .guide-footer {
+    background: var(--ink);
+    color: rgba(245,240,232,0.5);
+    padding: 3rem 2rem;
+    text-align: center;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+  }
+
+  .guide-footer strong {
+    color: var(--gold);
+    font-weight: 500;
+  }
+
+  /* VINTAGE TAG */
+  .vintage-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--gold);
+    color: var(--ink);
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.6rem;
+    border-radius: 1px;
+    margin-bottom: 2rem;
+  }
+
+  hr.divider {
+    border: none;
+    border-top: 1px solid var(--fog);
+    margin: 3rem 0;
+  }
+
+  /* CONTACT INFO */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: var(--smoke);
+  }
+
+  @media (max-width: 480px) {
+    .contact-grid { grid-template-columns: 1fr; }
+  }
+
+  .contact-item {
+    display: flex;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+
+  .contact-item .ci-label {
+    font-weight: 500;
+    color: var(--ink);
+    min-width: 55px;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding-top: 0.05rem;
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-label">Sonoma Chef Field Guide · Oregon Edition</div>
+  <h1>The <em>Willamette Valley</em></h1>
+  <div class="hero-divider"></div>
+  <p class="hero-sub">Pinot Country, Farm Tables & Slow Food Roots</p>
+  <p class="hero-intro">Where Burgundy's ghost settled into Oregon's rain-soft hills and stubborn idealists planted vines the world said would never ripen. Decades later, this valley is one of North America's most compelling wine and food destinations — unhurried, deeply rooted, and increasingly luminous.</p>
+</div>
+
+<!-- SLOW FOOD ALERT BAR -->
+<div class="slow-food-bar">
+  Slow Food movement active across the valley — chapters in Portland, Corvallis & South Willamette ·
+  <a href="https://slowfoodusa.org">slowfoodusa.org</a>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="container">
+
+  <!-- SLOW FOOD SECTION -->
+  <div class="section">
+    <div class="vintage-tag">🐌 Slow Food Networks</div>
+
+    <div class="sf-box">
+      <h3>The Valley's Slow Food Ecosystem</h3>
+      <p>The Willamette Valley benefits from a robust network of Slow Food chapters anchoring food ethics and producer relationships across the region. Collectively they champion small farms, native seed varieties, artisan producers, and the Arc of Taste — connecting chefs, growers, and eaters in exactly the way this valley's founders intended.</p>
+      <div class="sf-chapters">
+        <div class="sf-chapter">
+          <strong>Slow Food Portland</strong>
+          <span>PNW regional hub; events, farm tours, Negroni Week fundraisers, olive oil tastings. Partner: Durant Olive Mill.</span>
+        </div>
+        <div class="sf-chapter">
+          <strong>Slow Food Corvallis</strong>
+          <span>Mid-Willamette Valley chapter focused on supporting good, clean, fair food and local producers around Benton County.</span>
+        </div>
+        <div class="sf-chapter">
+          <strong>Slow Food South Willamette</strong>
+          <span>Eugene-anchored chapter serving Lane County — active as of 2026, rooted in the university food culture and south valley farms.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sf-box" style="background: var(--forest); margin-bottom: 0;">
+      <h3 style="color: var(--gold);">Slow Food Oregon: What to Watch</h3>
+      <p>Oregon's proposed farm stand rule changes drew statewide Slow Food attention in 2025 — raising vital questions about agritourism, land preservation, and small-farm permitting. The valley's chapters have been vocal advocates for farmers navigating these rules. If you visit small farms, buying direct at their stands is a meaningful act of solidarity.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- WINERIES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🍷</span>
+      <div>
+        <span class="section-tag">The Pour</span>
+        <div class="section-title">Essential Wineries</div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <!-- FEATURE CARD -->
+      <div class="card card-feature">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">⭐ James Beard Best Chef NW 2025 · Don't Miss</div>
+        <div class="card-name">Antica Terra</div>
+        <div class="card-location">Amity, OR — Eola-Amity Hills AVA</div>
+        <div class="card-body">One of Oregon's most singular wine experiences — part winery, part sacred ground. Chef Timothy Wastell, winner of Best Chef Northwest at the 2025 James Beard Awards, has turned "A Very Nice Lunch" here into a genuine pilgrimage. Expect caviar alongside chestnuts and quince; wines of meticulous restraint alongside legendary Pinot Noir. Seatings are limited. Reservations are a commitment. Worth every moment.</div>
+        <span class="card-note">Reservation Required · Lunch Service Only</span>
+      </div>
+
+      <div class="cards cards-2col">
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">Founding Winery</div>
+          <div class="card-name">The Eyrie Vineyards</div>
+          <div class="card-location">McMinnville, OR · Est. 1965</div>
+          <div class="card-body">David Lett planted the first Pinot Noir in the Willamette Valley here in 1965 — and the wine world laughed. Nobody's laughing now. Low-intervention, native yeast, no artificial temperature control. The source of it all.</div>
+          <span class="card-note">Historic · Tasting by Appt.</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">Burgundy Benchmark</div>
+          <div class="card-name">Domaine Drouhin Oregon</div>
+          <div class="card-location">Dundee Hills AVA</div>
+          <div class="card-body">The French came and confirmed what Lett always knew. Maison Drouhin planted here in 1987. Their Laurène Pinot Noir remains a standard-bearer for the valley — Burgundian in structure, undeniably Oregonian in soul.</div>
+          <span class="card-note">Tasting Room Open</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">Biodynamic Pioneer</div>
+          <div class="card-name">Beaux Frères</div>
+          <div class="card-location">Ribbon Ridge AVA</div>
+          <div class="card-body">Founded 1988, now fully biodynamic across their Ribbon Ridge estate. Native yeast, minimal racking, restrained sulfur. Three Pinot Noir clones across two vineyards: Dijon, Pommard, Wädenswil. A benchmark for the appellation.</div>
+          <span class="card-note">Appointment Tasting</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-gold"></div>
+          <div class="card-label">Critically Acclaimed</div>
+          <div class="card-name">Adelsheim Vineyard</div>
+          <div class="card-location">Chehalem Mountains · Est. 1971</div>
+          <div class="card-body">The first winery in the Chehalem Mountains appellation. David Adelsheim helped write Oregon wine history — quite literally, helping draft the state's appellation regulations. A founding voice of the entire valley's identity.</div>
+          <span class="card-note">Tasting Room Open</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">Single-Vineyard Master</div>
+          <div class="card-name">Ken Wright Cellars</div>
+          <div class="card-location">Carlton, OR</div>
+          <div class="card-body">Wine Spectator's "Master of Pinot Noir in Oregon." Each wine is single-vineyard, single-site — a map of the valley's terroir you can drink. Multiple AVAs represented, ranging from Dundee Hills to Chehalem Mountains.</div>
+          <span class="card-note">Tasting Room · Carlton</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">French-Oregon Collaboration</div>
+          <div class="card-name">Résonance</div>
+          <div class="card-location">Yamhill-Carlton AVA</div>
+          <div class="card-body">Maison Louis Jadot's first winery outside of France — established here because the Willamette Valley, more than anywhere else in America, unlocks the potential of Pinot Noir the way Burgundy does. A profound statement of terroir confidence.</div>
+          <span class="card-note">Tasting by Appt.</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-gold"></div>
+          <div class="card-label">Sparkling Excellence</div>
+          <div class="card-name">Argyle Winery</div>
+          <div class="card-location">Dundee, OR</div>
+          <div class="card-body">Oregon's definitive sparkling wine house — méthode traditionnelle done with genuine ambition. Their Brut is ubiquitous for good reason. Beyond bubbles, Argyle's still Pinots and Chardonnays earn their Wine Spectator recognition year after year.</div>
+          <span class="card-note">Tasting Room Open</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">Biodynamic Estate</div>
+          <div class="card-name">Sokol Blosser Winery</div>
+          <div class="card-location">Dundee Hills AVA</div>
+          <div class="card-body">One of Oregon's original estate wineries, now fully certified organic and biodynamic. The Evolution blend democratizes the cellar; their Pinot Noirs reward patience. Gorgeous hilltop views, accessible tasting room, committed stewardship.</div>
+          <span class="card-note">Open Daily · Views</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">Olive Oil + Wine</div>
+          <div class="card-name">Durant Vineyards &amp; Olive Mill</div>
+          <div class="card-location">Dayton, OR · Dundee Hills</div>
+          <div class="card-body">A Slow Food Portland partner and a singular Oregon producer — wines and estate-pressed olive oil from the same Dundee Hills property. Paul Durant has been a champion of the Oregon olive oil industry. This is one of those places that makes you rethink what a winery can be.</div>
+          <span class="card-note">Wines + Olive Oil · Slow Food Partner</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">Value + Craft</div>
+          <div class="card-name">Vincent Wine Company</div>
+          <div class="card-location">Ribbon Ridge AVA</div>
+          <div class="card-body">Owner-winemaker Vincent Fritzsche makes low-input, handmade Pinot Noir from sustainably-farmed vineyards across the valley. Accessible pricing without sacrificing craft — a refreshing counterpoint to the valley's prestige tier.</div>
+          <span class="card-note">Small Production · Direct</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="pull-quote">
+    <p>"The 2024 vintage has been an absolute dream for winemakers — daytime highs in the 70s, extended hang time, perfectly balanced acidity. A vintage to collect."</p>
+    <cite>— Anna Matzinger, Matzinger Davies Wine Company / Willamette Valley Wineries Association</cite>
+  </div>
+
+  <hr class="divider">
+
+  <!-- RESTAURANTS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🍽</span>
+      <div>
+        <span class="section-tag">The Table</span>
+        <div class="section-title">Restaurants Worth the Drive</div>
+      </div>
+    </div>
+
+    <div class="cards">
+
+      <div class="card card-feature">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">James Beard Finalist 2024 · Rising Star Chef</div>
+        <div class="card-name">Hayward Restaurant</div>
+        <div class="card-location">Carlton, OR</div>
+        <div class="card-body">Chef-owner Kari Shaughnessy left Michelin kitchens in San Francisco to get closer to the source — and built something extraordinary in Carlton. "New Northwest" cuisine: hyper-local, hyper-seasonal, transformed through fermentation, whole-animal butchery, and zero-waste discipline. A James Beard finalist for Best New Restaurant in 2024 and semifinalist for Best Chef NW in 2025. Seventy seats, six named rooms, dinner Wednesday through Saturday. The wine list leans rare Italian and Austrian alongside Oregon's finest. One of Oregon's most essential dining experiences, full stop.</div>
+        <span class="card-note">Wed–Sat · Dinner Only · Reservations Essential</span>
+      </div>
+
+      <div class="cards cards-2col">
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">AAA Four Diamond · Forbes Four Star</div>
+          <div class="card-name">The Painted Lady</div>
+          <div class="card-location">Newberg, OR</div>
+          <div class="card-body">Oregon's only AAA Four Diamond and Forbes Four Star restaurant. Chef-driven tasting menu in a restored Victorian, celebrating local ranchers, farmers, and vintners nightly. Bring a bottle of something you love and let Chef Allen do the rest.</div>
+          <span class="card-note">Prix Fixe · Tasting Menu</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">Truffle &amp; Mushroom Legend</div>
+          <div class="card-name">The Joel Palmer House</div>
+          <div class="card-location">Dayton, OR · Est. 1857 Structure</div>
+          <div class="card-body">If you love Oregon's legendary truffles and wild mushrooms, this is your temple. Set in the valley's oldest standing structure on the National Register of Historic Places. Freestyle cuisine — French, Chinese, Thai, Polish influences — united by Oregon Pinot pairings and a 400-bottle Oregon wine list.</div>
+          <span class="card-note">Seasonal · Wine Spectator Award</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">Relocated Fine Dining</div>
+          <div class="card-name">The Bay House</div>
+          <div class="card-location">Dayton, OR · Est. May 2025</div>
+          <div class="card-body">After 45 years on the Oregon Coast, The Bay House moved to a beautifully restored historic church in Dayton's town square in 2025. Four collaborating chefs, 2,600-selection wine program — one of the largest in Oregon — and AAA Four Diamond status since 2015. DiRōNA Award of Excellence 2024 and 2025.</div>
+          <span class="card-note">New Location · 2025</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-gold"></div>
+          <div class="card-label">Farm-to-Table Anchor</div>
+          <div class="card-name">Thistle</div>
+          <div class="card-location">McMinnville, OR</div>
+          <div class="card-body">Named Restaurant of the Year by The Oregonian. Ingredients sourced from local farmers and ranchers within 20 miles. Chalkboard menu that changes with what's available. The gnocchi, when they have it, is the thing. Zero-Foodprint certified — one of Oregon's first.</div>
+          <span class="card-note">Hyper-Local · Seasonal Menu</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">Humble &amp; Excellent</div>
+          <div class="card-name">Humble Spirit</div>
+          <div class="card-location">McMinnville, OR · Est. 2022</div>
+          <div class="card-body">Opened July 2022 with a commitment to pasture-raised beef and pork, handmade pasta, and a cozy, unpretentious room. Quickly became a local favorite for the kind of cooking that makes wine country so pleasurable — elegant but at ease.</div>
+          <span class="card-note">Dinner Service · Reservations</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-forest"></div>
+          <div class="card-label">Tasting Menu at a Winery</div>
+          <div class="card-name">Okta at Tributary Hotel</div>
+          <div class="card-location">McMinnville, OR</div>
+          <div class="card-body">A four-course tasting menu drawing from the Willamette Valley's micro-seasons and Tributary's own farm. Pacific seafood, estate vegetables, and wines selected with genuine editorial intelligence. Seasonal closure Jan–mid April; plan accordingly.</div>
+          <span class="card-note">Tasting Menu · Seasonal Closure Jan–Apr</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-wine"></div>
+          <div class="card-label">French Country Warmth</div>
+          <div class="card-name">Bistro Maison</div>
+          <div class="card-location">McMinnville, OR</div>
+          <div class="card-body">An absolute essential. French-bistro warmth in the heart of McMinnville — the kind of place that makes you feel the meal will last as long as you want it to. Thoughtful wine country menu with genuine hospitality. A local institution.</div>
+          <span class="card-note">Lunch &amp; Dinner</span>
+        </div>
+
+        <div class="card">
+          <div class="card-accent accent-gold"></div>
+          <div class="card-label">Cheese Bar + Wine</div>
+          <div class="card-name">Good Company Cheese Bar &amp; Bistro</div>
+          <div class="card-location">Newberg, OR</div>
+          <div class="card-body">The ideal post-tasting stop: a serious cheese program, casual vibe, happy hour daily 4–6pm. Exactly the kind of low-key neighborhood anchor that makes a wine region feel like a real place to live, not just to visit.</div>
+          <span class="card-note">Daily Happy Hour 4–6pm</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- FARMSTANDS & FARMS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🌿</span>
+      <div>
+        <span class="section-tag">The Harvest</span>
+        <div class="section-title">Farmstands &amp; Working Farms</div>
+      </div>
+    </div>
+
+    <div class="cards cards-2col">
+
+      <div class="card">
+        <div class="card-accent accent-forest"></div>
+        <div class="card-label">South Willamette</div>
+        <div class="card-name">Upriver Organics</div>
+        <div class="card-location">McKenzie River, Lane County</div>
+        <div class="card-body">A sprawling U-pick blueberry farm and market along the banks of the McKenzie River. Open May through December. One of the South Willamette Valley Food Trail's most beloved stops.</div>
+        <span class="card-note">U-Pick · May–Dec</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">South Willamette</div>
+        <div class="card-name">McKenzie River Lavender</div>
+        <div class="card-location">McKenzie River corridor</div>
+        <div class="card-body">One of the scenic anchors of the South Willamette Food Trail — vibrant purple fields peak in July. A quintessential Oregon farmstand moment, with lavender products and u-cut available in season.</div>
+        <span class="card-note">Peak Season: July</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-wine"></div>
+        <div class="card-label">Clackamas Farm Loop</div>
+        <div class="card-name">Morning Shade Farm</div>
+        <div class="card-location">South Clackamas</div>
+        <div class="card-body">U-pick apples, plums, blackberries, raspberries in season — plus a stand stocked with raw honey, frozen fruit, and popsicles. Part of the 20-destination South Clackamas Farm Loop.</div>
+        <span class="card-note">U-Pick · Seasonal</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-forest"></div>
+        <div class="card-label">Goat Farmstay</div>
+        <div class="card-name">Fraga Farmstead Creamery</div>
+        <div class="card-location">Gales Creek — West of Portland</div>
+        <div class="card-body">Certified Animal Welfare Approved. Hike with goats, picnic by the pond, then shop the on-site farm stand for seasonal goat cheese, goat gelato, and goat-milk soaps. An antidote to anything urban.</div>
+        <span class="card-note">Farm Stand · Tours · Animal Welfare Certified</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">Organic Farm</div>
+        <div class="card-name">Groundwork Organics</div>
+        <div class="card-location">Junction City, OR</div>
+        <div class="card-body">The farm where Antica Terra chef Timothy Wastell occasionally works farmers market shifts — a testament to his commitment to Oregon's agricultural landscape. Family-scale organic production in the southern valley.</div>
+        <span class="card-note">Farmers Market Presence</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-wine"></div>
+        <div class="card-label">Willamette Valley Farm Trail</div>
+        <div class="card-name">King Estate Winery &amp; Farm</div>
+        <div class="card-location">Eugene, OR · South Willamette</div>
+        <div class="card-body">The largest Biodynamic-certified winery in North America anchors the South Willamette Valley Food Trail. On-site restaurant, estate gardens, and a working organic farm make this a full-day destination for wine and food together.</div>
+        <span class="card-note">Biodynamic · Restaurant On-Site</span>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ARTISAN PRODUCERS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-icon">🧀</span>
+      <div>
+        <span class="section-tag">The Pantry</span>
+        <div class="section-title">Artisan Producers</div>
+      </div>
+    </div>
+
+    <div class="cards cards-2col">
+
+      <div class="card card-feature">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">Cheese · Dundee Hills</div>
+        <div class="card-name">Briar Rose Creamery</div>
+        <div class="card-location">Dundee, OR — surrounded by Pinot vineyards</div>
+        <div class="card-body">Nestled in the hills above Dundee, cheesemaker Sarah Marcus crafts seasonal, limited-edition cheeses in a 120-square-foot tasting room. From spreadable Fromage Blanc to the aged Callisto — each designed to pair with Oregon Pinot Noir. Don't miss the chocolate truffles made with fromage blanc rolled in cocoa. The setting alone — forest and vineyards — earns the visit.</div>
+        <span class="card-note">Tasting Room · Seasonal Editions</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-forest"></div>
+        <div class="card-label">Cheese · Salem</div>
+        <div class="card-name">Willamette Valley Cheese Co.</div>
+        <div class="card-location">Salem, OR</div>
+        <div class="card-body">Family dairy heritage dating to 1962, cheese production since 1999. Their raw-milk Gouda — distinct, complex, wine-friendly — is served regularly at area winery tastings. Handcrafted Havarti and European-style rounds from Holstein dairy stock.</div>
+        <span class="card-note">Farmstead · Raw Milk Gouda</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-wine"></div>
+        <div class="card-label">Goat Cheese · French Style</div>
+        <div class="card-name">Goldin Artisan Goat Cheese</div>
+        <div class="card-location">Molalla / Estacada area</div>
+        <div class="card-body">French native Carine Goldin brings the Savoie tradition — France's great mountain cheese country — to Oregon's pastoral hills. Small-batch, French-Alpine style goat cheese. By appointment only; call ahead and hear her call "biquette" across the fields.</div>
+        <span class="card-note">By Appointment · Small Batch</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">Goat Dairy · Lowell</div>
+        <div class="card-name">Fern's Edge Goat Dairy</div>
+        <div class="card-location">Lowell, OR — South Willamette</div>
+        <div class="card-body">Heart-of-the-valley goat cheese operation near the gorgeous Lowell Covered Bridge. Their Mt. Zion — a hard, mild cheese — is exceptional. Available at Lane County farmers markets. A quintessential slow food producer.</div>
+        <span class="card-note">Farmers Market · Lane County</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-forest"></div>
+        <div class="card-label">Artisan Cheese · Swiss Tradition</div>
+        <div class="card-name">Helvetia Creamery</div>
+        <div class="card-location">Helvetia, OR — Tualatin Valley</div>
+        <div class="card-body">A sixth-generation Century Farm partnership. Their Bergkäse — traditional Swiss Alpine-style — is washed with local hard cider from a neighboring cidery. Bold, nutty, and utterly Oregonian in its collaborative spirit.</div>
+        <span class="card-note">Century Farm · Cider-Washed Rind</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-wine"></div>
+        <div class="card-label">Olive Oil · Dundee Hills</div>
+        <div class="card-name">Durant Olive Mill</div>
+        <div class="card-location">Dayton, OR</div>
+        <div class="card-body">Paul Durant has been a leading voice for Oregon's olive oil industry — a Slow Food Portland featured partner and a genuine pioneer. Estate-pressed oil from Dundee Hills olives, available at the winery alongside their wines. A remarkable dual-producer story.</div>
+        <span class="card-note">Estate Oil + Wine · Slow Food Partner</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-forest"></div>
+        <div class="card-label">Mexican Cheesemaking · Albany</div>
+        <div class="card-name">Ochoa's Queseria</div>
+        <div class="card-location">Albany, OR</div>
+        <div class="card-body">Family-run since 2005, named for the founder's father. Their hand-pulled Liliana's string cheese was named Best String Cheese by the American Cheese Society in both 2023 and 2024. Watch the stretching process on weekdays — a mesmerizing 9,000-square-foot artisan operation.</div>
+        <span class="card-note">Best String Cheese · ACS 2023 &amp; 2024</span>
+      </div>
+
+      <div class="card">
+        <div class="card-accent accent-gold"></div>
+        <div class="card-label">Artisan Food Shop · Eugene</div>
+        <div class="card-name">Marché Provisions</div>
+        <div class="card-location">Eugene, OR</div>
+        <div class="card-body">The gourmet anchor of Eugene's food scene — a treasure trove of artisan food and drink, perfect for assembling a picnic before heading out on the South Willamette Valley Food Trail. Croque Madame and coffee to start the day.</div>
+        <span class="card-note">Deli + Artisan Market</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PUBLICATIONS NOTE -->
+  <div class="section" style="padding-top: 2rem;">
+    <div class="sf-box" style="background: var(--ink);">
+      <h3 style="color: var(--gold); font-size: 1.3rem;">Regional Publications &amp; Resources</h3>
+      <p>The <strong style="color: var(--parchment);">Willamette Valley Wineries Association</strong> (willamettewines.com) publishes comprehensive maps, winery directories, and harvest news for 400+ members. <strong style="color: var(--parchment);">Travel Oregon</strong> maintains a curated South Willamette Valley Food Trail guide covering nearly 60 businesses — wineries, farms, restaurants, and markets — across Lane County and the Cascade foothills. For Slow Food events and chapter news, follow <strong style="color: var(--parchment);">slowfoodportland.com</strong> and the national directory at slowfoodusa.org.</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="guide-footer">
+  <p><strong>Sonoma Chef Field Guide</strong> · Willamette Valley Edition</p>
+  <p style="margin-top: 0.5rem;">sonomachef.pages.dev · Research compiled April 2026</p>
+  <p style="margin-top: 0.5rem; font-style: italic; color: rgba(245,240,232,0.35);">For the curious table — good, clean, fair.</p>
+</div>
+
+</body>
+</html>
