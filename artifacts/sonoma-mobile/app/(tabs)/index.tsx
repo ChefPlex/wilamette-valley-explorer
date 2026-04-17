@@ -42,7 +42,7 @@ const CATEGORY_LABELS: Record<Category, string> = {
   winery: "Wineries",
   restaurant: "Dining",
   farmstand: "Farms",
-  producer: "Makers",
+  producer: "Artisan Producers",
 };
 
 const CATEGORY_ICON_MAP: Record<Category, IoniconsName> = {
@@ -57,7 +57,7 @@ const MAP_FILTERS: { key: MapFilter; label: string; icon: IoniconsName }[] = [
   { key: "winery", label: "Wineries", icon: "wine-outline" },
   { key: "restaurant", label: "Dining", icon: "restaurant-outline" },
   { key: "farmstand", label: "Farms", icon: "leaf-outline" },
-  { key: "producer", label: "Makers", icon: "storefront-outline" },
+  { key: "producer", label: "Artisan", icon: "storefront-outline" },
 ];
 
 function getCategoryColor(category: Category, colors: ReturnType<typeof useColors>) {
@@ -137,7 +137,7 @@ interface SpotSheetProps {
 }
 
 function buildShareMessage(spot: MarkerType) {
-  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Producer" : "Farm Stand";
+  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Artisan" : "Farm Stand";
   const parts: string[] = [
     `${spot.name} — ${catLabel} in Willamette Valley`,
     "",
@@ -154,7 +154,7 @@ function SpotDetailModal({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
 
   const catColor = getCategoryColor(spot.category as Category, colors);
   const catIcon = getCategoryIcon(spot.category as Category);
-  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Producer" : "Farm";
+  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Artisan" : "Farm";
   const saved = isSaved(spot.id);
 
   const handleShare = async () => {
@@ -252,7 +252,7 @@ function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
 
   const catColor = getCategoryColor(spot.category as Category, colors);
   const catIcon = getCategoryIcon(spot.category as Category);
-  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Producer" : "Farm";
+  const catLabel = spot.category === "winery" ? "Winery" : spot.category === "restaurant" ? "Dining" : spot.category === "producer" ? "Artisan" : "Farm";
   const saved = isSaved(spot.id);
 
   const handleShare = async () => {
@@ -1024,7 +1024,7 @@ export default function MapScreen() {
               {[...myListSaved.values()].map((s) => {
                 const catColor = getCategoryColor(s.category as Category, colors);
                 const catIcon = getCategoryIcon(s.category as Category);
-                const catLabel = s.category === "winery" ? "Winery" : s.category === "restaurant" ? "Dining" : s.category === "producer" ? "Producer" : "Farm";
+                const catLabel = s.category === "winery" ? "Winery" : s.category === "restaurant" ? "Dining" : s.category === "producer" ? "Artisan" : "Farm";
                 return (
                   <View
                     key={s.id}

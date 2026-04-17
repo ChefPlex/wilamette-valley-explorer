@@ -120,7 +120,7 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
             <span className="text-xl font-serif font-medium leading-none mb-1 text-foreground">
               {statsLoading ? "-" : producers}
             </span>
-            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Makers</span>
+            <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">Artisan</span>
           </button>
         </div>
       </div>
