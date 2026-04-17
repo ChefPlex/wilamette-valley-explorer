@@ -149,7 +149,7 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
                 key={marker.id}
                 className="group p-4 rounded-xl border border-border bg-background shadow-sm hover:border-ring/30 transition-colors"
               >
-                <div className="flex items-start justify-between mb-2">
+                <div className="flex items-start justify-between mb-1">
                   <h3 className="font-serif font-semibold text-foreground text-lg leading-tight">{marker.name}</h3>
                   <div className={cn(
                     "p-1.5 rounded-full shrink-0 ml-2",
@@ -164,6 +164,9 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
                     : <Utensils className="w-3.5 h-3.5" />}
                   </div>
                 </div>
+                {(marker as any).city && (
+                  <p className="text-xs text-muted-foreground italic mb-2">{(marker as any).city}, OR</p>
+                )}
                 {marker.note && (
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
                     {marker.note}
