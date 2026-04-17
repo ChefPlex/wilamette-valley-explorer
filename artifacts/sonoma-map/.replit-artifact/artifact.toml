@@ -1,6 +1,6 @@
 kind = "web"
 previewPath = "/"
-title = "Sonoma County Map"
+title = "Willamette Valley Map"
 version = "1.0.0"
 id = "artifacts/sonoma-map"
 router = "path"

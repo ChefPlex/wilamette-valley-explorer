@@ -1,6 +1,6 @@
 kind = "mobile"
 previewPath = "/sonoma-mobile/"
-title = "Sonoma Mobile"
+title = "Willamette Mobile"
 version = "1.0.0"
 id = "artifacts/sonoma-mobile"
 router = "expo-domain"
