@@ -42,7 +42,7 @@ const CATEGORY_LABELS: Record<Category, string> = {
   winery: "Wineries",
   restaurant: "Dining",
   farmstand: "Farms",
-  producer: "Artisan Producers",
+  producer: "Artisan",
 };
 
 const CATEGORY_ICON_MAP: Record<Category, IoniconsName> = {

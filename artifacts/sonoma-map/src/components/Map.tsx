@@ -155,7 +155,7 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
                   : marker.category === "farmstand" ? <Leaf className="w-3 h-3" />
                   : marker.category === "producer" ? <Store className="w-3 h-3" />
                   : <Utensils className="w-3 h-3" />}
-                  {marker.category === "producer" ? "Artisan Producer" : marker.category}
+                  {marker.category === "producer" ? "Artisan" : marker.category}
                 </span>
                 <span className="text-[10px] text-muted-foreground font-mono">
                   {format(new Date(marker.createdAt), 'MMM d, yyyy')}
