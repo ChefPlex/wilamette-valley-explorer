@@ -150,12 +150,11 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
           <Popup className="custom-popup min-w-[240px]">
             <div className="p-1">
               <div className="flex items-center justify-between mb-2">
-                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground uppercase tracking-wider">
+                <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground">
                   {marker.category === "winery" ? <Wine className="w-3 h-3" /> 
                   : marker.category === "farmstand" ? <Leaf className="w-3 h-3" />
                   : marker.category === "producer" ? <Store className="w-3 h-3" />
                   : <Utensils className="w-3 h-3" />}
-                  {marker.category === "producer" ? "Artisan" : marker.category}
                 </span>
                 <span className="text-[10px] text-muted-foreground font-mono">
                   {format(new Date(marker.createdAt), 'MMM d, yyyy')}

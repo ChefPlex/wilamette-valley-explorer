@@ -1041,7 +1041,7 @@ export default function MapScreen() {
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={[styles.myListItemName, { color: colors.foreground }]}>{s.name}</Text>
-                      <Text style={[styles.myListItemCat, { color: catColor }]}>{catLabel}{s.city ? ` · ${s.city}` : ""}</Text>
+                      {s.city ? <Text style={[styles.myListItemCat, { color: colors.mutedForeground }]}>{s.city}, OR</Text> : null}
                     </View>
                     <TouchableOpacity
                       onPress={() => removeFromList(s.id)}
