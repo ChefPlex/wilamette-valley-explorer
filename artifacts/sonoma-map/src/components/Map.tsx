@@ -162,8 +162,8 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
                 </span>
               </div>
               <h3 className="font-serif text-lg font-bold text-foreground mb-1 leading-tight">{marker.name}</h3>
-              {(marker as any).city && (
-                <p className="text-xs text-muted-foreground italic mb-2">{(marker as any).city}, OR</p>
+              {marker.city && (
+                <p className="text-xs text-muted-foreground italic mb-2">{marker.city}, OR</p>
               )}
               {marker.note && (
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{marker.note}</p>

@@ -164,8 +164,8 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
                     : <Utensils className="w-3.5 h-3.5" />}
                   </div>
                 </div>
-                {(marker as any).city && (
-                  <p className="text-xs text-muted-foreground italic mb-2">{(marker as any).city}, OR</p>
+                {marker.city && (
+                  <p className="text-xs text-muted-foreground italic mb-2">{marker.city}, OR</p>
                 )}
                 {marker.note && (
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-3 leading-relaxed">

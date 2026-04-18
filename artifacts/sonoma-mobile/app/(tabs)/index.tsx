@@ -211,6 +211,9 @@ function SpotDetailModal({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
         </View>
 
         <Text style={[styles.spotName, { color: colors.foreground }]}>{spot.name}</Text>
+        {spot.city ? (
+          <Text style={[styles.spotCity, { color: colors.mutedForeground }]}>{spot.city}, OR</Text>
+        ) : null}
 
         {spot.note ? (
           <Text style={[styles.spotNote, { color: colors.mutedForeground }]}>{spot.note}</Text>
@@ -302,6 +305,9 @@ function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
       </View>
 
       <Text style={[styles.spotName, { color: colors.foreground }]}>{spot.name}</Text>
+      {spot.city ? (
+        <Text style={[styles.spotCity, { color: colors.mutedForeground }]}>{spot.city}, OR</Text>
+      ) : null}
 
       {spot.note ? (
         <ScrollView style={styles.panelNoteScroll} showsVerticalScrollIndicator={false}>
@@ -1035,7 +1041,7 @@ export default function MapScreen() {
                     </View>
                     <View style={{ flex: 1 }}>
                       <Text style={[styles.myListItemName, { color: colors.foreground }]}>{s.name}</Text>
-                      <Text style={[styles.myListItemCat, { color: catColor }]}>{catLabel}</Text>
+                      <Text style={[styles.myListItemCat, { color: catColor }]}>{catLabel}{s.city ? ` · ${s.city}` : ""}</Text>
                     </View>
                     <TouchableOpacity
                       onPress={() => removeFromList(s.id)}
@@ -1376,6 +1382,13 @@ const styles = StyleSheet.create({
     fontFamily: "Inter_700Bold",
     marginBottom: 10,
     lineHeight: 28,
+  },
+  spotCity: {
+    fontSize: 13,
+    fontFamily: "Inter_400Regular",
+    fontStyle: "italic",
+    marginTop: 2,
+    marginBottom: 10,
   },
   spotNote: {
     fontSize: 15,
