@@ -43,7 +43,7 @@ export function WelcomeOverlay({ open, onClose }: WelcomeOverlayProps) {
   const wineries = stats?.wineries ?? "—";
   const restaurants = stats?.restaurants ?? "—";
   const farmstands = stats?.farmstands ?? "—";
-  const producers = stats?.producers ?? "—";
+  const artisans = (stats as any)?.artisans ?? "—";
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
@@ -63,7 +63,7 @@ export function WelcomeOverlay({ open, onClose }: WelcomeOverlayProps) {
             Willamette Valley
           </h1>
           <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-            {total} personally curated spots — {wineries} wineries, {restaurants} restaurants, {farmstands} farm stands, and {producers} artisan producers (truffle dealers, hazelnut roasters, cheesemakers, cidermakers, and more) — verified by a professional chef who actually goes to all of them.
+            {total} personally curated spots — {wineries} wineries, {restaurants} restaurants, {farmstands} farm stands, and {artisans} artisan producers (truffle dealers, hazelnut roasters, cheesemakers, cidermakers, and more) — verified by a professional chef who actually goes to all of them.
           </p>
         </div>
 

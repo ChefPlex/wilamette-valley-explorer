@@ -26,16 +26,16 @@ L.Icon.Default.mergeOptions({
 });
 
 // Create custom icons
-const createCustomIcon = (type: "winery" | "restaurant" | "farmstand" | "producer" | string) => {
+const createCustomIcon = (type: "winery" | "restaurant" | "farmstand" | "artisan" | string) => {
   const bgColor = type === "winery" ? "bg-primary" 
     : type === "farmstand" ? "bg-[#6f7d3c]"
-    : type === "producer" ? "bg-[#c06a2d]"
+    : type === "artisan" ? "bg-[#c06a2d]"
     : "bg-secondary";
   const iconSvg = type === "winery"
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 22h8"/><path d="M7 10h10"/><path d="M12 15v7"/><path d="M12 15a5 5 0 0 0 5-5c0-2-.5-4-2-8H9c-1.5 4-2 6-2 8a5 5 0 0 0 5 5Z"/></svg>`
     : type === "farmstand"
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>`
-    : type === "producer"
+    : type === "artisan"
     ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>`
     : `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/><path d="M7 2v20"/><path d="M21 15V2v0a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3Zm0 0v7"/></svg>`;
     
@@ -86,7 +86,7 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
   const deleteMarker = useDeleteMarker();
   
   const [draftMarker, setDraftMarker] = useState<L.LatLng | null>(null);
-  const [formData, setFormData] = useState({ name: "", note: "", category: "winery" as "winery" | "restaurant" | "farmstand" | "producer" });
+  const [formData, setFormData] = useState({ name: "", note: "", category: "winery" as "winery" | "restaurant" | "farmstand" | "artisan" });
   
   const handleMapClick = useCallback((latlng: L.LatLng) => {
     setDraftMarker(latlng);
@@ -153,7 +153,7 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
                 <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium bg-muted text-muted-foreground">
                   {marker.category === "winery" ? <Wine className="w-3 h-3" /> 
                   : marker.category === "farmstand" ? <Leaf className="w-3 h-3" />
-                  : marker.category === "producer" ? <Store className="w-3 h-3" />
+                  : marker.category === "artisan" ? <Store className="w-3 h-3" />
                   : <Utensils className="w-3 h-3" />}
                 </span>
                 <span className="text-[10px] text-muted-foreground font-mono">
@@ -293,9 +293,9 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
                     </button>
                     <button
                       type="button"
-                      onClick={() => setFormData(p => ({ ...p, category: "producer" }))}
+                      onClick={() => setFormData(p => ({ ...p, category: "artisan" }))}
                       className={`flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-md border text-xs font-medium transition-colors
-                        ${formData.category === "producer" 
+                        ${formData.category === "artisan" 
                           ? "bg-[#c06a2d] text-white border-[#c06a2d]" 
                           : "bg-background text-muted-foreground border-border hover:bg-muted"}`}
                     >

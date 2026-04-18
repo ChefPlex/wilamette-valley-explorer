@@ -7,7 +7,7 @@ import { MyList } from "@/components/MyList";
 import { useMyList } from "@/hooks/useMyList";
 
 export default function Home() {
-  const [activeFilter, setActiveFilter] = useState<"all" | "winery" | "restaurant" | "farmstand" | "producer">("all");
+  const [activeFilter, setActiveFilter] = useState<"all" | "winery" | "restaurant" | "farmstand" | "artisan">("all");
 
   const [showWelcome, setShowWelcome] = useState(() => !localStorage.getItem("valley-welcomed"));
   const handleCloseWelcome = () => {

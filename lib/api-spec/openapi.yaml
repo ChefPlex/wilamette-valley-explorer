@@ -342,7 +342,7 @@ components:
           type: string
         category:
           type: string
-          enum: [winery, restaurant, farmstand]
+          enum: [winery, restaurant, farmstand, artisan]
         lat:
           type: number
         lng:
@@ -372,7 +372,7 @@ components:
           type: string
         category:
           type: string
-          enum: [winery, restaurant, farmstand]
+          enum: [winery, restaurant, farmstand, artisan]
         lat:
           type: number
         lng:
@@ -398,7 +398,7 @@ components:
           type: string
         category:
           type: string
-          enum: [winery, restaurant, farmstand]
+          enum: [winery, restaurant, farmstand, artisan]
         website:
           type: string
           nullable: true
@@ -416,8 +416,11 @@ components:
           type: integer
         farmstands:
           type: integer
+        artisans:
+          type: integer
       required:
         - total
         - wineries
         - restaurants
         - farmstands
+        - artisans

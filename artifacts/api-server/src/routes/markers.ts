@@ -15,9 +15,9 @@ router.get("/markers/stats", async (req, res) => {
     const wineries = rows.find((r) => r.category === "winery")?.count ?? 0;
     const restaurants = rows.find((r) => r.category === "restaurant")?.count ?? 0;
     const farmstands = rows.find((r) => r.category === "farmstand")?.count ?? 0;
-    const producers = rows.find((r) => r.category === "producer")?.count ?? 0;
+    const artisans = rows.find((r) => r.category === "artisan")?.count ?? 0;
 
-    res.json({ total, wineries: Number(wineries), restaurants: Number(restaurants), farmstands: Number(farmstands), producers: Number(producers) });
+    res.json({ total, wineries: Number(wineries), restaurants: Number(restaurants), farmstands: Number(farmstands), artisans: Number(artisans) });
   } catch (err) {
     req.log.error({ err }, "Failed to get marker stats");
     res.status(500).json({ error: "Failed to get stats" });
