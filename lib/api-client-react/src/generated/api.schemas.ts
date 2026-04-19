@@ -49,6 +49,7 @@ export const MarkerCategory = {
   winery: "winery",
   restaurant: "restaurant",
   farmstand: "farmstand",
+  artisan: "artisan",
 } as const;
 
 export interface Marker {
@@ -70,6 +71,7 @@ export const CreateMarkerInputCategory = {
   winery: "winery",
   restaurant: "restaurant",
   farmstand: "farmstand",
+  artisan: "artisan",
 } as const;
 
 export interface CreateMarkerInput {
@@ -89,6 +91,7 @@ export const UpdateMarkerInputCategory = {
   winery: "winery",
   restaurant: "restaurant",
   farmstand: "farmstand",
+  artisan: "artisan",
 } as const;
 
 export interface UpdateMarkerInput {
@@ -104,4 +107,5 @@ export interface MarkerStats {
   wineries: number;
   restaurants: number;
   farmstands: number;
+  artisans: number;
 }

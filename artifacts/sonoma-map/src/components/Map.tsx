@@ -5,7 +5,6 @@ import L from "leaflet";
 import { 
   useGetMarkers, 
   useCreateMarker, 
-  useDeleteMarker, 
   getGetMarkersQueryKey, 
   getGetMarkerStatsQueryKey 
 } from "@workspace/api-client-react";
@@ -14,7 +13,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { Loader2, Trash2, MapPin, Wine, Utensils, Leaf, ExternalLink, Bookmark, Store } from "lucide-react";
+import { Loader2, Wine, Utensils, Leaf, ExternalLink, Bookmark, Store } from "lucide-react";
 import { format } from "date-fns";
 
 // Fix Leaflet default icon issues
@@ -83,8 +82,7 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
   });
   
   const createMarker = useCreateMarker();
-  const deleteMarker = useDeleteMarker();
-  
+
   const [draftMarker, setDraftMarker] = useState<L.LatLng | null>(null);
   const [formData, setFormData] = useState({ name: "", note: "", category: "winery" as "winery" | "restaurant" | "farmstand" | "artisan" });
   
@@ -108,15 +106,6 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
     }, {
       onSuccess: () => {
         setDraftMarker(null);
-        queryClient.invalidateQueries({ queryKey: getGetMarkersQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getGetMarkerStatsQueryKey() });
-      }
-    });
-  };
-
-  const handleDelete = (id: number) => {
-    deleteMarker.mutate({ id }, {
-      onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: getGetMarkersQueryKey() });
         queryClient.invalidateQueries({ queryKey: getGetMarkerStatsQueryKey() });
       }
@@ -190,26 +179,13 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
                       id: marker.id,
                       name: marker.name,
                       category: marker.category,
-                      city: (marker as any).city ?? null,
+                      city: marker.city ?? null,
                     });
                   }}
                   title={isSaved(marker.id) ? "Remove from My List" : "Save to My List"}
                 >
                   <Bookmark className={`w-3.5 h-3.5 ${isSaved(marker.id) ? "fill-primary" : ""}`} />
                   {isSaved(marker.id) ? "Saved" : "Save"}
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="h-8 px-2 text-destructive hover:text-destructive hover:bg-destructive/10"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleDelete(marker.id);
-                  }}
-                  disabled={deleteMarker.isPending}
-                >
-                  {deleteMarker.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4 mr-1.5" />}
-                  Remove
                 </Button>
               </div>
             </div>

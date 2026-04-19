@@ -13,4 +13,5 @@ export const MarkerCategory = {
   winery: "winery",
   restaurant: "restaurant",
   farmstand: "farmstand",
+  artisan: "artisan",
 } as const;

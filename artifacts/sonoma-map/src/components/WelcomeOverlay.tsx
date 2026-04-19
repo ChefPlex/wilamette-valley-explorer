@@ -43,7 +43,7 @@ export function WelcomeOverlay({ open, onClose }: WelcomeOverlayProps) {
   const wineries = stats?.wineries ?? "—";
   const restaurants = stats?.restaurants ?? "—";
   const farmstands = stats?.farmstands ?? "—";
-  const artisans = (stats as any)?.artisans ?? "—";
+  const artisans = stats?.artisans ?? "—";
 
   return (
     <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">

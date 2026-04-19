@@ -23,7 +23,11 @@ app.listen(port, (err) => {
   }
 
   logger.info({ port }, "Server listening");
-  seedIfEmpty()
-    .then(() => correctCoordinates())
-    .catch((e) => logger.error({ err: e }, "Seed/correction error"));
+  if (process.env["RUN_SEED_ON_BOOT"] === "true") {
+    seedIfEmpty()
+      .then(() => correctCoordinates())
+      .catch((e) => logger.error({ err: e }, "Seed/correction error"));
+  } else {
+    logger.info("Skipping seed/coordinate correction (RUN_SEED_ON_BOOT != true)");
+  }
 });

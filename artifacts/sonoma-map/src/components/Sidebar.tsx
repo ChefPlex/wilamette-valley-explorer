@@ -25,8 +25,8 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
     })
     .sort((a, b) => a.name.localeCompare(b.name));
 
-  const farmstands = (stats as any)?.farmstands ?? 0;
-  const artisans = (stats as any)?.artisans ?? 0;
+  const farmstands = stats?.farmstands ?? 0;
+  const artisans = stats?.artisans ?? 0;
 
   return (
     <div className="w-80 h-full bg-card border-r border-border shadow-xl flex flex-col z-10 relative">

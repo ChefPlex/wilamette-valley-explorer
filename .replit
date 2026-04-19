@@ -48,3 +48,11 @@ timeoutMs = 20000
 
 [nix]
 channel = "stable-25_05"
+
+[userenv]
+
+[userenv.development]
+RUN_SEED_ON_BOOT = "true"
+
+[userenv.production]
+RUN_SEED_ON_BOOT = "false"

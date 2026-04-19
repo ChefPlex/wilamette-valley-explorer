@@ -1,6 +1,19 @@
-import { Router, type IRouter } from "express";
+import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
 import { db, markersTable, insertMarkerSchema } from "@workspace/db";
-import { eq, count, sql } from "drizzle-orm";
+import { eq, count } from "drizzle-orm";
+
+function requireAdminKey(req: Request, res: Response, next: NextFunction) {
+  const adminKey = process.env["ADMIN_API_KEY"];
+  if (!adminKey) {
+    res.status(503).json({ error: "Admin operations not configured" });
+    return;
+  }
+  if (req.headers["x-admin-key"] !== adminKey) {
+    res.status(401).json({ error: "Unauthorized" });
+    return;
+  }
+  next();
+}
 
 const router: IRouter = Router();
 
@@ -68,7 +81,7 @@ router.get("/markers/:id", async (req, res) => {
   }
 });
 
-router.put("/markers/:id", async (req, res) => {
+router.put("/markers/:id", requireAdminKey, async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {
@@ -96,7 +109,7 @@ router.put("/markers/:id", async (req, res) => {
   }
 });
 
-router.delete("/markers/:id", async (req, res) => {
+router.delete("/markers/:id", requireAdminKey, async (req, res) => {
   try {
     const id = parseInt(req.params.id, 10);
     if (isNaN(id)) {

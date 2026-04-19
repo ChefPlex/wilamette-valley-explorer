@@ -23,7 +23,7 @@ export const GetMarkersResponseItem = zod.object({
   id: zod.number(),
   name: zod.string(),
   note: zod.string(),
-  category: zod.enum(["winery", "restaurant", "farmstand"]),
+  category: zod.enum(["winery", "restaurant", "farmstand", "artisan"]),
   lat: zod.number(),
   lng: zod.number(),
   website: zod.string().nullish(),
@@ -39,7 +39,7 @@ export const GetMarkersResponse = zod.array(GetMarkersResponseItem);
 export const CreateMarkerBody = zod.object({
   name: zod.string(),
   note: zod.string(),
-  category: zod.enum(["winery", "restaurant", "farmstand"]),
+  category: zod.enum(["winery", "restaurant", "farmstand", "artisan"]),
   lat: zod.number(),
   lng: zod.number(),
   website: zod.string().nullish(),
@@ -57,7 +57,7 @@ export const GetMarkerResponse = zod.object({
   id: zod.number(),
   name: zod.string(),
   note: zod.string(),
-  category: zod.enum(["winery", "restaurant", "farmstand"]),
+  category: zod.enum(["winery", "restaurant", "farmstand", "artisan"]),
   lat: zod.number(),
   lng: zod.number(),
   website: zod.string().nullish(),
@@ -75,7 +75,9 @@ export const UpdateMarkerParams = zod.object({
 export const UpdateMarkerBody = zod.object({
   name: zod.string().optional(),
   note: zod.string().optional(),
-  category: zod.enum(["winery", "restaurant", "farmstand"]).optional(),
+  category: zod
+    .enum(["winery", "restaurant", "farmstand", "artisan"])
+    .optional(),
   website: zod.string().nullish(),
   city: zod.string().nullish(),
 });
@@ -84,7 +86,7 @@ export const UpdateMarkerResponse = zod.object({
   id: zod.number(),
   name: zod.string(),
   note: zod.string(),
-  category: zod.enum(["winery", "restaurant", "farmstand"]),
+  category: zod.enum(["winery", "restaurant", "farmstand", "artisan"]),
   lat: zod.number(),
   lng: zod.number(),
   website: zod.string().nullish(),
@@ -185,4 +187,5 @@ export const GetMarkerStatsResponse = zod.object({
   wineries: zod.number(),
   restaurants: zod.number(),
   farmstands: zod.number(),
+  artisans: zod.number(),
 });

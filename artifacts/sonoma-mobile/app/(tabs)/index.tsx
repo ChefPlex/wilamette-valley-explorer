@@ -26,7 +26,6 @@ import {
   useGetMarkers,
   useGetMarkerStats,
   useCreateMarker,
-  useDeleteMarker,
   getGetMarkersQueryKey,
   getGetMarkerStatsQueryKey,
 } from "@workspace/api-client-react";
@@ -89,7 +88,9 @@ function useMobileMyList() {
       try {
         const arr: SavedSpot[] = JSON.parse(raw);
         setSaved(new Map(arr.map((s) => [s.id, s])));
-      } catch {}
+      } catch (e) {
+        console.warn("[MyList] Failed to load saved list from storage:", e);
+      }
     });
   }, []);
 
@@ -132,8 +133,6 @@ interface SpotSheetProps {
   onClose: () => void;
   onToggleSave: (spot: SavedSpot) => void;
   isSaved: (id: number) => boolean;
-  onDelete: (id: number) => void;
-  isDeleting: boolean;
 }
 
 function buildShareMessage(spot: MarkerType) {
@@ -148,7 +147,7 @@ function buildShareMessage(spot: MarkerType) {
   return parts.join("\n");
 }
 
-function SpotDetailModal({ spot, onClose, onToggleSave, isSaved, onDelete, isDeleting }: SpotSheetProps) {
+function SpotDetailModal({ spot, onClose, onToggleSave, isSaved }: SpotSheetProps) {
   const colors = useColors();
   if (!spot) return null;
 
@@ -162,21 +161,6 @@ function SpotDetailModal({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
       await Haptics.selectionAsync();
       await Share.share({ message: buildShareMessage(spot) });
     } catch {}
-  };
-
-  const handleDelete = () => {
-    Alert.alert(
-      "Remove spot",
-      `Remove "${spot.name}" from the map?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Remove",
-          style: "destructive",
-          onPress: () => onDelete(spot.id),
-        },
-      ]
-    );
   };
 
   return (
@@ -230,26 +214,13 @@ function SpotDetailModal({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
           </TouchableOpacity>
         ) : null}
 
-        <TouchableOpacity
-          style={[styles.deleteBtn, { borderColor: colors.border }]}
-          onPress={handleDelete}
-          disabled={isDeleting}
-          testID="delete-btn"
-        >
-          {isDeleting ? (
-            <ActivityIndicator size="small" color={colors.destructive} />
-          ) : (
-            <Ionicons name="trash-outline" size={16} color={colors.destructive} />
-          )}
-          <Text style={[styles.deleteBtnText, { color: colors.destructive }]}>Remove spot</Text>
-        </TouchableOpacity>
       </View>
     </Modal>
   );
 }
 
 // ── Spot detail: tablet inline panel ─────────────────────────────────────────
-function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDeleting }: SpotSheetProps) {
+function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved }: SpotSheetProps) {
   const colors = useColors();
   if (!spot) return null;
 
@@ -263,21 +234,6 @@ function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
       await Haptics.selectionAsync();
       await Share.share({ message: buildShareMessage(spot) });
     } catch {}
-  };
-
-  const handleDelete = () => {
-    Alert.alert(
-      "Remove spot",
-      `Remove "${spot.name}" from the map?`,
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Remove",
-          style: "destructive",
-          onPress: () => onDelete(spot.id),
-        },
-      ]
-    );
   };
 
   return (
@@ -326,19 +282,6 @@ function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved, onDelete, isDel
         </TouchableOpacity>
       ) : null}
 
-      <TouchableOpacity
-        style={[styles.deleteBtn, { borderColor: colors.border }]}
-        onPress={handleDelete}
-        disabled={isDeleting}
-        testID="delete-btn"
-      >
-        {isDeleting ? (
-          <ActivityIndicator size="small" color={colors.destructive} />
-        ) : (
-          <Ionicons name="trash-outline" size={16} color={colors.destructive} />
-        )}
-        <Text style={[styles.deleteBtnText, { color: colors.destructive }]}>Remove spot</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -377,7 +320,7 @@ function WelcomeSplashModal({ visible, onClose }: { visible: boolean; onClose: (
   const wineries = stats?.wineries ?? "—";
   const restaurants = stats?.restaurants ?? "—";
   const farmstands = stats?.farmstands ?? "—";
-  const artisans = (stats as any)?.artisans ?? "—";
+  const artisans = stats?.artisans ?? "—";
 
   return (
     <Modal
@@ -668,7 +611,6 @@ export default function MapScreen() {
 
   const { data: markers = [], isLoading } = useGetMarkers();
   const createMarker = useCreateMarker();
-  const deleteMarkerMutation = useDeleteMarker();
 
   const { saved: myListSaved, toggle: toggleSave, isSaved, remove: removeFromList, clearAll: clearMyList } = useMobileMyList();
 
@@ -713,24 +655,6 @@ export default function MapScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setAddCoord(e.nativeEvent.coordinate);
   }, []);
-
-  const handleDelete = useCallback((id: number) => {
-    deleteMarkerMutation.mutate(
-      { id },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({ queryKey: getGetMarkersQueryKey() });
-          queryClient.invalidateQueries({ queryKey: getGetMarkerStatsQueryKey() });
-          removeFromList(id);
-          setSelectedSpot(null);
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-        },
-        onError: () => {
-          Alert.alert("Could not remove spot", "Something went wrong. Please try again.");
-        },
-      }
-    );
-  }, [deleteMarkerMutation, queryClient, removeFromList]);
 
   const handleSaveSpot = useCallback(
     (data: { name: string; note: string; category: Category }) => {
@@ -1099,8 +1023,6 @@ export default function MapScreen() {
               onClose={() => setSelectedSpot(null)}
               onToggleSave={toggleSave}
               isSaved={isSaved}
-              onDelete={handleDelete}
-              isDeleting={deleteMarkerMutation.isPending}
             />
           </View>
         ) : null
@@ -1110,8 +1032,6 @@ export default function MapScreen() {
           onClose={() => setSelectedSpot(null)}
           onToggleSave={toggleSave}
           isSaved={isSaved}
-          onDelete={handleDelete}
-          isDeleting={deleteMarkerMutation.isPending}
         />
       )}
 
