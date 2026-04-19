@@ -2,10 +2,35 @@ import { Router, type IRouter } from "express";
 import { db, conversations, messages } from "@workspace/db";
 import { eq, asc } from "drizzle-orm";
 import { openai } from "@workspace/integrations-openai-ai-server";
+import { rateLimit } from "express-rate-limit";
 
 const router: IRouter = Router();
 
-const VALLEY_CHEF_SYSTEM_PROMPT = `You are Valley Chef.
+// Fix 1 — Rate limiting
+// GPT endpoint: 10 requests/IP/minute (expensive, stream-based)
+const chatLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests — please wait a moment before asking again." },
+});
+
+// All other conversation CRUD: 60 requests/IP/minute
+const conversationLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 60,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests — please slow down." },
+});
+
+// Fix 2 — Date rebuilt per-request so the season is always accurate
+function buildSystemPrompt(): string {
+  const now = new Date();
+  const monthYear = now.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  return `You are Valley Chef.
 Not a concierge. Not a tourist board. Not a wine-country marketing arm.
 You are a culinary authority embedded in Willamette Valley's agricultural and restaurant ecosystem — vineyard rows, hazelnut orchards, truffle grounds, berry fields, dairy farms, curing rooms, river-fish smokehouses, grange halls, and dining rooms.
 
@@ -53,7 +78,7 @@ TONE PILLARS:
 - Ethical Clarity Without Sanctimony: Sustainability isn't branding. Regenerative farming isn't a buzzword. Farm-to-table is not new. Explain gently why sourcing affects flavor, why certain foods cost more, what's real vs. greenwashed.
 - PNW Sensibility: Understated. Deeply serious about ingredients. Skeptical of hype. Comfortable with rain, mud, and fog. This is not coastal California — the sensibility is quieter, more rooted, more comfortable with restraint.
 
-SEASONAL WILLAMETTE VALLEY (today is roughly ${new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}):
+SEASONAL WILLAMETTE VALLEY (today is roughly ${monthYear}):
 Spring (March-May): Asparagus, spring morels, ramps, fiddlehead ferns, peas, fava beans, spring onions, nettles, watercress, fresh chèvre. Strawberries start in late May. Wine tone: Pinot Gris, sparkling, rosé, light Chardonnay.
 Summer (June-August): Marionberries (July peak), boysenberries, blueberries, sweet corn, tomatoes, zucchini, peppers, basil, stone fruit. Chanterelles begin in July. Wine tone: Pinot Noir, Chardonnay, Pinot Gris, rosé.
 Fall (September-November): Harvest. Wine grapes, hazelnuts (September–October harvest), winter squash, apples, pears, hedgehog mushrooms, matsutake, black truffles begin (November). Wine tone: Pinot Noir, aged Chardonnay, Riesling.
@@ -62,8 +87,15 @@ Winter (December-February): Oregon white and black truffles (peak season), kale,
 STYLE: Knowledgeable but human. Confident but never pompous. Ingredient-forward. Terroir-driven. Community-aware. Clear and practical. Sensory, not flowery. Opinionated, but fair. Speak like someone who knows the vineyard manager by name, has walked Jory soil in the rain, hunts mushrooms in the Coast Range foothills, eats at the counter at Nick's Italian Café when it matters.
 
 When users ask about wineries or restaurants they've saved on their map, give informed, honest perspective. Don't just validate — if you know the place well, bring your knowledge. If asked about pairings, be specific to the wine's structure and the ingredient's season. Do not fabricate event dates — direct users to regional calendars when uncertain.`;
+}
 
-router.get("/openai/conversations", async (req, res) => {
+// Fix 5 — shared NaN guard
+function parseId(raw: string): number | null {
+  const id = parseInt(raw, 10);
+  return isNaN(id) ? null : id;
+}
+
+router.get("/openai/conversations", conversationLimiter, async (req, res) => {
   try {
     const all = await db.select().from(conversations).orderBy(asc(conversations.createdAt));
     res.json(all.map(c => ({ ...c, createdAt: c.createdAt.toISOString() })));
@@ -73,7 +105,7 @@ router.get("/openai/conversations", async (req, res) => {
   }
 });
 
-router.post("/openai/conversations", async (req, res) => {
+router.post("/openai/conversations", conversationLimiter, async (req, res) => {
   try {
     const { title } = req.body;
     if (!title) { res.status(400).json({ error: "title required" }); return; }
@@ -85,9 +117,10 @@ router.post("/openai/conversations", async (req, res) => {
   }
 });
 
-router.get("/openai/conversations/:id", async (req, res) => {
+router.get("/openai/conversations/:id", conversationLimiter, async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseId(req.params.id);
+    if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
     const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
     if (!conv) { res.status(404).json({ error: "Not found" }); return; }
     const msgs = await db.select().from(messages).where(eq(messages.conversationId, id)).orderBy(asc(messages.createdAt));
@@ -102,9 +135,10 @@ router.get("/openai/conversations/:id", async (req, res) => {
   }
 });
 
-router.delete("/openai/conversations/:id", async (req, res) => {
+router.delete("/openai/conversations/:id", conversationLimiter, async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseId(req.params.id);
+    if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
     const [deleted] = await db.delete(conversations).where(eq(conversations.id, id)).returning();
     if (!deleted) { res.status(404).json({ error: "Not found" }); return; }
     res.status(204).end();
@@ -114,9 +148,10 @@ router.delete("/openai/conversations/:id", async (req, res) => {
   }
 });
 
-router.get("/openai/conversations/:id/messages", async (req, res) => {
+router.get("/openai/conversations/:id/messages", conversationLimiter, async (req, res) => {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseId(req.params.id);
+    if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
     const msgs = await db.select().from(messages).where(eq(messages.conversationId, id)).orderBy(asc(messages.createdAt));
     res.json(msgs.map(m => ({ ...m, createdAt: m.createdAt.toISOString() })));
   } catch (err) {
@@ -125,9 +160,15 @@ router.get("/openai/conversations/:id/messages", async (req, res) => {
   }
 });
 
-router.post("/openai/conversations/:id/messages", async (req, res) => {
+router.post("/openai/conversations/:id/messages", chatLimiter, async (req, res) => {
+  // Fix 4 — abort the OpenAI stream if the client disconnects
+  const controller = new AbortController();
+  req.on("close", () => controller.abort());
+
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseId(req.params.id);
+    if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
+
     const { content } = req.body;
     if (!content) { res.status(400).json({ error: "content required" }); return; }
 
@@ -136,10 +177,18 @@ router.post("/openai/conversations/:id/messages", async (req, res) => {
 
     await db.insert(messages).values({ conversationId: id, role: "user", content });
 
-    const history = await db.select().from(messages).where(eq(messages.conversationId, id)).orderBy(asc(messages.createdAt));
+    // Fix 3 — cap context at the last 40 messages to bound token spend
+    const history = await db
+      .select()
+      .from(messages)
+      .where(eq(messages.conversationId, id))
+      .orderBy(asc(messages.createdAt));
+    const cappedHistory = history.slice(-40);
+
+    // Fix 2 — system prompt rebuilt fresh so the season is always correct
     const chatMessages = [
-      { role: "system" as const, content: VALLEY_CHEF_SYSTEM_PROMPT },
-      ...history.map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
+      { role: "system" as const, content: buildSystemPrompt() },
+      ...cappedHistory.map(m => ({ role: m.role as "user" | "assistant", content: m.content })),
     ];
 
     res.setHeader("Content-Type", "text/event-stream");
@@ -155,7 +204,7 @@ router.post("/openai/conversations/:id/messages", async (req, res) => {
       max_completion_tokens: 8192,
       messages: chatMessages,
       stream: true,
-    });
+    }, { signal: controller.signal });
 
     for await (const chunk of stream) {
       const text = chunk.choices[0]?.delta?.content;
@@ -169,7 +218,11 @@ router.post("/openai/conversations/:id/messages", async (req, res) => {
 
     res.write(`data: ${JSON.stringify({ done: true })}\n\n`);
     res.end();
-  } catch (err) {
+  } catch (err: any) {
+    if (err?.name === "AbortError" || controller.signal.aborted) {
+      req.log.info("OpenAI stream aborted — client disconnected");
+      return;
+    }
     req.log.error({ err }, "Failed to send message");
     res.write(`data: ${JSON.stringify({ error: "Failed to generate response" })}\n\n`);
     res.end();
