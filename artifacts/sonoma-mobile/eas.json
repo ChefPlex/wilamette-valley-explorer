@@ -27,7 +27,11 @@
   },
   "submit": {
     "production": {
-      "ios": {}
+      "ios": {
+        "appleId": "edwhite@yahoo.com",
+        "ascAppId": "6762567887",
+        "appleTeamId": "P5WHRMCS5Q"
+      }
     }
   }
 }
