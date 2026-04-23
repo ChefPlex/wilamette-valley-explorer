@@ -14,6 +14,8 @@
       "backgroundColor": "#6B2D3E"
     },
     "ios": {
+      "bundleIdentifier": "com.chefplex.willametteexplorer",
+      "buildNumber": "1",
       "supportsTablet": true,
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Used to show your location on the Willamette Valley map and find nearby spots."
