@@ -799,10 +799,10 @@ export default function MapScreen() {
         ref={mapRef}
         style={StyleSheet.absoluteFill}
         initialRegion={{
-          latitude: 38.5,
-          longitude: -122.8,
-          latitudeDelta: 0.4,
-          longitudeDelta: 0.4,
+          latitude: 45.2,
+          longitude: -123.1,
+          latitudeDelta: 0.8,
+          longitudeDelta: 0.8,
         }}
         onLongPress={handleLongPress}
         showsUserLocation
