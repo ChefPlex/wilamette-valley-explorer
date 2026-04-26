@@ -18,7 +18,7 @@
       "buildNumber": "1",
       "supportsTablet": true,
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Used to show your location on the Willamette Valley map and find nearby spots."
+        "NSLocationWhenInUseUsageDescription": "Your location is used to show a blue dot on the map so you can see where you are relative to nearby wineries, restaurants, farm stands, and artisan producers in the Willamette Valley. Your location is never stored or shared."
       }
     },
     "android": {
@@ -43,7 +43,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "Used to show your location on the Willamette Valley map and find nearby spots."
+          "locationWhenInUsePermission": "Your location is used to show a blue dot on the map so you can see where you are relative to nearby wineries, restaurants, farm stands, and artisan producers in the Willamette Valley. Your location is never stored or shared."
         }
       ]
     ],
