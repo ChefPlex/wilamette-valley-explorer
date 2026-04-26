@@ -820,6 +820,7 @@ export default function MapScreen() {
               onPress={() => handleMarkerPress(marker)}
               testID={`marker-${marker.id}`}
               anchor={{ x: 0.5, y: 1 }}
+              tracksViewChanges={false}
             >
               <View style={styles.markerContainer}>
                 <View style={[styles.markerBubble, { backgroundColor: catColor }]}>
