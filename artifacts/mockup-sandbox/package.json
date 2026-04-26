@@ -1,6 +1,6 @@
 {
   "name": "@workspace/mockup-sandbox",
-  "version": "2.1.0",
+  "version": "2.5.0",
   "type": "module",
   "private": true,
   "scripts": {
