@@ -55,4 +55,4 @@ channel = "stable-25_05"
 RUN_SEED_ON_BOOT = "true"
 
 [userenv.production]
-RUN_SEED_ON_BOOT = "false"
+RUN_SEED_ON_BOOT = "true"
