@@ -1,6 +1,6 @@
 WILLAMETTE VALLEY MAP — GPS AUDIT REPORT
 Generated: April 27, 2026
-Method: All 54 markers cross-checked via OSM Nominatim reverse geocoding and
+winderleeeMethod: All 54 markers cross-checked via OSM Nominatim reverse geocoding and
 forward geocoding of known street addresses. Discrepancies calculated in km.
 ===============================================================================
 
