@@ -29,3 +29,9 @@ id = "uDUoRhicRLUibV4AVF1xI"
 uri = "file://SONOMA_EXPLORER_PROJECT_NOTES.txt"
 type = "text"
 title = "Sonoma Explorer — Project Notes"
+
+[[outputs]]
+id = "LoCq10CR05JowKGwhsIzM"
+uri = "file://gps_audit_report.txt"
+type = "text"
+title = "GPS Audit Report — 11 flagged entries"

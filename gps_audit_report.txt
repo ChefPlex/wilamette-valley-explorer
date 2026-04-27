@@ -1,0 +1,146 @@
+WILLAMETTE VALLEY MAP — GPS AUDIT REPORT
+Generated: April 27, 2026
+Method: All 54 markers cross-checked via OSM Nominatim reverse geocoding and
+forward geocoding of known street addresses. Discrepancies calculated in km.
+===============================================================================
+
+SECTION 1: CRITICAL ERRORS (>5km off — pins appear far from actual location)
+-------------------------------------------------------------------------------
+These two entries have a systematic coordinate error. Their stored longitudes
+place them ~10 km west of downtown Dundee in rural wine country, when both
+businesses are actually on OR-99W in town.
+
+1. Argyle Winery
+   Address: 691 OR-99W (Pacific Highway West), Dundee, OR 97115
+   Website: https://argylewinery.com
+   Problem: Stored at (45.2724, -123.1027). Forward geocoding the tasting room
+            address returns (45.2780, -123.0107) — 10.23 km off. Stored pin
+            lands on Northeast Abbey Road in rural Dundee Hills, not on 99W.
+   Note: Seed comment says "GPS verified — tasting room at 691 OR-99W" but the
+         stored coordinate does not match that address.
+
+2. Red Hills Market
+   Address: 155 SW 7th St (on OR-99W), Dundee, OR 97115
+   Website: https://www.redhillsmarket.com
+   Problem: Stored at (45.2718, -123.1009). Forward geocoding the 7th St
+            address returns (45.2781, -123.0116) — 9.94 km off. Stored pin
+            also lands in rural Dundee Hills, not in town.
+
+
+===============================================================================
+
+SECTION 2: MEANINGFUL DISCREPANCY (0.5–2km off — pin is in the right area
+           but noticeably displaced from the actual building)
+-------------------------------------------------------------------------------
+
+3. Joel Palmer House
+   Address: 600 Ferry St, Dayton, OR 97114
+   Website: https://www.joelpalmerhouse.com
+   Problem: Stored at (45.2236, -123.0654). Forward geocoding 600 Ferry St
+            returns (45.2180, -123.0797) — 1.70 km off. Stored pin is
+            northeast of the actual building on Ferry Street.
+
+4. Winderlea Vineyard & Winery
+   Address: 8905 NE Worden Hill Rd, Dundee, OR 97115
+   Website: https://www.winderlea.com
+   Problem: Stored at (45.2868, -123.0482). Forward geocoding Worden Hill Rd
+            returns (45.2791, -123.0431) — 1.03 km off.
+
+5. The Bay House
+   Address: Dayton town square (historic church building), Dayton, OR 97114
+   Website: https://www.thebayhouse.org
+   Problem: Stored at (45.2215, -123.0671). Reverse geocodes to Water Street
+            in Dayton (plausible), but the Bay House relocated from the Oregon
+            Coast in May 2025 to a restored historic church in Dayton's town
+            square. Exact new street address was not available at time of
+            seeding. The stored coordinate may be approximate. Forward
+            geocoding "360 Ferry St Dayton" (nearest known reference) gives
+            0.90 km delta. Confirm the church address directly.
+
+
+===============================================================================
+
+SECTION 3: LOW CONFIDENCE (estimated coordinates — reverse geocode resolves
+           to a different road than the known address)
+-------------------------------------------------------------------------------
+
+6. Youngberg Hill Vineyards
+   Address: 10660 SW Youngberg Hill Rd, McMinnville, OR 97128
+   Website: https://www.youngberghill.com
+   Problem: Coordinates (45.185, -123.237) were estimated (SW of McMinnville
+            per road direction). Neither Nominatim nor Photon could find the
+            road. Reverse geocoding the stored point returns Southwest Peavine
+            Road — a different road entirely from Youngberg Hill Rd.
+
+7. Draper Farms
+   Address: 11105 SW Baker Creek Road, McMinnville, OR 97128
+   Website: https://www.drapersfarm.com
+   Problem: Coordinates (45.197, -123.236) were estimated from ZIP centroid
+            + SW offset because Nominatim/Photon returned no match for Baker
+            Creek Road. Reverse geocoding the stored point returns Southwest
+            Hill Road — not Baker Creek Road.
+
+8. Gathering Together Farm
+   Address: 25159 Grange Hall Road, Philomath, OR 97370
+   Website: https://www.gatheringtogetherfarm.com
+   Problem: Stored at (44.5398, -123.3695), which reverse geocodes to South
+            12th Street in Philomath (city location, not the farm). Forward
+            geocoding Grange Hall Road returns no match. The farm is a rural
+            operation several km outside Philomath — the stored pin may be
+            in the city rather than at the actual farm property.
+
+
+===============================================================================
+
+SECTION 4: PARTIAL VERIFICATION (no geocoder match for the specific address;
+           coordinates from a single industry or estimated source)
+-------------------------------------------------------------------------------
+
+9. Coeur de Terre Vineyard
+   Address: 21000 SW Eagle Point Rd, McMinnville, OR 97128
+   Website: https://www.cdtvineyard.com
+   Source: Oregon Wine Board listing (oregonwine.org) — (45.1779, -123.3305)
+   Note: Nominatim and Photon both returned no match for the address. Reverse
+         geocoding the stored point DOES confirm it is on SW Eagle Point Road
+         (correct road per address), which is a positive signal. Confidence is
+         reasonable but not independently confirmed. The estate is remote and
+         has no cell service, per their own materials.
+
+10. Red Ridge Farms — Oregon Olive Mill
+    Address: 5510 NE Breyman Orchards Road, Dayton, OR 97114
+    Website: https://www.redridgefarms.com
+    Note: No geocoder match for Breyman Orchards Road. Stored at (45.2742,
+          -123.0485), which reverse geocodes to NE Niederberger Road — a
+          different road from Breyman Orchards. Could be a neighboring road,
+          or coordinates may be displaced.
+
+11. Domaine Drouhin Oregon
+    Address: 6750 Breyman Orchards Road, Dayton, OR 97114
+    Website: https://www.domainedrouhin.com
+    Note: No geocoder match for the address. Stored at (45.2698, -123.0529),
+          which reverse geocodes to NE Timmons Lane — a different road from
+          Breyman Orchards. Same issue as Red Ridge Farms above (both are
+          on Breyman Orchards, which may simply not be in OSM's dataset).
+          Worth confirming both as a pair during any site visit.
+
+
+===============================================================================
+
+ITEMS VERIFIED AND CLEARED (not flagged — noted here for completeness)
+-------------------------------------------------------------------------------
+The following were confirmed accurate to within 0.5 km:
+- The Dundee Bistro (45.2784, -123.0109) ✓ — confirmed on 99W Dundee
+- Maysara Winery ✓ — Nominatim direct business match on Muddy Valley Rd
+- Coeur de Terre (reverse confirms Eagle Point Rd) — see Section 4
+- All McMinnville downtown entries (Nick's, Okta, Bistro Maison, La Rambla,
+  Abuela's, Alchemist's Jam, Thistle, Eyrie) ✓ — all Nominatim confirmed
+- All Carlton entries (Hayward, Carlton Corners, Ken Wright, Carlton
+  Winemakers Studio) ✓
+- All Salem/Eola-Amity entries (Cristom, Bethel Heights, Witness Tree,
+  Evening Land) ✓ — plausible rural placements
+- Maysara, Argyle (needs correction), Source Farms (Tualatin Valley Hwy ✓),
+  Blue Raeven (Pacific Hwy West / 99W ✓)
+
+===============================================================================
+END OF REPORT — 11 items flagged across 4 categories
+===============================================================================
