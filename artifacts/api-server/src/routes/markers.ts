@@ -1,6 +1,16 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
 import { db, markersTable, insertMarkerSchema } from "@workspace/db";
 import { eq, count } from "drizzle-orm";
+import { rateLimit } from "express-rate-limit";
+
+// Markers & stats: 120 requests/IP/minute
+const markersLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many requests — please slow down." },
+});
 
 function requireAdminKey(req: Request, res: Response, next: NextFunction) {
   const adminKey = process.env["ADMIN_API_KEY"];
@@ -17,7 +27,7 @@ function requireAdminKey(req: Request, res: Response, next: NextFunction) {
 
 const router: IRouter = Router();
 
-router.get("/markers/stats", async (req, res) => {
+router.get("/markers/stats", markersLimiter, async (req, res) => {
   try {
     const rows = await db
       .select({ category: markersTable.category, count: count() })
@@ -37,7 +47,7 @@ router.get("/markers/stats", async (req, res) => {
   }
 });
 
-router.get("/markers", async (req, res) => {
+router.get("/markers", markersLimiter, async (req, res) => {
   try {
     const markers = await db.select().from(markersTable).orderBy(markersTable.createdAt);
     res.json(markers.map((m) => ({ ...m, createdAt: m.createdAt.toISOString() })));

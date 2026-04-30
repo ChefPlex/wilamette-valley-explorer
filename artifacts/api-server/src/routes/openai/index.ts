@@ -6,20 +6,19 @@ import { rateLimit } from "express-rate-limit";
 
 const router: IRouter = Router();
 
-// Fix 1 — Rate limiting
-// GPT endpoint: 10 requests/IP/minute (expensive, stream-based)
+// AI chat (POST .../messages): 8 requests/IP/minute
 const chatLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 10,
+  max: 8,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many requests — please wait a moment before asking again." },
 });
 
-// All other conversation CRUD: 60 requests/IP/minute
+// Conversation CRUD: 30 requests/IP/minute
 const conversationLimiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 60,
+  max: 30,
   standardHeaders: true,
   legacyHeaders: false,
   message: { error: "Too many requests — please slow down." },
