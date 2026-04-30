@@ -16,7 +16,7 @@ import { useIsTablet } from "@/hooks/useIsTablet";
 import { useGetMarkers, useGetMarkerStats } from "@workspace/api-client-react";
 import type { Marker } from "@workspace/api-client-react";
 
-type FilterType = "all" | "winery" | "restaurant" | "farmstand";
+type FilterType = "all" | "winery" | "restaurant" | "farmstand" | "artisan";
 
 type IoniconsName = React.ComponentProps<typeof Ionicons>["name"];
 
@@ -25,6 +25,7 @@ const FILTERS: { key: FilterType; label: string; icon: IoniconsName }[] = [
   { key: "winery", label: "Wineries", icon: "wine-outline" },
   { key: "restaurant", label: "Dining", icon: "restaurant-outline" },
   { key: "farmstand", label: "Farms", icon: "leaf-outline" },
+  { key: "artisan", label: "Artisans", icon: "storefront-outline" },
 ];
 
 // Regional latitude boundaries for Willamette Valley
@@ -48,12 +49,14 @@ function getRegion(lat: number): RegionKey {
 function getCategoryColor(category: string, colors: ReturnType<typeof useColors>) {
   if (category === "winery") return colors.wineRed;
   if (category === "restaurant") return colors.accent;
+  if (category === "artisan") return "#c06a2d";
   return colors.farmGreen;
 }
 
 function getCategoryBg(category: string, colors: ReturnType<typeof useColors>) {
   if (category === "winery") return colors.wineRedLight;
   if (category === "restaurant") return colors.goldLight;
+  if (category === "artisan") return "#c06a2d1a";
   return colors.farmGreenLight;
 }
 
@@ -61,6 +64,7 @@ function getCategoryLabel(category: string) {
   if (category === "winery") return "Winery";
   if (category === "restaurant") return "Dining";
   if (category === "farmstand") return "Farm";
+  if (category === "artisan") return "Artisan";
   return category;
 }
 
@@ -68,6 +72,7 @@ const CATEGORY_ICON_MAP: Record<string, IoniconsName> = {
   winery: "wine",
   restaurant: "restaurant",
   farmstand: "leaf",
+  artisan: "storefront",
 };
 
 function getCategoryIcon(category: string): IoniconsName {
@@ -261,6 +266,7 @@ export default function JournalScreen() {
     if (filter === "winery") return stats.wineries;
     if (filter === "restaurant") return stats.restaurants;
     if (filter === "farmstand") return stats.farmstands;
+    if (filter === "artisan") return stats.artisans;
     return 0;
   };
 
