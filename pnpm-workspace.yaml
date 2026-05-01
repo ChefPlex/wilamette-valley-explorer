@@ -158,13 +158,16 @@ overrides:
   "@esbuild-kit/esm-loader": "npm:tsx@^4.21.0"
   esbuild: "0.27.3"
   # Security vulnerability fixes
-  "@xmldom/xmldom": "0.9.10"
-  "picomatch@2": "2.3.2"
-  "picomatch@4": "4.0.4"
-  path-to-regexp: "8.4.2"
-  lodash: "4.18.1"
-  yaml: "2.8.3"
-  "brace-expansion@2": "2.1.0"
-  postcss: "8.5.12"
-  "uuid@3": "14.0.0"
-  "uuid@7": "14.0.0"
+  # xmldom: pinned below 0.9.x — 0.9.x broke expo prebuild (EAS build fix)
+  "@xmldom/xmldom": ">=0.8.13 <0.9.0"
+  # picomatch: scoped overrides to avoid breaking micromatch/jest consumers
+  "picomatch": "4.0.4"
+  "micromatch>picomatch": "2.3.2"
+  "jest-util>picomatch": "2.3.2"
+  path-to-regexp: ">=8.4.2"
+  lodash: ">=4.18.1"
+  yaml: ">=2.8.3"
+  # brace-expansion: ^1 range — v2 forced here broke EAS fingerprint computation
+  "brace-expansion": "^1.1.11"
+  postcss: ">=8.5.12"
+  uuid: ">=14.0.0"
