@@ -1,6 +1,6 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
 Updated: 2026-05-02 | 54 markers total
-Status: 29 confirmed ✓ | 22 unverified ? | 3 need direct place link ⚠
+Status: 33 confirmed ✓ | 21 unverified ?
 
 Format: NAME | lat, lng | STATUS
 Google Maps links are direct pin drops — click to verify location on map.
@@ -31,16 +31,16 @@ https://www.google.com/maps?q=45.03455,-123.12054
 Bethel Heights Vineyard | 45.03717, -123.15267 | ✓ VERIFIED (corrected from 44.9905, -123.1299 — ~5.3km)
 https://www.google.com/maps?q=45.03717,-123.15267
 
-Witness Tree Vineyard | 44.9935, -123.1398 | ⚠ NEED DIRECT PLACE LINK
-  → Send Google Maps link for: Witness Tree Vineyard, Salem OR
+Witness Tree Vineyard | 45.03675, -123.11851 | ✓ VERIFIED (corrected from 44.9935, -123.1398 — ~5km)
+https://www.google.com/maps?q=45.03675,-123.11851
 
-Evening Land Vineyards | 44.9720, -123.1433 | ⚠ NEED DIRECT PLACE LINK
-  → Send Google Maps link for: Evening Land Vineyards / Seven Springs Estate, Salem OR
+Evening Land Vineyards | 45.06852, -123.11404 | ✓ VERIFIED (corrected from 44.9720, -123.1433 — ~11km)
+https://www.google.com/maps?q=45.06852,-123.11404
 
 ── McMANNVILLE AVA ───────────────────────────────────────────
 
-Eyrie Vineyards | 45.2099, -123.1994 | ⚠ NEED DIRECT PLACE LINK
-  → Send Google Maps link for: Eyrie Vineyards tasting room, McMinnville OR
+Eyrie Vineyards | 45.21405, -123.18783 | ✓ VERIFIED (corrected from 45.2099, -123.1994 — ~1.1km)
+https://www.google.com/maps?q=45.21405,-123.18783
 
 Maysara Winery | 45.14811, -123.30760 | ✓ VERIFIED
 https://www.google.com/maps?q=45.14811,-123.30760
@@ -90,8 +90,8 @@ https://www.google.com/maps?q=45.31456,-122.92057
 
 ── AMITY / SOUTH ─────────────────────────────────────────────
 
-Antica Terra | 45.1061, -123.1918 | ? UNVERIFIED
-https://www.google.com/maps?q=45.1061,-123.1918
+Antica Terra | 45.11969, -123.18323 | ✓ VERIFIED (corrected from 45.1061, -123.1918 — ~1.6km)
+https://www.google.com/maps?q=45.11969,-123.18323
 
 Vincent Wine Company | 45.1030, -123.1910 | ? UNVERIFIED
 https://www.google.com/maps?q=45.1030,-123.1910
@@ -218,11 +218,10 @@ SUMMARY
 ════════════════════════════════════════════════════════════════
 
 Total markers:           54
-✓ VERIFIED:              29
-? UNVERIFIED:            22
-⚠ NEED DIRECT LINK:       3  (Witness Tree, Evening Land, Eyrie)
+✓ VERIFIED:              33
+? UNVERIFIED:            21
 
-Corrections applied this session (13):
+Corrections applied this session (17):
   Sokol Blosser             corrected ~1.2km
   Cristom Vineyards         corrected ~4.1km
   Bethel Heights Vineyard   corrected ~5.3km
@@ -236,8 +235,12 @@ Corrections applied this session (13):
   Carlton Winemakers Studio corrected ~0.6km
   Ken Wright Cellars        corrected ~0.2km
   Résonance                 corrected ~1.9km
+  Witness Tree Vineyard     corrected ~5km
+  Evening Land Vineyards    corrected ~11km
+  Antica Terra              corrected ~1.6km
+  Eyrie Vineyards           corrected ~1.1km
 
-Previously verified (16):
+Previously verified (no correction needed, 17):
   Argyle Winery
   Red Hills Market
   Joel Palmer House
