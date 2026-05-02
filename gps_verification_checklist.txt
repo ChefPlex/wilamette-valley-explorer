@@ -1,9 +1,9 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
-Generated: 2026-05-01 | 54 markers total
-Source of truth: production DB + seed.ts
+Updated: 2026-05-01 | 54 markers total
+Status: 16 confirmed ✓ | 38 unverified ?
 
-Format: NAME | City | lat, lng | Google Maps link
-Status key: ✓ Google Maps confirmed | ~ estimated/industry source | ? unverified
+Format: NAME | lat, lng | STATUS
+Google Maps links are direct pin drops — click to verify location on map.
 
 ════════════════════════════════════════════════════════════════
 WINERIES (26)
@@ -11,94 +11,94 @@ WINERIES (26)
 
 ── DUNDEE HILLS ──────────────────────────────────────────────
 
-Domaine Drouhin Oregon | Dayton | 45.26554, -123.05563 | ✓ confirmed
+Domaine Drouhin Oregon | 45.26554, -123.05563 | ✓ VERIFIED
 https://www.google.com/maps?q=45.26554,-123.05563
 
-Argyle Winery | Dundee | 45.27730, -123.01108 | ✓ confirmed
+Argyle Winery | 45.27730, -123.01108 | ✓ VERIFIED
 https://www.google.com/maps?q=45.27730,-123.01108
 
-Sokol Blosser | Dayton | 45.2625, -123.0681 | ? unverified
+Sokol Blosser | 45.2625, -123.0681 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2625,-123.0681
 
-Winderlea Vineyard & Winery | Dundee | 45.27902, -123.04308 | ✓ confirmed
+Winderlea Vineyard & Winery | 45.27902, -123.04308 | ✓ VERIFIED
 https://www.google.com/maps?q=45.27902,-123.04308
 
 ── EOLA-AMITY HILLS ──────────────────────────────────────────
 
-Cristom Vineyards | Salem | 44.9996, -123.1454 | ? unverified
+Cristom Vineyards | 44.9996, -123.1454 | ? UNVERIFIED
 https://www.google.com/maps?q=44.9996,-123.1454
 
-Bethel Heights Vineyard | Salem | 44.9905, -123.1299 | ? unverified
+Bethel Heights Vineyard | 44.9905, -123.1299 | ? UNVERIFIED
 https://www.google.com/maps?q=44.9905,-123.1299
 
-Witness Tree Vineyard | Salem | 44.9935, -123.1398 | ? unverified
+Witness Tree Vineyard | 44.9935, -123.1398 | ? UNVERIFIED
 https://www.google.com/maps?q=44.9935,-123.1398
 
-Evening Land Vineyards | Salem | 44.9720, -123.1433 | ? unverified
+Evening Land Vineyards | 44.9720, -123.1433 | ? UNVERIFIED
 https://www.google.com/maps?q=44.9720,-123.1433
 
 ── McMANNVILLE AVA ───────────────────────────────────────────
 
-Eyrie Vineyards | McMinnville | 45.2099, -123.1994 | ? unverified
+Eyrie Vineyards | 45.2099, -123.1994 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2099,-123.1994
 
-Maysara Winery | McMinnville | 45.14811, -123.30760 | ✓ confirmed
+Maysara Winery | 45.14811, -123.30760 | ✓ VERIFIED
 https://www.google.com/maps?q=45.14811,-123.30760
 
-Coeur de Terre Vineyard | McMinnville | 45.18052, -123.33149 | ✓ confirmed
+Coeur de Terre Vineyard | 45.18052, -123.33149 | ✓ VERIFIED
 https://www.google.com/maps?q=45.18052,-123.33149
 
-Youngberg Hill Vineyards | McMinnville | 45.19026, -123.29070 | ✓ confirmed
+Youngberg Hill Vineyards | 45.19026, -123.29070 | ✓ VERIFIED
 https://www.google.com/maps?q=45.19026,-123.29070
 
 ── YAMHILL-CARLTON ───────────────────────────────────────────
 
-Penner-Ash Wine Cellars | Newberg | 45.3432, -123.0021 | ? unverified
+Penner-Ash Wine Cellars | 45.3432, -123.0021 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3432,-123.0021
 
-Carlton Winemakers Studio | Carlton | 45.2953, -123.1772 | ? unverified
+Carlton Winemakers Studio | 45.2953, -123.1772 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2953,-123.1772
 
-Ken Wright Cellars | Carlton | 45.2958, -123.1793 | ? unverified
+Ken Wright Cellars | 45.2958, -123.1793 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2958,-123.1793
 
-Lemelson Vineyards | Carlton | 45.3020, -123.1315 | ? unverified
+Lemelson Vineyards | 45.3020, -123.1315 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3020,-123.1315
 
-Résonance | Carlton | 45.3079, -123.2341 | ? unverified
+Résonance | 45.3079, -123.2341 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3079,-123.2341
 
 ── CHEHALEM MOUNTAINS / RIBBON RIDGE ────────────────────────
 
-Adelsheim Vineyard | Newberg | 45.3298, -122.9613 | ? unverified
+Adelsheim Vineyard | 45.3298, -122.9613 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3298,-122.9613
 
-Beaux Frères | Newberg | 45.3424, -123.0024 | ? unverified
+Beaux Frères | 45.3424, -123.0024 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3424,-123.0024
 
-Bergström Winery | Newberg | 45.3264, -122.9430 | ? unverified
+Bergström Winery | 45.3264, -122.9430 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3264,-122.9430
 
-Brick House Wine Company | Newberg | 45.3485, -122.9979 | ? unverified
+Brick House Wine Company | 45.3485, -122.9979 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3485,-122.9979
 
-Patricia Green Cellars | Newberg | 45.3399, -123.0011 | ? unverified
+Patricia Green Cellars | 45.3399, -123.0011 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3399,-123.0011
 
-Rex Hill | Newberg | 45.3055, -122.9711 | ? unverified
+Rex Hill | 45.3055, -122.9711 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3055,-122.9711
 
 ── AMITY / SOUTH ─────────────────────────────────────────────
 
-Antica Terra | Amity | 45.1061, -123.1918 | ? unverified
+Antica Terra | 45.1061, -123.1918 | ? UNVERIFIED
 https://www.google.com/maps?q=45.1061,-123.1918
 
-Vincent Wine Company | Amity | 45.1030, -123.1910 | ? unverified
+Vincent Wine Company | 45.1030, -123.1910 | ? UNVERIFIED
 https://www.google.com/maps?q=45.1030,-123.1910
 
 ── SOUTH VALLEY ──────────────────────────────────────────────
 
-King Estate Winery | Eugene | 43.9721, -123.2244 | ? unverified
+King Estate Winery | 43.9721, -123.2244 | ? UNVERIFIED
 https://www.google.com/maps?q=43.9721,-123.2244
 
 
@@ -108,68 +108,68 @@ RESTAURANTS (18)
 
 ── DAYTON ────────────────────────────────────────────────────
 
-Joel Palmer House | Dayton | 45.21788, -123.07958 | ✓ confirmed
+Joel Palmer House | 45.21788, -123.07958 | ✓ VERIFIED
 https://www.google.com/maps?q=45.21788,-123.07958
 
-The Bay House | Dayton | 45.22165, -123.07681 | ✓ confirmed
+The Bay House | 45.22165, -123.07681 | ✓ VERIFIED
 https://www.google.com/maps?q=45.22165,-123.07681
 
 ── DUNDEE ────────────────────────────────────────────────────
 
-Red Hills Market | Dundee | 45.27806, -123.01179 | ✓ confirmed
+Red Hills Market | 45.27806, -123.01179 | ✓ VERIFIED
 https://www.google.com/maps?q=45.27806,-123.01179
 
-The Dundee Bistro | Dundee | 45.27840, -123.01090 | ✓ confirmed
+The Dundee Bistro | 45.27840, -123.01090 | ✓ VERIFIED
 https://www.google.com/maps?q=45.27840,-123.01090
 
 ── McMANNVILLE ───────────────────────────────────────────────
 
-Nick's Italian Café | McMinnville | 45.2085, -123.1966 | ? unverified
+Nick's Italian Café | 45.2085, -123.1966 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2085,-123.1966
 
-Thistle Restaurant | McMinnville | 45.2104, -123.1961 | ? unverified
+Thistle Restaurant | 45.2104, -123.1961 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2104,-123.1961
 
-Bistro Maison | McMinnville | 45.2092, -123.1899 | ? unverified
+Bistro Maison | 45.2092, -123.1899 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2092,-123.1899
 
-Okta | McMinnville | 45.2088, -123.1960 | ? unverified
+Okta | 45.2088, -123.1960 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2088,-123.1960
 
-La Rambla | McMinnville | 45.2097, -123.1971 | ? unverified
+La Rambla | 45.2097, -123.1971 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2097,-123.1971
 
-Alchemist's Jam | McMinnville | 45.20945, -123.19342 | ✓ confirmed
+Alchemist's Jam | 45.20945, -123.19342 | ✓ VERIFIED
 https://www.google.com/maps?q=45.20945,-123.19342
 
-Abuela's Nuestra Cocina | McMinnville | 45.2095, -123.18632 | ? unverified
+Abuela's Nuestra Cocina | 45.2095, -123.18632 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2095,-123.18632
 
 ── CARLTON ───────────────────────────────────────────────────
 
-Hayward | Carlton | 45.2946, -123.1788 | ? unverified
+Hayward | 45.2946, -123.1788 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2946,-123.1788
 
-Carlton Corners | Carlton | 45.29469, -123.17972 | ? unverified
+Carlton Corners | 45.29469, -123.17972 | ? UNVERIFIED
 https://www.google.com/maps?q=45.29469,-123.17972
 
 ── NEWBERG ───────────────────────────────────────────────────
 
-The Painted Lady | Newberg | 45.3017, -122.9722 | ? unverified
+The Painted Lady | 45.3017, -122.9722 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3017,-122.9722
 
-Good Company Cheese Bar & Bistro | Newberg | 45.3023, -122.9726 | ? unverified
+Good Company Cheese Bar & Bistro | 45.3023, -122.9726 | ? UNVERIFIED
 https://www.google.com/maps?q=45.3023,-122.9726
 
 ── SALEM / CORVALLIS / EUGENE ────────────────────────────────
 
-Word of Mouth Bistro | Salem | 44.9357, -123.0198 | ? unverified
+Word of Mouth Bistro | 44.9357, -123.0198 | ? UNVERIFIED
 https://www.google.com/maps?q=44.9357,-123.0198
 
-Block 15 Brewing | Corvallis | 44.5622, -123.2622 | ? unverified
+Block 15 Brewing | 44.5622, -123.2622 | ? UNVERIFIED
 https://www.google.com/maps?q=44.5622,-123.2622
 
-King Estate Winery Restaurant | Eugene | 43.9724, -123.2239 | ? unverified
+King Estate Winery Restaurant | 43.9724, -123.2239 | ? UNVERIFIED
 https://www.google.com/maps?q=43.9724,-123.2239
 
 
@@ -177,22 +177,22 @@ https://www.google.com/maps?q=43.9724,-123.2239
 FARMSTANDS (6)
 ════════════════════════════════════════════════════════════════
 
-Red Ridge Farms — Oregon Olive Mill | Dayton | 45.25623, -123.05826 | ✓ confirmed
+Red Ridge Farms — Oregon Olive Mill | 45.25623, -123.05826 | ✓ VERIFIED
 https://www.google.com/maps?q=45.25623,-123.05826
 
-Gathering Together Farm | Philomath | 44.53133, -123.37286 | ✓ confirmed
+Gathering Together Farm | 44.53133, -123.37286 | ✓ VERIFIED
 https://www.google.com/maps?q=44.53133,-123.37286
 
-Blue Raeven Farmstand | Amity | 45.11038, -123.20773 | ✓ confirmed
+Blue Raeven Farmstand | 45.11038, -123.20773 | ✓ VERIFIED
 https://www.google.com/maps?q=45.11038,-123.20773
 
-The Ground Market | Yamhill | 45.33000, -123.18400 | ✓ confirmed (location only — name change from Source Farms)
+The Ground Market | 45.33000, -123.18400 | ✓ VERIFIED
 https://www.google.com/maps?q=45.33000,-123.18400
 
-Draper Farms | McMinnville | 45.22701, -123.22969 | ✓ confirmed
+Draper Farms | 45.22701, -123.22969 | ✓ VERIFIED
 https://www.google.com/maps?q=45.22701,-123.22969
 
-Groundwork Organics | Junction City | 44.2165, -123.2090 | ? unverified
+Groundwork Organics | 44.2165, -123.2090 | ? UNVERIFIED
 https://www.google.com/maps?q=44.2165,-123.2090
 
 
@@ -200,16 +200,16 @@ https://www.google.com/maps?q=44.2165,-123.2090
 ARTISAN PRODUCERS (4)
 ════════════════════════════════════════════════════════════════
 
-Briar Rose Creamery | Dundee | 45.2931, -123.0565 | ? unverified
+Briar Rose Creamery | 45.2931, -123.0565 | ? UNVERIFIED
 https://www.google.com/maps?q=45.2931,-123.0565
 
-Ochoa's Queseria | Albany | 44.6369, -123.1050 | ? unverified
+Ochoa's Queseria | 44.6369, -123.1050 | ? UNVERIFIED
 https://www.google.com/maps?q=44.6369,-123.1050
 
-Marché Provisions | Eugene | 44.0534, -123.0925 | ? unverified
+Marché Provisions | 44.0534, -123.0925 | ? UNVERIFIED
 https://www.google.com/maps?q=44.0534,-123.0925
 
-Camas Country Mill | Junction City | 44.1582, -123.2304 | ? unverified
+Camas Country Mill | 44.1582, -123.2304 | ? UNVERIFIED
 https://www.google.com/maps?q=44.1582,-123.2304
 
 
@@ -217,25 +217,24 @@ https://www.google.com/maps?q=44.1582,-123.2304
 SUMMARY
 ════════════════════════════════════════════════════════════════
 
-Total markers:     54
-✓ Google Maps confirmed: 17
-? Unverified:          37
+Total markers:        54
+✓ VERIFIED:           16
+? UNVERIFIED:         38
 
-Confirmed entries:
-  Wineries (7):   Domaine Drouhin, Argyle, Winderlea, Maysara,
-                  Coeur de Terre, Youngberg Hill, (Dundee Bistro ✓)
-  Restaurants (5): Joel Palmer House, The Bay House, Red Hills Market,
-                   The Dundee Bistro, Alchemist's Jam
-  Farmstands (5): Red Ridge Farms, Gathering Together Farm,
-                  Blue Raeven, The Ground Market, Draper Farms
-
-Unverified entries to prioritize (no geocoder match during audit):
-  Sokol Blosser, Cristom, Bethel Heights, Witness Tree, Evening Land,
-  Eyrie, Penner-Ash, Carlton Winemakers Studio, Ken Wright, Lemelson,
-  Résonance, Adelsheim, Beaux Frères, Bergström, Brick House,
-  Patricia Green, Rex Hill, Antica Terra, Vincent Wine, King Estate (winery),
-  Nick's Italian, Thistle, Bistro Maison, Okta, La Rambla,
-  Abuela's Nuestra Cocina, Hayward, Carlton Corners, The Painted Lady,
-  Good Company, Word of Mouth, Block 15, King Estate (restaurant),
-  Groundwork Organics, Briar Rose Creamery, Ochoa's Queseria,
-  Marché Provisions, Camas Country Mill
+Verified:
+  Argyle Winery
+  Red Hills Market
+  Joel Palmer House
+  Winderlea Vineyard & Winery
+  The Bay House
+  Youngberg Hill Vineyards
+  Draper Farms
+  Gathering Together Farm
+  Coeur de Terre Vineyard
+  Red Ridge Farms — Oregon Olive Mill
+  Domaine Drouhin Oregon
+  Maysara Winery
+  Blue Raeven Farmstand
+  The Ground Market
+  The Dundee Bistro
+  Alchemist's Jam
