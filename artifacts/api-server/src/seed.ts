@@ -20,6 +20,7 @@ const REMOVED_FROM_SEED: string[] = [
   "Humble Spirit",
   "Willamette Valley Cheese Co.",
   "Marché Provisions",
+  "King Estate Winery Restaurant",
 ];
 
 const SEED_DATA = [
@@ -105,8 +106,6 @@ const SEED_DATA = [
   { name: "Red Hills Market", city: "Dundee", note: "The essential daytime stop in Dundee — a market, bakery, wood-fired pizzeria, and bottle shop rolled into one warm room on 99W. The pizza uses Oregon grains, the charcuterie board is serious, and the wine selection focuses tightly on local producers. This is where winery workers eat.", category: "restaurant", lat: 45.27806, lng: -123.01179, website: "https://www.redhillsmarket.com" },
   // Thistle Restaurant: GPS confirmed via Google Maps (45.20953, -123.194251) — McMinnville OR 97128. Previous coords (45.2104, -123.1961) were ~210m off.
   { name: "Thistle Restaurant", city: "McMinnville", note: "Eric Bechard's small room on Evans Street is the most consistently excellent dinner in McMinnville — precise seasonal cooking from Oregon ingredients, a wine list built with real knowledge, and service that doesn't perform. Reservations essential. This is quiet, serious, and very good.", category: "restaurant", lat: 45.20953, lng: -123.19425, website: "https://www.thistlerestaurant.com" },
-  // King Estate Winery Restaurant: same campus as King Estate Winery — GPS confirmed (43.8609479, -123.2506801). Previous coords (43.9724, -123.2239) were ~12.4km north.
-  { name: "King Estate Winery Restaurant", city: "Eugene", note: "The on-site restaurant at King Estate sources heavily from the certified-organic estate farm — real farm-to-table, not decorative. The menu rotates with what's growing, the wines are poured by the estate team, and the views over the vineyard are worth the drive to the southern end of the valley.", category: "restaurant", lat: 43.86095, lng: -123.25068, website: "https://www.kingestate.com" },
   // The Painted Lady: GPS confirmed via Google Maps (45.2993261, -122.9730206) — 201 S College St, Newberg OR 97132. Previous coords (45.3017, -122.9722) were ~270m north.
   { name: "The Painted Lady", city: "Newberg", note: "Oregon wine country's most decorated fine dining destination — Forbes Four-Star, AAA Four-Diamond, and consistently the benchmark for what farm-driven tasting-menu cooking looks like in the Willamette Valley. The Victorian house on College Street in Newberg has been setting the standard since 2005. Every course is anchored to Oregon ingredients and the extraordinary Pinot Noir being made in the surrounding hills. Reservations required; plan ahead.", category: "restaurant", lat: 45.29933, lng: -122.97302, website: "https://www.thepaintedladyrestaurant.com" },
   { name: "Hayward", city: "Carlton", note: "Chef Kari Shaughnessy's James Beard Award–nominated restaurant (Best New Restaurant 2024 finalist, Best Chef NW & Pacific 2025 semifinalist) in downtown Carlton. Hyper-seasonal, zero-waste, deeply rooted in Willamette Valley producers. The space feels like a well-loved home; the cooking is precise and completely unsentimental. The best argument for why Carlton is now the valley's most exciting dining address.", category: "restaurant", lat: 45.2946, lng: -123.1788, website: "https://www.haywardrestaurant.com" },
