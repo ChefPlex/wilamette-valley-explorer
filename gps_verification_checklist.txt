@@ -1,6 +1,6 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
-Updated: 2026-05-01 | 54 markers total
-Status: 16 confirmed ✓ | 38 unverified ?
+Updated: 2026-05-02 | 54 markers total
+Status: 29 confirmed ✓ | 22 unverified ? | 3 need direct place link ⚠
 
 Format: NAME | lat, lng | STATUS
 Google Maps links are direct pin drops — click to verify location on map.
@@ -17,30 +17,30 @@ https://www.google.com/maps?q=45.26554,-123.05563
 Argyle Winery | 45.27730, -123.01108 | ✓ VERIFIED
 https://www.google.com/maps?q=45.27730,-123.01108
 
-Sokol Blosser | 45.2625, -123.0681 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2625,-123.0681
+Sokol Blosser | 45.25170, -123.04968 | ✓ VERIFIED (corrected from 45.2625, -123.0681 — ~1.2km)
+https://www.google.com/maps?q=45.25170,-123.04968
 
 Winderlea Vineyard & Winery | 45.27902, -123.04308 | ✓ VERIFIED
 https://www.google.com/maps?q=45.27902,-123.04308
 
 ── EOLA-AMITY HILLS ──────────────────────────────────────────
 
-Cristom Vineyards | 44.9996, -123.1454 | ? UNVERIFIED
-https://www.google.com/maps?q=44.9996,-123.1454
+Cristom Vineyards | 45.03455, -123.12054 | ✓ VERIFIED (corrected from 44.9996, -123.1454 — ~4.1km)
+https://www.google.com/maps?q=45.03455,-123.12054
 
-Bethel Heights Vineyard | 44.9905, -123.1299 | ? UNVERIFIED
-https://www.google.com/maps?q=44.9905,-123.1299
+Bethel Heights Vineyard | 45.03717, -123.15267 | ✓ VERIFIED (corrected from 44.9905, -123.1299 — ~5.3km)
+https://www.google.com/maps?q=45.03717,-123.15267
 
-Witness Tree Vineyard | 44.9935, -123.1398 | ? UNVERIFIED
-https://www.google.com/maps?q=44.9935,-123.1398
+Witness Tree Vineyard | 44.9935, -123.1398 | ⚠ NEED DIRECT PLACE LINK
+  → Send Google Maps link for: Witness Tree Vineyard, Salem OR
 
-Evening Land Vineyards | 44.9720, -123.1433 | ? UNVERIFIED
-https://www.google.com/maps?q=44.9720,-123.1433
+Evening Land Vineyards | 44.9720, -123.1433 | ⚠ NEED DIRECT PLACE LINK
+  → Send Google Maps link for: Evening Land Vineyards / Seven Springs Estate, Salem OR
 
 ── McMANNVILLE AVA ───────────────────────────────────────────
 
-Eyrie Vineyards | 45.2099, -123.1994 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2099,-123.1994
+Eyrie Vineyards | 45.2099, -123.1994 | ⚠ NEED DIRECT PLACE LINK
+  → Send Google Maps link for: Eyrie Vineyards tasting room, McMinnville OR
 
 Maysara Winery | 45.14811, -123.30760 | ✓ VERIFIED
 https://www.google.com/maps?q=45.14811,-123.30760
@@ -53,40 +53,40 @@ https://www.google.com/maps?q=45.19026,-123.29070
 
 ── YAMHILL-CARLTON ───────────────────────────────────────────
 
-Penner-Ash Wine Cellars | 45.3432, -123.0021 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3432,-123.0021
+Penner-Ash Wine Cellars | 45.33232, -123.09568 | ✓ VERIFIED (corrected from 45.3432, -123.0021 — ~8.6km)
+https://www.google.com/maps?q=45.33232,-123.09568
 
-Carlton Winemakers Studio | 45.2953, -123.1772 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2953,-123.1772
+Carlton Winemakers Studio | 45.30020, -123.18258 | ✓ VERIFIED (corrected from 45.2953, -123.1772 — ~0.6km)
+https://www.google.com/maps?q=45.30020,-123.18258
 
-Ken Wright Cellars | 45.2958, -123.1793 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2958,-123.1793
+Ken Wright Cellars | 45.29446, -123.17685 | ✓ VERIFIED (corrected from 45.2958, -123.1793 — ~0.2km)
+https://www.google.com/maps?q=45.29446,-123.17685
 
-Lemelson Vineyards | 45.3020, -123.1315 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3020,-123.1315
+Lemelson Vineyards | 45.30200, -123.13150 | ✓ VERIFIED
+https://www.google.com/maps?q=45.30200,-123.13150
 
-Résonance | 45.3079, -123.2341 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3079,-123.2341
+Résonance | 45.29070, -123.23684 | ✓ VERIFIED (corrected from 45.3079, -123.2341 — ~1.9km)
+https://www.google.com/maps?q=45.29070,-123.23684
 
 ── CHEHALEM MOUNTAINS / RIBBON RIDGE ────────────────────────
 
-Adelsheim Vineyard | 45.3298, -122.9613 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3298,-122.9613
+Adelsheim Vineyard | 45.33855, -123.04970 | ✓ VERIFIED (corrected from 45.3298, -122.9613 — ~7.5km)
+https://www.google.com/maps?q=45.33855,-123.04970
 
-Beaux Frères | 45.3424, -123.0024 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3424,-123.0024
+Beaux Frères | 45.34748, -123.09225 | ✓ VERIFIED (corrected from 45.3424, -123.0024 — ~8km)
+https://www.google.com/maps?q=45.34748,-123.09225
 
-Bergström Winery | 45.3264, -122.9430 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3264,-122.9430
+Bergström Winery | 45.27882, -123.02769 | ✓ VERIFIED (corrected from 45.3264, -122.9430 — ~8.4km)
+https://www.google.com/maps?q=45.27882,-123.02769
 
-Brick House Wine Company | 45.3485, -122.9979 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3485,-122.9979
+Brick House Wine Company | 45.35010, -123.07016 | ✓ VERIFIED (corrected from 45.3485, -122.9979 — ~6km)
+https://www.google.com/maps?q=45.35010,-123.07016
 
-Patricia Green Cellars | 45.3399, -123.0011 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3399,-123.0011
+Patricia Green Cellars | 45.34602, -123.09147 | ✓ VERIFIED (corrected from 45.3399, -123.0011 — ~8km)
+https://www.google.com/maps?q=45.34602,-123.09147
 
-Rex Hill | 45.3055, -122.9711 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3055,-122.9711
+Rex Hill | 45.31456, -122.92057 | ✓ VERIFIED (corrected from 45.3055, -122.9711 — ~5km)
+https://www.google.com/maps?q=45.31456,-122.92057
 
 ── AMITY / SOUTH ─────────────────────────────────────────────
 
@@ -142,8 +142,8 @@ https://www.google.com/maps?q=45.2097,-123.1971
 Alchemist's Jam | 45.20945, -123.19342 | ✓ VERIFIED
 https://www.google.com/maps?q=45.20945,-123.19342
 
-Abuela's Nuestra Cocina | 45.2095, -123.18632 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2095,-123.18632
+Abuela's Nuestra Cocina | 45.20950, -123.18632 | ? UNVERIFIED
+https://www.google.com/maps?q=45.20950,-123.18632
 
 ── CARLTON ───────────────────────────────────────────────────
 
@@ -217,11 +217,27 @@ https://www.google.com/maps?q=44.1582,-123.2304
 SUMMARY
 ════════════════════════════════════════════════════════════════
 
-Total markers:        54
-✓ VERIFIED:           16
-? UNVERIFIED:         38
+Total markers:           54
+✓ VERIFIED:              29
+? UNVERIFIED:            22
+⚠ NEED DIRECT LINK:       3  (Witness Tree, Evening Land, Eyrie)
 
-Verified:
+Corrections applied this session (13):
+  Sokol Blosser             corrected ~1.2km
+  Cristom Vineyards         corrected ~4.1km
+  Bethel Heights Vineyard   corrected ~5.3km
+  Adelsheim Vineyard        corrected ~7.5km
+  Bergström Winery          corrected ~8.4km
+  Rex Hill                  corrected ~5km
+  Beaux Frères              corrected ~8km
+  Brick House Wine Company  corrected ~6km
+  Patricia Green Cellars    corrected ~8km
+  Penner-Ash Wine Cellars   corrected ~8.6km
+  Carlton Winemakers Studio corrected ~0.6km
+  Ken Wright Cellars        corrected ~0.2km
+  Résonance                 corrected ~1.9km
+
+Previously verified (16):
   Argyle Winery
   Red Hills Market
   Joel Palmer House
@@ -238,3 +254,4 @@ Verified:
   The Ground Market
   The Dundee Bistro
   Alchemist's Jam
+  Lemelson Vineyards
