@@ -1,6 +1,6 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
-Updated: 2026-05-02 | 54 markers total
-Status: 49 confirmed ✓ | 4 unverified ? | 1 need direct place link ⚠
+Updated: 2026-05-02 | 53 markers total (Marché Provisions removed)
+Status: 53 confirmed ✓ | 0 unverified ? — GPS AUDIT COMPLETE ✓✓✓
 
 Format: NAME | lat, lng | STATUS
 Google Maps links are direct pin drops — click to verify location on map.
@@ -158,8 +158,8 @@ https://www.google.com/maps?q=45.29469,-123.17972
 The Painted Lady | 45.29933, -122.97302 | ✓ VERIFIED (corrected from 45.3017, -122.9722 — ~270m)
 https://www.google.com/maps?q=45.29933,-122.97302
 
-Good Company Cheese Bar & Bistro | 45.3023, -122.9726 | ⚠ NEED DIRECT PLACE LINK
-  → Search Google Maps for "Good Company Cheese Bar Bistro Newberg OR" and send the place link
+Good Company Cheese Bar & Bistro | 45.30007, -122.97381 | ✓ VERIFIED (corrected from 45.3023, -122.9726 — ~280m)
+https://www.google.com/maps?q=45.30007,-122.97381
 
 ── SALEM / CORVALLIS / EUGENE ────────────────────────────────
 
@@ -200,29 +200,29 @@ https://www.google.com/maps?q=44.14266,-123.15045
 ARTISAN PRODUCERS (4)
 ════════════════════════════════════════════════════════════════
 
-Briar Rose Creamery | 45.2931, -123.0565 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2931,-123.0565
+Briar Rose Creamery | 45.28724, -123.04148 | ✓ VERIFIED (corrected from 45.2931, -123.0565 — ~1.4km)
+https://www.google.com/maps?q=45.28724,-123.04148
 
-Ochoa's Queseria | 44.6369, -123.1050 | ? UNVERIFIED
-https://www.google.com/maps?q=44.6369,-123.1050
+Ochoa's Queseria | 44.63876, -123.09566 | ✓ VERIFIED (corrected from 44.6369, -123.1050 — ~860m)
+https://www.google.com/maps?q=44.63876,-123.09566
 
-Marché Provisions | 44.0534, -123.0925 | ? UNVERIFIED
-https://www.google.com/maps?q=44.0534,-123.0925
+Marché Provisions | REMOVED FROM MAP (per curator decision)
 
-Camas Country Mill | 44.1582, -123.2304 | ? UNVERIFIED
-https://www.google.com/maps?q=44.1582,-123.2304
+Camas Country Mill | 44.11893, -123.17730 | ✓ VERIFIED (corrected from 44.1582, -123.2304 — ~6.5km)
+https://www.google.com/maps?q=44.11893,-123.17730
 
 
 ════════════════════════════════════════════════════════════════
 SUMMARY
 ════════════════════════════════════════════════════════════════
 
-Total markers:           54
-✓ VERIFIED:              49
-? UNVERIFIED:             4
-⚠ NEED DIRECT LINK:       1  (Good Company Cheese Bar & Bistro)
+Total markers:           53  (54 original − 1 removed: Marché Provisions)
+✓ VERIFIED:              53
+? UNVERIFIED:             0
 
-Corrections applied this session (27):
+GPS AUDIT COMPLETE — every marker on the map has been confirmed via Google Maps.
+
+Corrections applied this session (31):
   Sokol Blosser             corrected ~1.2km
   Cristom Vineyards         corrected ~4.1km
   Bethel Heights Vineyard   corrected ~5.3km
@@ -250,6 +250,10 @@ Corrections applied this session (27):
   Abuela's Nuestra Cocina   corrected ~860m
   The Painted Lady          corrected ~270m
   Groundwork Organics       corrected ~8.7km
+  Good Company Cheese Bar   corrected ~280m
+  Briar Rose Creamery       corrected ~1.4km
+  Ochoa's Queseria          corrected ~860m
+  Camas Country Mill        corrected ~6.5km
 
 Previously verified (no correction needed, 22):
   Argyle Winery
@@ -270,7 +274,3 @@ Previously verified (no correction needed, 22):
   Alchemist's Jam
   La Rambla
   Lemelson Vineyards
-  Hayward
-  Carlton Corners
-  Word of Mouth Bistro
-  Block 15 Brewing
