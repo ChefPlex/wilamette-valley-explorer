@@ -1,6 +1,6 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
 Updated: 2026-05-02 | 54 markers total
-Status: 36 confirmed ✓ | 18 unverified ?
+Status: 43 confirmed ✓ | 11 unverified ?
 
 Format: NAME | lat, lng | STATUS
 Google Maps links are direct pin drops — click to verify location on map.
@@ -124,26 +124,26 @@ https://www.google.com/maps?q=45.27840,-123.01090
 
 ── McMANNVILLE ───────────────────────────────────────────────
 
-Nick's Italian Café | 45.2085, -123.1966 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2085,-123.1966
+Nick's Italian Café | 45.21020, -123.19405 | ✓ VERIFIED (corrected from 45.2085, -123.1966 — ~280m)
+https://www.google.com/maps?q=45.21020,-123.19405
 
-Thistle Restaurant | 45.2104, -123.1961 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2104,-123.1961
+Thistle Restaurant | 45.20953, -123.19425 | ✓ VERIFIED (corrected from 45.2104, -123.1961 — ~210m)
+https://www.google.com/maps?q=45.20953,-123.19425
 
-Bistro Maison | 45.2092, -123.1899 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2092,-123.1899
+Bistro Maison | 45.21027, -123.19147 | ✓ VERIFIED (corrected from 45.2092, -123.1899 — ~180m)
+https://www.google.com/maps?q=45.21027,-123.19147
 
-Okta | 45.2088, -123.1960 | ? UNVERIFIED
-https://www.google.com/maps?q=45.2088,-123.1960
+Okta | 45.20982, -123.19288 | ✓ VERIFIED (corrected from 45.2088, -123.1960 — ~280m)
+https://www.google.com/maps?q=45.20982,-123.19288
 
-La Rambla | 45.2097, -123.1971 | ? UNVERIFIED
+La Rambla | 45.2097, -123.1971 | ✓ VERIFIED
 https://www.google.com/maps?q=45.2097,-123.1971
 
 Alchemist's Jam | 45.20945, -123.19342 | ✓ VERIFIED
 https://www.google.com/maps?q=45.20945,-123.19342
 
-Abuela's Nuestra Cocina | 45.20950, -123.18632 | ? UNVERIFIED
-https://www.google.com/maps?q=45.20950,-123.18632
+Abuela's Nuestra Cocina | 45.20981, -123.19737 | ✓ VERIFIED (corrected from 45.2095, -123.18632 — ~860m)
+https://www.google.com/maps?q=45.20981,-123.19737
 
 ── CARLTON ───────────────────────────────────────────────────
 
@@ -218,10 +218,10 @@ SUMMARY
 ════════════════════════════════════════════════════════════════
 
 Total markers:           54
-✓ VERIFIED:              36
-? UNVERIFIED:            18
+✓ VERIFIED:              43
+? UNVERIFIED:            11
 
-Corrections applied this session (20):
+Corrections applied this session (25):
   Sokol Blosser             corrected ~1.2km
   Cristom Vineyards         corrected ~4.1km
   Bethel Heights Vineyard   corrected ~5.3km
@@ -242,8 +242,13 @@ Corrections applied this session (20):
   Vincent Wine Company      corrected ~3.1km
   King Estate Winery        corrected ~12.4km
   King Estate Restaurant    corrected ~12.4km (same campus)
+  Nick's Italian Café       corrected ~280m
+  Thistle Restaurant        corrected ~210m
+  Bistro Maison             corrected ~180m
+  Okta                      corrected ~280m
+  Abuela's Nuestra Cocina   corrected ~860m
 
-Previously verified (no correction needed, 17):
+Previously verified (no correction needed, 19):
   Argyle Winery
   Red Hills Market
   Joel Palmer House
@@ -260,4 +265,5 @@ Previously verified (no correction needed, 17):
   The Ground Market
   The Dundee Bistro
   Alchemist's Jam
+  La Rambla
   Lemelson Vineyards
