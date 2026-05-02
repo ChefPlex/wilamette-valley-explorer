@@ -35,3 +35,9 @@ id = "LoCq10CR05JowKGwhsIzM"
 uri = "file://gps_audit_report.txt"
 type = "text"
 title = "GPS Audit Report — 11 flagged entries"
+
+[[outputs]]
+id = "jo4dF8QqfA5ve7KYsNccy"
+uri = "file://gps_verification_checklist.txt"
+type = "text"
+title = "GPS Verification Checklist — 54 markers"
