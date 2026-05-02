@@ -1,6 +1,6 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
 Updated: 2026-05-02 | 54 markers total
-Status: 33 confirmed ✓ | 21 unverified ?
+Status: 36 confirmed ✓ | 18 unverified ?
 
 Format: NAME | lat, lng | STATUS
 Google Maps links are direct pin drops — click to verify location on map.
@@ -93,13 +93,13 @@ https://www.google.com/maps?q=45.31456,-122.92057
 Antica Terra | 45.11969, -123.18323 | ✓ VERIFIED (corrected from 45.1061, -123.1918 — ~1.6km)
 https://www.google.com/maps?q=45.11969,-123.18323
 
-Vincent Wine Company | 45.1030, -123.1910 | ? UNVERIFIED
-https://www.google.com/maps?q=45.1030,-123.1910
+Vincent Wine Company | 45.09528, -123.15657 | ✓ VERIFIED (corrected from 45.1030, -123.1910 — ~3.1km)
+https://www.google.com/maps?q=45.09528,-123.15657
 
 ── SOUTH VALLEY ──────────────────────────────────────────────
 
-King Estate Winery | 43.9721, -123.2244 | ? UNVERIFIED
-https://www.google.com/maps?q=43.9721,-123.2244
+King Estate Winery | 43.86095, -123.25068 | ✓ VERIFIED (corrected from 43.9721, -123.2244 — ~12.4km)
+https://www.google.com/maps?q=43.86095,-123.25068
 
 
 ════════════════════════════════════════════════════════════════
@@ -169,8 +169,8 @@ https://www.google.com/maps?q=44.9357,-123.0198
 Block 15 Brewing | 44.5622, -123.2622 | ? UNVERIFIED
 https://www.google.com/maps?q=44.5622,-123.2622
 
-King Estate Winery Restaurant | 43.9724, -123.2239 | ? UNVERIFIED
-https://www.google.com/maps?q=43.9724,-123.2239
+King Estate Winery Restaurant | 43.86095, -123.25068 | ✓ VERIFIED (corrected from 43.9724, -123.2239 — ~12.4km, same campus as winery)
+https://www.google.com/maps?q=43.86095,-123.25068
 
 
 ════════════════════════════════════════════════════════════════
@@ -218,10 +218,10 @@ SUMMARY
 ════════════════════════════════════════════════════════════════
 
 Total markers:           54
-✓ VERIFIED:              33
-? UNVERIFIED:            21
+✓ VERIFIED:              36
+? UNVERIFIED:            18
 
-Corrections applied this session (17):
+Corrections applied this session (20):
   Sokol Blosser             corrected ~1.2km
   Cristom Vineyards         corrected ~4.1km
   Bethel Heights Vineyard   corrected ~5.3km
@@ -239,6 +239,9 @@ Corrections applied this session (17):
   Evening Land Vineyards    corrected ~11km
   Antica Terra              corrected ~1.6km
   Eyrie Vineyards           corrected ~1.1km
+  Vincent Wine Company      corrected ~3.1km
+  King Estate Winery        corrected ~12.4km
+  King Estate Restaurant    corrected ~12.4km (same campus)
 
 Previously verified (no correction needed, 17):
   Argyle Winery
