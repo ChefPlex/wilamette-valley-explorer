@@ -1,6 +1,6 @@
 GPS VERIFICATION CHECKLIST — Willamette Valley Explorer
 Updated: 2026-05-02 | 54 markers total
-Status: 43 confirmed ✓ | 11 unverified ?
+Status: 49 confirmed ✓ | 4 unverified ? | 1 need direct place link ⚠
 
 Format: NAME | lat, lng | STATUS
 Google Maps links are direct pin drops — click to verify location on map.
@@ -147,26 +147,26 @@ https://www.google.com/maps?q=45.20981,-123.19737
 
 ── CARLTON ───────────────────────────────────────────────────
 
-Hayward | 45.2946, -123.1788 | ? UNVERIFIED
+Hayward | 45.2946, -123.1788 | ✓ VERIFIED
 https://www.google.com/maps?q=45.2946,-123.1788
 
-Carlton Corners | 45.29469, -123.17972 | ? UNVERIFIED
+Carlton Corners | 45.29469, -123.17972 | ✓ VERIFIED
 https://www.google.com/maps?q=45.29469,-123.17972
 
 ── NEWBERG ───────────────────────────────────────────────────
 
-The Painted Lady | 45.3017, -122.9722 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3017,-122.9722
+The Painted Lady | 45.29933, -122.97302 | ✓ VERIFIED (corrected from 45.3017, -122.9722 — ~270m)
+https://www.google.com/maps?q=45.29933,-122.97302
 
-Good Company Cheese Bar & Bistro | 45.3023, -122.9726 | ? UNVERIFIED
-https://www.google.com/maps?q=45.3023,-122.9726
+Good Company Cheese Bar & Bistro | 45.3023, -122.9726 | ⚠ NEED DIRECT PLACE LINK
+  → Search Google Maps for "Good Company Cheese Bar Bistro Newberg OR" and send the place link
 
 ── SALEM / CORVALLIS / EUGENE ────────────────────────────────
 
-Word of Mouth Bistro | 44.9357, -123.0198 | ? UNVERIFIED
+Word of Mouth Bistro | 44.9357, -123.0198 | ✓ VERIFIED
 https://www.google.com/maps?q=44.9357,-123.0198
 
-Block 15 Brewing | 44.5622, -123.2622 | ? UNVERIFIED
+Block 15 Brewing | 44.5622, -123.2622 | ✓ VERIFIED
 https://www.google.com/maps?q=44.5622,-123.2622
 
 King Estate Winery Restaurant | 43.86095, -123.25068 | ✓ VERIFIED (corrected from 43.9724, -123.2239 — ~12.4km, same campus as winery)
@@ -192,8 +192,8 @@ https://www.google.com/maps?q=45.33000,-123.18400
 Draper Farms | 45.22701, -123.22969 | ✓ VERIFIED
 https://www.google.com/maps?q=45.22701,-123.22969
 
-Groundwork Organics | 44.2165, -123.2090 | ? UNVERIFIED
-https://www.google.com/maps?q=44.2165,-123.2090
+Groundwork Organics | 44.14266, -123.15045 | ✓ VERIFIED (corrected from 44.2165, -123.2090 — ~8.7km)
+https://www.google.com/maps?q=44.14266,-123.15045
 
 
 ════════════════════════════════════════════════════════════════
@@ -218,10 +218,11 @@ SUMMARY
 ════════════════════════════════════════════════════════════════
 
 Total markers:           54
-✓ VERIFIED:              43
-? UNVERIFIED:            11
+✓ VERIFIED:              49
+? UNVERIFIED:             4
+⚠ NEED DIRECT LINK:       1  (Good Company Cheese Bar & Bistro)
 
-Corrections applied this session (25):
+Corrections applied this session (27):
   Sokol Blosser             corrected ~1.2km
   Cristom Vineyards         corrected ~4.1km
   Bethel Heights Vineyard   corrected ~5.3km
@@ -247,8 +248,10 @@ Corrections applied this session (25):
   Bistro Maison             corrected ~180m
   Okta                      corrected ~280m
   Abuela's Nuestra Cocina   corrected ~860m
+  The Painted Lady          corrected ~270m
+  Groundwork Organics       corrected ~8.7km
 
-Previously verified (no correction needed, 19):
+Previously verified (no correction needed, 22):
   Argyle Winery
   Red Hills Market
   Joel Palmer House
@@ -267,3 +270,7 @@ Previously verified (no correction needed, 19):
   Alchemist's Jam
   La Rambla
   Lemelson Vineyards
+  Hayward
+  Carlton Corners
+  Word of Mouth Bistro
+  Block 15 Brewing
