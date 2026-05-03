@@ -2,7 +2,7 @@
   "expo": {
     "name": "Willamette Valley",
     "slug": "sonoma-mobile",
-    "version": "2.5.1",
+    "version": "2.6.0",
     "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "sonoma-mobile",
