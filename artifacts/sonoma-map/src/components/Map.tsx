@@ -1,19 +1,9 @@
-import { useState, useCallback } from "react";
 import type { SavedSpot } from "@/hooks/useMyList";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
-import { 
-  useGetMarkers, 
-  useCreateMarker, 
-  getGetMarkersQueryKey, 
-  getGetMarkerStatsQueryKey 
-} from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useGetMarkers, getGetMarkersQueryKey } from "@workspace/api-client-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { Loader2, Wine, Utensils, Leaf, ExternalLink, Bookmark, Store } from "lucide-react";
+import { Wine, Utensils, Leaf, ExternalLink, Bookmark, Store } from "lucide-react";
 import { format } from "date-fns";
 
 // Fix Leaflet default icon issues
@@ -47,28 +37,6 @@ const createCustomIcon = (type: "winery" | "restaurant" | "farmstand" | "artisan
   });
 };
 
-const defaultIcon = new L.Icon({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  popupAnchor: [1, -34],
-});
-
-interface MapEventsProps {
-  onMapClick: (latlng: L.LatLng) => void;
-}
-
-function MapEventsComponent({ onMapClick }: MapEventsProps) {
-  useMapEvents({
-    click(e) {
-      onMapClick(e.latlng);
-    },
-  });
-  return null;
-}
-
 interface MapComponentProps {
   activeFilter: string;
   onToggleSave: (spot: SavedSpot) => void;
@@ -76,41 +44,9 @@ interface MapComponentProps {
 }
 
 export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapComponentProps) {
-  const queryClient = useQueryClient();
   const { data: markers = [], isLoading } = useGetMarkers({
     query: { queryKey: getGetMarkersQueryKey() }
   });
-  
-  const createMarker = useCreateMarker();
-
-  const [draftMarker, setDraftMarker] = useState<L.LatLng | null>(null);
-  const [formData, setFormData] = useState({ name: "", note: "", category: "winery" as "winery" | "restaurant" | "farmstand" | "artisan" });
-  
-  const handleMapClick = useCallback((latlng: L.LatLng) => {
-    setDraftMarker(latlng);
-    setFormData({ name: "", note: "", category: "winery" });
-  }, []);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!draftMarker || !formData.name) return;
-    
-    createMarker.mutate({
-      data: {
-        name: formData.name,
-        note: formData.note,
-        category: formData.category,
-        lat: draftMarker.lat,
-        lng: draftMarker.lng,
-      }
-    }, {
-      onSuccess: () => {
-        setDraftMarker(null);
-        queryClient.invalidateQueries({ queryKey: getGetMarkersQueryKey() });
-        queryClient.invalidateQueries({ queryKey: getGetMarkerStatsQueryKey() });
-      }
-    });
-  };
 
   const filteredMarkers = markers.filter(marker => {
     if (activeFilter === "all") return true;
@@ -128,7 +64,6 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
         url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
       />
-      <MapEventsComponent onMapClick={handleMapClick} />
       
       {filteredMarkers.map(marker => (
         <Marker 
@@ -156,7 +91,7 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
               {marker.note && (
                 <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{marker.note}</p>
               )}
-              {marker.website && (
+              {marker.website && /^https?:\/\//i.test(marker.website) && (
                 <a
                   href={marker.website}
                   target="_blank"
@@ -192,118 +127,6 @@ export function MapComponent({ activeFilter, onToggleSave, isSaved }: MapCompone
           </Popup>
         </Marker>
       ))}
-
-      {draftMarker && (
-        <Marker position={draftMarker} icon={defaultIcon}>
-          <Popup 
-            className="custom-popup min-w-[280px]"
-            eventHandlers={{
-              remove: () => setDraftMarker(null)
-            }}
-          >
-            <form onSubmit={handleSubmit} className="p-1 space-y-4">
-              <div className="mb-2">
-                <h3 className="font-serif text-lg font-bold text-foreground">Mark this spot</h3>
-                <p className="text-xs text-muted-foreground">Name it. Note what made it worth stopping.</p>
-              </div>
-              
-              <div className="space-y-3">
-                <div className="space-y-1.5">
-                  <Label htmlFor="name" className="text-xs font-medium text-foreground">Name</Label>
-                  <Input 
-                    id="name"
-                    value={formData.name}
-                    onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
-                    placeholder="E.g. Scribe Winery"
-                    className="h-9 bg-background focus-visible:ring-1"
-                    autoFocus
-                  />
-                </div>
-                
-                <div className="space-y-1.5">
-                  <Label htmlFor="note" className="text-xs font-medium text-foreground">Notes</Label>
-                  <Textarea 
-                    id="note"
-                    value={formData.note}
-                    onChange={(e) => setFormData(p => ({ ...p, note: e.target.value }))}
-                    placeholder="What was memorable?"
-                    className="min-h-[80px] resize-none bg-background focus-visible:ring-1"
-                  />
-                </div>
-
-                <div className="space-y-2 pt-1">
-                  <Label className="text-xs font-medium text-foreground">Category</Label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setFormData(p => ({ ...p, category: "winery" }))}
-                      className={`flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-md border text-xs font-medium transition-colors
-                        ${formData.category === "winery" 
-                          ? "bg-primary text-primary-foreground border-primary" 
-                          : "bg-background text-muted-foreground border-border hover:bg-muted"}`}
-                    >
-                      <Wine className="w-4 h-4" />
-                      Winery
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData(p => ({ ...p, category: "restaurant" }))}
-                      className={`flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-md border text-xs font-medium transition-colors
-                        ${formData.category === "restaurant" 
-                          ? "bg-secondary text-secondary-foreground border-secondary" 
-                          : "bg-background text-muted-foreground border-border hover:bg-muted"}`}
-                    >
-                      <Utensils className="w-4 h-4" />
-                      Dining
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData(p => ({ ...p, category: "farmstand" }))}
-                      className={`flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-md border text-xs font-medium transition-colors
-                        ${formData.category === "farmstand" 
-                          ? "bg-[#6f7d3c] text-white border-[#6f7d3c]" 
-                          : "bg-background text-muted-foreground border-border hover:bg-muted"}`}
-                    >
-                      <Leaf className="w-4 h-4" />
-                      Farm
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setFormData(p => ({ ...p, category: "artisan" }))}
-                      className={`flex flex-col items-center justify-center gap-1 py-2 px-2 rounded-md border text-xs font-medium transition-colors
-                        ${formData.category === "artisan" 
-                          ? "bg-[#c06a2d] text-white border-[#c06a2d]" 
-                          : "bg-background text-muted-foreground border-border hover:bg-muted"}`}
-                    >
-                      <Store className="w-4 h-4" />
-                      Artisan
-                    </button>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="pt-2 flex gap-2">
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="flex-1 h-9"
-                  onClick={() => setDraftMarker(null)}
-                >
-                  Cancel
-                </Button>
-                <Button 
-                  type="submit" 
-                  className="flex-1 h-9"
-                  disabled={!formData.name || createMarker.isPending}
-                >
-                  {createMarker.isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                  Save Spot
-                </Button>
-              </div>
-            </form>
-          </Popup>
-        </Marker>
-      )}
     </MapContainer>
   );
 }

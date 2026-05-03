@@ -92,11 +92,12 @@ function SpotRow({ item, isTablet }: SpotRowProps) {
   const catLabel = getCategoryLabel(item.category);
   const catIcon = getCategoryIcon(item.category);
   const hasMore = item.note && item.note.length > 80;
+  const safeWebsite = item.website && /^https?:\/\//i.test(item.website) ? item.website : null;
 
   return (
     <TouchableOpacity
       activeOpacity={0.75}
-      onPress={() => (hasMore || item.website) ? setExpanded((v) => !v) : null}
+      onPress={() => (hasMore || safeWebsite) ? setExpanded((v) => !v) : null}
       style={[
         styles.spotRow,
         { backgroundColor: colors.card, borderColor: expanded ? catColor : colors.border },
@@ -123,12 +124,12 @@ function SpotRow({ item, isTablet }: SpotRowProps) {
             {item.note}
           </Text>
         ) : null}
-        {(expanded || !hasMore) && item.website ? (
+        {(expanded || !hasMore) && safeWebsite ? (
           <TouchableOpacity
             style={styles.inlineWebsiteLink}
             onPress={(e) => {
               e.stopPropagation?.();
-              Linking.openURL(item.website!);
+              Linking.openURL(safeWebsite);
             }}
           >
             <Ionicons name="globe-outline" size={13} color={catColor} />

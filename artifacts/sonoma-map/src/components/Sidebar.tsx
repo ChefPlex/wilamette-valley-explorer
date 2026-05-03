@@ -176,7 +176,7 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
                   <div className="text-[10px] text-muted-foreground font-mono uppercase tracking-wider">
                     Added {format(new Date(marker.createdAt), 'MMM d, yyyy')}
                   </div>
-                  {marker.website && (
+                  {marker.website && /^https?:\/\//i.test(marker.website) && (
                     <a
                       href={marker.website}
                       target="_blank"
@@ -198,7 +198,7 @@ export function Sidebar({ activeFilter, setActiveFilter }: SidebarProps) {
       {/* Footer Instructions */}
       <div className="p-4 border-t border-border bg-muted/30 text-center">
         <p className="text-xs text-muted-foreground">
-          Click the map to mark a spot · Ask Valley Chef below
+          Ask Valley Chef below
         </p>
       </div>
     </div>

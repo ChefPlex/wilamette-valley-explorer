@@ -1,5 +1,5 @@
 import { Router, type IRouter, type Request, type Response, type NextFunction } from "express";
-import { db, markersTable, insertMarkerSchema } from "@workspace/db";
+import { db, markersTable, insertMarkerSchema, createMarkerSchema } from "@workspace/db";
 import { eq, count } from "drizzle-orm";
 import { rateLimit } from "express-rate-limit";
 
@@ -57,9 +57,9 @@ router.get("/markers", markersLimiter, async (req, res) => {
   }
 });
 
-router.post("/markers", async (req, res) => {
+router.post("/markers", markersLimiter, requireAdminKey, async (req, res) => {
   try {
-    const input = insertMarkerSchema.safeParse(req.body);
+    const input = createMarkerSchema.safeParse(req.body);
     if (!input.success) {
       res.status(400).json({ error: "Invalid input", details: input.error.issues });
       return;
@@ -98,7 +98,7 @@ router.put("/markers/:id", requireAdminKey, async (req, res) => {
       res.status(400).json({ error: "Invalid id" });
       return;
     }
-    const partial = insertMarkerSchema.partial().safeParse(req.body);
+    const partial = createMarkerSchema.partial().safeParse(req.body);
     if (!partial.success) {
       res.status(400).json({ error: "Invalid input", details: partial.error.issues });
       return;

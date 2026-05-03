@@ -46,7 +46,9 @@ paths:
       operationId: createMarker
       tags: [markers]
       summary: Create a marker
-      description: Add a new marker to the map
+      description: Add a new marker to the map. Requires admin key.
+      security:
+        - adminKey: []
       requestBody:
         required: true
         content:
@@ -60,6 +62,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Marker"
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized — missing or invalid admin key
+        "503":
+          description: Admin operations not configured
   /markers/{id}:
     get:
       operationId: getMarker
@@ -84,6 +92,9 @@ paths:
       operationId: updateMarker
       tags: [markers]
       summary: Update a marker
+      description: Requires admin key.
+      security:
+        - adminKey: []
       parameters:
         - in: path
           name: id
@@ -103,12 +114,21 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Marker"
+        "400":
+          description: Invalid input
+        "401":
+          description: Unauthorized — missing or invalid admin key
         "404":
           description: Not found
+        "503":
+          description: Admin operations not configured
     delete:
       operationId: deleteMarker
       tags: [markers]
       summary: Delete a marker
+      description: Requires admin key.
+      security:
+        - adminKey: []
       parameters:
         - in: path
           name: id
@@ -118,8 +138,12 @@ paths:
       responses:
         "204":
           description: Deleted
+        "401":
+          description: Unauthorized — missing or invalid admin key
         "404":
           description: Not found
+        "503":
+          description: Admin operations not configured
   /openai/conversations:
     get:
       operationId: listOpenaiConversations
@@ -249,6 +273,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/MarkerStats"
 components:
+  securitySchemes:
+    adminKey:
+      type: apiKey
+      in: header
+      name: x-admin-key
+      description: Admin API key required for marker write operations (create, update, delete)
   schemas:
     OpenaiConversation:
       type: object
@@ -368,20 +398,30 @@ components:
       properties:
         name:
           type: string
+          maxLength: 200
         note:
           type: string
+          maxLength: 2000
         category:
           type: string
           enum: [winery, restaurant, farmstand, artisan]
         lat:
           type: number
+          minimum: 43.0
+          maximum: 47.0
         lng:
           type: number
+          minimum: -125.0
+          maximum: -120.5
         website:
           type: string
+          format: uri
+          pattern: "^https?://"
+          maxLength: 500
           nullable: true
         city:
           type: string
+          maxLength: 100
           nullable: true
       required:
         - name
@@ -394,16 +434,30 @@ components:
       properties:
         name:
           type: string
+          maxLength: 200
         note:
           type: string
+          maxLength: 2000
         category:
           type: string
           enum: [winery, restaurant, farmstand, artisan]
+        lat:
+          type: number
+          minimum: 43.0
+          maximum: 47.0
+        lng:
+          type: number
+          minimum: -125.0
+          maximum: -120.5
         website:
           type: string
+          format: uri
+          pattern: "^https?://"
+          maxLength: 500
           nullable: true
         city:
           type: string
+          maxLength: 100
           nullable: true
     MarkerStats:
       type: object

@@ -15,7 +15,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import MapView, { Marker, LongPressEvent } from "react-native-maps";
+import MapView, { Marker } from "react-native-maps";
 import * as Location from "expo-location";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,11 +25,7 @@ import { useIsTablet } from "@/hooks/useIsTablet";
 import {
   useGetMarkers,
   useGetMarkerStats,
-  useCreateMarker,
-  getGetMarkersQueryKey,
-  getGetMarkerStatsQueryKey,
 } from "@workspace/api-client-react";
-import { useQueryClient } from "@tanstack/react-query";
 import type { Marker as MarkerType } from "@workspace/api-client-react";
 
 type Category = "winery" | "restaurant" | "farmstand" | "artisan";
@@ -203,7 +199,7 @@ function SpotDetailModal({ spot, onClose, onToggleSave, isSaved }: SpotSheetProp
           <Text style={[styles.spotNote, { color: colors.mutedForeground }]}>{spot.note}</Text>
         ) : null}
 
-        {spot.website ? (
+        {spot.website && /^https?:\/\//i.test(spot.website) ? (
           <TouchableOpacity
             style={[styles.websiteBtn, { borderColor: colors.primary }]}
             onPress={() => Linking.openURL(spot.website!)}
@@ -271,7 +267,7 @@ function SpotDetailPanel({ spot, onClose, onToggleSave, isSaved }: SpotSheetProp
         </ScrollView>
       ) : null}
 
-      {spot.website ? (
+      {spot.website && /^https?:\/\//i.test(spot.website) ? (
         <TouchableOpacity
           style={[styles.websiteBtn, { borderColor: colors.primary }]}
           onPress={() => Linking.openURL(spot.website!)}
@@ -607,10 +603,7 @@ export default function MapScreen() {
   const colors = useColors();
   const isTablet = useIsTablet();
   const { width } = useWindowDimensions();
-  const queryClient = useQueryClient();
-
   const { data: markers = [], isLoading } = useGetMarkers();
-  const createMarker = useCreateMarker();
 
   const { saved: myListSaved, toggle: toggleSave, isSaved, remove: removeFromList, clearAll: clearMyList } = useMobileMyList();
 
@@ -618,7 +611,6 @@ export default function MapScreen() {
   const [locationLoading, setLocationLoading] = useState(false);
 
   const [selectedSpot, setSelectedSpot] = useState<MarkerType | null>(null);
-  const [addCoord, setAddCoord] = useState<{ latitude: number; longitude: number } | null>(null);
   const [mapFilter, setMapFilter] = useState<MapFilter>("all");
   const [showMyList, setShowMyList] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -650,40 +642,6 @@ export default function MapScreen() {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setSelectedSpot(marker);
   }, []);
-
-  const handleLongPress = useCallback((e: LongPressEvent) => {
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    setAddCoord(e.nativeEvent.coordinate);
-  }, []);
-
-  const handleSaveSpot = useCallback(
-    (data: { name: string; note: string; category: Category }) => {
-      if (!addCoord) return;
-      createMarker.mutate(
-        {
-          data: {
-            name: data.name,
-            note: data.note,
-            category: data.category,
-            lat: addCoord.latitude,
-            lng: addCoord.longitude,
-          },
-        },
-        {
-          onSuccess: () => {
-            Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-            queryClient.invalidateQueries({ queryKey: getGetMarkersQueryKey() });
-            queryClient.invalidateQueries({ queryKey: getGetMarkerStatsQueryKey() });
-            setAddCoord(null);
-          },
-          onError: () => {
-            Alert.alert("Error", "Failed to save spot. Please try again.");
-          },
-        }
-      );
-    },
-    [addCoord, createMarker, queryClient]
-  );
 
   const handleNearMe = useCallback(async () => {
     try {
@@ -804,7 +762,6 @@ export default function MapScreen() {
           latitudeDelta: 0.8,
           longitudeDelta: 0.8,
         }}
-        onLongPress={handleLongPress}
         showsUserLocation
         showsCompass={false}
         testID="map-view"
@@ -1005,16 +962,6 @@ export default function MapScreen() {
         )}
       </TouchableOpacity>
 
-      {/* Hint — only on phone (tablet users are more exploratory) */}
-      {!isTablet && (
-        <View style={[styles.hintBanner, { bottom: bottomInset + 8 }]}>
-          <View style={[styles.hintPill, { backgroundColor: colors.card + "E8" }]}>
-            <Ionicons name="hand-right-outline" size={13} color={colors.mutedForeground} />
-            <Text style={[styles.hintText, { color: colors.mutedForeground }]}>Long press to add a spot</Text>
-          </View>
-        </View>
-      )}
-
       {/* Spot detail: inline panel on tablet, modal on phone */}
       {isTablet ? (
         selectedSpot ? (
@@ -1035,13 +982,6 @@ export default function MapScreen() {
           isSaved={isSaved}
         />
       )}
-
-      <AddSpotSheet
-        coordinate={addCoord}
-        onClose={() => setAddCoord(null)}
-        onSave={handleSaveSpot}
-        saving={createMarker.isPending}
-      />
 
       <WelcomeSplashModal visible={showWelcome} onClose={handleCloseWelcome} />
     </View>
