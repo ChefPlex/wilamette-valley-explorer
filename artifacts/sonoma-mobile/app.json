@@ -14,7 +14,7 @@
       "backgroundColor": "#6B2D3E"
     },
     "ios": {
-      "bundleIdentifier": "com.chefplex.willametteexplorer",
+      "bundleIdentifier": "app.replit.willamettevalleyexplorer",
       "buildNumber": "1",
       "supportsTablet": true,
       "infoPlist": {
