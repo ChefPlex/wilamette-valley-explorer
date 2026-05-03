@@ -7,5 +7,6 @@
  */
 
 export interface SendOpenaiMessageBody {
+  /** @maxLength 2000 */
   content: string;
 }

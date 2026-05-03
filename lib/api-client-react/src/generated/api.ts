@@ -190,7 +190,7 @@ export function useGetMarkers<
 }
 
 /**
- * Add a new marker to the map
+ * Add a new marker to the map. Requires admin key.
  * @summary Create a marker
  */
 export const getCreateMarkerUrl = () => {
@@ -210,7 +210,7 @@ export const createMarker = async (
 };
 
 export const getCreateMarkerMutationOptions = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -251,13 +251,13 @@ export type CreateMarkerMutationResult = NonNullable<
   Awaited<ReturnType<typeof createMarker>>
 >;
 export type CreateMarkerMutationBody = BodyType<CreateMarkerInput>;
-export type CreateMarkerMutationError = ErrorType<unknown>;
+export type CreateMarkerMutationError = ErrorType<void>;
 
 /**
  * @summary Create a marker
  */
 export const useCreateMarker = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<void>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -362,6 +362,7 @@ export function useGetMarker<
 }
 
 /**
+ * Requires admin key.
  * @summary Update a marker
  */
 export const getUpdateMarkerUrl = (id: number) => {
@@ -449,6 +450,7 @@ export const useUpdateMarker = <
 };
 
 /**
+ * Requires admin key.
  * @summary Delete a marker
  */
 export const getDeleteMarkerUrl = (id: number) => {
@@ -531,82 +533,6 @@ export const useDeleteMarker = <
 > => {
   return useMutation(getDeleteMarkerMutationOptions(options));
 };
-
-/**
- * @summary List all conversations
- */
-export const getListOpenaiConversationsUrl = () => {
-  return `/api/openai/conversations`;
-};
-
-export const listOpenaiConversations = async (
-  options?: RequestInit,
-): Promise<OpenaiConversation[]> => {
-  return customFetch<OpenaiConversation[]>(getListOpenaiConversationsUrl(), {
-    ...options,
-    method: "GET",
-  });
-};
-
-export const getListOpenaiConversationsQueryKey = () => {
-  return [`/api/openai/conversations`] as const;
-};
-
-export const getListOpenaiConversationsQueryOptions = <
-  TData = Awaited<ReturnType<typeof listOpenaiConversations>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof listOpenaiConversations>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
-  const { query: queryOptions, request: requestOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getListOpenaiConversationsQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof listOpenaiConversations>>
-  > = ({ signal }) => listOpenaiConversations({ signal, ...requestOptions });
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
-    Awaited<ReturnType<typeof listOpenaiConversations>>,
-    TError,
-    TData
-  > & { queryKey: QueryKey };
-};
-
-export type ListOpenaiConversationsQueryResult = NonNullable<
-  Awaited<ReturnType<typeof listOpenaiConversations>>
->;
-export type ListOpenaiConversationsQueryError = ErrorType<unknown>;
-
-/**
- * @summary List all conversations
- */
-
-export function useListOpenaiConversations<
-  TData = Awaited<ReturnType<typeof listOpenaiConversations>>,
-  TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof listOpenaiConversations>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getListOpenaiConversationsQueryOptions(options);
-
-  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
-    queryKey: QueryKey;
-  };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
 
 /**
  * @summary Create a new conversation
@@ -893,7 +819,7 @@ export const getListOpenaiMessagesQueryKey = (id: number) => {
 
 export const getListOpenaiMessagesQueryOptions = <
   TData = Awaited<ReturnType<typeof listOpenaiMessages>>,
-  TError = ErrorType<unknown>,
+  TError = ErrorType<OpenaiError>,
 >(
   id: number,
   options?: {
@@ -928,7 +854,7 @@ export const getListOpenaiMessagesQueryOptions = <
 export type ListOpenaiMessagesQueryResult = NonNullable<
   Awaited<ReturnType<typeof listOpenaiMessages>>
 >;
-export type ListOpenaiMessagesQueryError = ErrorType<unknown>;
+export type ListOpenaiMessagesQueryError = ErrorType<OpenaiError>;
 
 /**
  * @summary List messages in a conversation
@@ -936,7 +862,7 @@ export type ListOpenaiMessagesQueryError = ErrorType<unknown>;
 
 export function useListOpenaiMessages<
   TData = Awaited<ReturnType<typeof listOpenaiMessages>>,
-  TError = ErrorType<unknown>,
+  TError = ErrorType<OpenaiError>,
 >(
   id: number,
   options?: {
@@ -978,7 +904,7 @@ export const sendOpenaiMessage = async (
 };
 
 export const getSendOpenaiMessageMutationOptions = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<OpenaiError>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<
@@ -1019,13 +945,13 @@ export type SendOpenaiMessageMutationResult = NonNullable<
   Awaited<ReturnType<typeof sendOpenaiMessage>>
 >;
 export type SendOpenaiMessageMutationBody = BodyType<SendOpenaiMessageBody>;
-export type SendOpenaiMessageMutationError = ErrorType<unknown>;
+export type SendOpenaiMessageMutationError = ErrorType<OpenaiError>;
 
 /**
  * @summary Send a text message and receive a streaming text response
  */
 export const useSendOpenaiMessage = <
-  TError = ErrorType<unknown>,
+  TError = ErrorType<OpenaiError>,
   TContext = unknown,
 >(options?: {
   mutation?: UseMutationOptions<

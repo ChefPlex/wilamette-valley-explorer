@@ -9,5 +9,7 @@
 export interface OpenaiConversation {
   id: number;
   title: string;
+  /** Opaque token that must be supplied as X-Conversation-Token for all subsequent requests on this conversation. */
+  sessionToken: string;
   createdAt: Date;
 }

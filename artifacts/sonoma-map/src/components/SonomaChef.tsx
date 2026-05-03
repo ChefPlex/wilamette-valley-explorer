@@ -15,7 +15,12 @@ interface Message {
 const BASE_URL = import.meta.env.BASE_URL ?? "/";
 const API_BASE = `${BASE_URL}api`.replace(/\/+/g, "/").replace(/\/$/, "");
 
-async function createConversation(): Promise<number> {
+interface ConversationHandle {
+  id: number;
+  sessionToken: string;
+}
+
+async function createConversation(): Promise<ConversationHandle> {
   const res = await fetch(`${API_BASE}/openai/conversations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -23,18 +28,22 @@ async function createConversation(): Promise<number> {
   });
   if (!res.ok) throw new Error("Failed to create conversation");
   const data = await res.json();
-  return data.id;
+  return { id: data.id, sessionToken: data.sessionToken };
 }
 
 async function* streamMessage(
   conversationId: number,
+  sessionToken: string,
   content: string
 ): AsyncGenerator<string> {
   const res = await fetch(
     `${API_BASE}/openai/conversations/${conversationId}/messages`,
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Conversation-Token": sessionToken,
+      },
       body: JSON.stringify({ content }),
     }
   );
@@ -76,7 +85,7 @@ export function SonomaChef() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [conversationId, setConversationId] = useState<number | null>(null);
+  const [conversation, setConversation] = useState<ConversationHandle | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -99,12 +108,12 @@ export function SonomaChef() {
     }
   }, [messages]);
 
-  const ensureConversation = useCallback(async (): Promise<number> => {
-    if (conversationId) return conversationId;
-    const id = await createConversation();
-    setConversationId(id);
-    return id;
-  }, [conversationId]);
+  const ensureConversation = useCallback(async (): Promise<ConversationHandle> => {
+    if (conversation) return conversation;
+    const handle = await createConversation();
+    setConversation(handle);
+    return handle;
+  }, [conversation]);
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -119,8 +128,8 @@ export function SonomaChef() {
       setMessages((prev) => [...prev, assistantMsg]);
 
       try {
-        const id = await ensureConversation();
-        const stream = streamMessage(id, trimmed);
+        const handle = await ensureConversation();
+        const stream = streamMessage(handle.id, handle.sessionToken, trimmed);
         for await (const chunk of stream) {
           setMessages((prev) => {
             const updated = [...prev];
@@ -157,7 +166,7 @@ export function SonomaChef() {
 
   const resetChat = () => {
     setMessages([]);
-    setConversationId(null);
+    setConversation(null);
     setInput("");
   };
 

@@ -25,6 +25,11 @@ interface Message {
   content: string;
 }
 
+interface ConversationHandle {
+  id: number;
+  sessionToken: string;
+}
+
 let messageCounter = 0;
 function generateId(): string {
   messageCounter++;
@@ -38,7 +43,7 @@ const PROMPTS = [
   "What makes Joel Palmer House worth it?",
 ];
 
-async function createConversation(apiUrl: string): Promise<number> {
+async function createConversation(apiUrl: string): Promise<ConversationHandle> {
   const res = await fetch(`${apiUrl}api/openai/conversations`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -46,12 +51,13 @@ async function createConversation(apiUrl: string): Promise<number> {
   });
   if (!res.ok) throw new Error("Failed to create conversation");
   const data = await res.json();
-  return data.id;
+  return { id: data.id, sessionToken: data.sessionToken };
 }
 
 async function streamMessage(
   apiUrl: string,
   conversationId: number,
+  sessionToken: string,
   content: string,
   onChunk: (chunk: string) => void
 ): Promise<void> {
@@ -62,6 +68,7 @@ async function streamMessage(
       headers: {
         "Content-Type": "application/json",
         Accept: "text/event-stream",
+        "X-Conversation-Token": sessionToken,
       },
       body: JSON.stringify({ content }),
     }
@@ -150,17 +157,17 @@ export default function ChefScreen() {
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [showTyping, setShowTyping] = useState(false);
-  const [conversationId, setConversationId] = useState<number | null>(null);
+  const [conversation, setConversation] = useState<ConversationHandle | null>(null);
   const inputRef = useRef<TextInput>(null);
 
   const apiUrl = getApiUrl().replace(/\/?$/, "/");
 
-  const ensureConversation = useCallback(async (): Promise<number> => {
-    if (conversationId) return conversationId;
-    const id = await createConversation(apiUrl);
-    setConversationId(id);
-    return id;
-  }, [conversationId, apiUrl]);
+  const ensureConversation = useCallback(async (): Promise<ConversationHandle> => {
+    if (conversation) return conversation;
+    const handle = await createConversation(apiUrl);
+    setConversation(handle);
+    return handle;
+  }, [conversation, apiUrl]);
 
   const handleSend = useCallback(
     async (text: string) => {
@@ -179,8 +186,8 @@ export default function ChefScreen() {
       let firstChunk = true;
 
       try {
-        const id = await ensureConversation();
-        await streamMessage(apiUrl, id, trimmed, (chunk) => {
+        const handle = await ensureConversation();
+        await streamMessage(apiUrl, handle.id, handle.sessionToken, trimmed, (chunk) => {
           if (firstChunk) {
             setShowTyping(false);
             setMessages((prev) => [
@@ -220,7 +227,7 @@ export default function ChefScreen() {
 
   const resetChat = useCallback(() => {
     setMessages([]);
-    setConversationId(null);
+    setConversation(null);
     setInput("");
   }, []);
 

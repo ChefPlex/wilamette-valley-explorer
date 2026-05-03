@@ -33,17 +33,37 @@ export const GetMarkersResponseItem = zod.object({
 export const GetMarkersResponse = zod.array(GetMarkersResponseItem);
 
 /**
- * Add a new marker to the map
+ * Add a new marker to the map. Requires admin key.
  * @summary Create a marker
  */
+export const createMarkerBodyNameMax = 200;
+
+export const createMarkerBodyNoteMax = 2000;
+
+export const createMarkerBodyLatMin = 43;
+export const createMarkerBodyLatMax = 47;
+
+export const createMarkerBodyLngMin = -125;
+export const createMarkerBodyLngMax = -120.5;
+
+export const createMarkerBodyWebsiteMax = 500;
+
+export const createMarkerBodyWebsiteRegExp = new RegExp("^https?:\/");
+export const createMarkerBodyCityMax = 100;
+
 export const CreateMarkerBody = zod.object({
-  name: zod.string(),
-  note: zod.string(),
+  name: zod.string().max(createMarkerBodyNameMax),
+  note: zod.string().max(createMarkerBodyNoteMax),
   category: zod.enum(["winery", "restaurant", "farmstand", "artisan"]),
-  lat: zod.number(),
-  lng: zod.number(),
-  website: zod.string().nullish(),
-  city: zod.string().nullish(),
+  lat: zod.number().min(createMarkerBodyLatMin).max(createMarkerBodyLatMax),
+  lng: zod.number().min(createMarkerBodyLngMin).max(createMarkerBodyLngMax),
+  website: zod
+    .string()
+    .url()
+    .max(createMarkerBodyWebsiteMax)
+    .regex(createMarkerBodyWebsiteRegExp)
+    .nullish(),
+  city: zod.string().max(createMarkerBodyCityMax).nullish(),
 });
 
 /**
@@ -66,20 +86,51 @@ export const GetMarkerResponse = zod.object({
 });
 
 /**
+ * Requires admin key.
  * @summary Update a marker
  */
 export const UpdateMarkerParams = zod.object({
   id: zod.coerce.number(),
 });
 
+export const updateMarkerBodyNameMax = 200;
+
+export const updateMarkerBodyNoteMax = 2000;
+
+export const updateMarkerBodyLatMin = 43;
+export const updateMarkerBodyLatMax = 47;
+
+export const updateMarkerBodyLngMin = -125;
+export const updateMarkerBodyLngMax = -120.5;
+
+export const updateMarkerBodyWebsiteMax = 500;
+
+export const updateMarkerBodyWebsiteRegExp = new RegExp("^https?:\/");
+export const updateMarkerBodyCityMax = 100;
+
 export const UpdateMarkerBody = zod.object({
-  name: zod.string().optional(),
-  note: zod.string().optional(),
+  name: zod.string().max(updateMarkerBodyNameMax).optional(),
+  note: zod.string().max(updateMarkerBodyNoteMax).optional(),
   category: zod
     .enum(["winery", "restaurant", "farmstand", "artisan"])
     .optional(),
-  website: zod.string().nullish(),
-  city: zod.string().nullish(),
+  lat: zod
+    .number()
+    .min(updateMarkerBodyLatMin)
+    .max(updateMarkerBodyLatMax)
+    .optional(),
+  lng: zod
+    .number()
+    .min(updateMarkerBodyLngMin)
+    .max(updateMarkerBodyLngMax)
+    .optional(),
+  website: zod
+    .string()
+    .url()
+    .max(updateMarkerBodyWebsiteMax)
+    .regex(updateMarkerBodyWebsiteRegExp)
+    .nullish(),
+  city: zod.string().max(updateMarkerBodyCityMax).nullish(),
 });
 
 export const UpdateMarkerResponse = zod.object({
@@ -95,23 +146,12 @@ export const UpdateMarkerResponse = zod.object({
 });
 
 /**
+ * Requires admin key.
  * @summary Delete a marker
  */
 export const DeleteMarkerParams = zod.object({
   id: zod.coerce.number(),
 });
-
-/**
- * @summary List all conversations
- */
-export const ListOpenaiConversationsResponseItem = zod.object({
-  id: zod.number(),
-  title: zod.string(),
-  createdAt: zod.coerce.date(),
-});
-export const ListOpenaiConversationsResponse = zod.array(
-  ListOpenaiConversationsResponseItem,
-);
 
 /**
  * @summary Create a new conversation
@@ -174,8 +214,10 @@ export const SendOpenaiMessageParams = zod.object({
   id: zod.coerce.number(),
 });
 
+export const sendOpenaiMessageBodyContentMax = 2000;
+
 export const SendOpenaiMessageBody = zod.object({
-  content: zod.string(),
+  content: zod.string().max(sendOpenaiMessageBodyContentMax),
 });
 
 /**

@@ -3,8 +3,15 @@ import { db, conversations, messages } from "@workspace/db";
 import { eq, asc } from "drizzle-orm";
 import { openai } from "@workspace/integrations-openai-ai-server";
 import { rateLimit } from "express-rate-limit";
+import { randomUUID } from "crypto";
 
 const router: IRouter = Router();
+
+const MAX_MESSAGE_LENGTH = 2000;
+// Maximum number of messages (user + assistant combined) allowed per conversation
+const MAX_MESSAGES_PER_CONVERSATION = 25;
+// Maximum output tokens per OpenAI request — keeps individual response costs bounded
+const MAX_COMPLETION_TOKENS = 1536;
 
 // AI chat (POST .../messages): 8 requests/IP/minute
 const chatLimiter = rateLimit({
@@ -15,7 +22,16 @@ const chatLimiter = rateLimit({
   message: { error: "Too many requests — please wait a moment before asking again." },
 });
 
-// Conversation CRUD: 30 requests/IP/minute
+// Conversation creation: 3 per IP per hour — limits ability to mint fresh tokens at scale
+const createConversationLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 3,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many new conversations — please wait before starting another." },
+});
+
+// Conversation CRUD reads/deletes: 30 requests/IP/minute
 const conversationLimiter = rateLimit({
   windowMs: 60 * 1000,
   max: 30,
@@ -94,21 +110,19 @@ function parseId(raw: string): number | null {
   return isNaN(id) ? null : id;
 }
 
-router.get("/openai/conversations", conversationLimiter, async (req, res) => {
-  try {
-    const all = await db.select().from(conversations).orderBy(asc(conversations.createdAt));
-    res.json(all.map(c => ({ ...c, createdAt: c.createdAt.toISOString() })));
-  } catch (err) {
-    req.log.error({ err }, "Failed to list conversations");
-    res.status(500).json({ error: "Failed to list conversations" });
-  }
-});
+// Validate that the request carries the correct session token for a conversation
+function getRequestToken(req: import("express").Request): string | null {
+  const header = req.headers["x-conversation-token"];
+  if (typeof header === "string" && header.length > 0) return header;
+  return null;
+}
 
-router.post("/openai/conversations", conversationLimiter, async (req, res) => {
+router.post("/openai/conversations", createConversationLimiter, async (req, res) => {
   try {
     const { title } = req.body;
     if (!title) { res.status(400).json({ error: "title required" }); return; }
-    const [conv] = await db.insert(conversations).values({ title }).returning();
+    const sessionToken = randomUUID();
+    const [conv] = await db.insert(conversations).values({ title, sessionToken }).returning();
     res.status(201).json({ ...conv, createdAt: conv.createdAt.toISOString() });
   } catch (err) {
     req.log.error({ err }, "Failed to create conversation");
@@ -120,8 +134,14 @@ router.get("/openai/conversations/:id", conversationLimiter, async (req, res) =>
   try {
     const id = parseId(req.params.id);
     if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
+
+    const token = getRequestToken(req);
+    if (!token) { res.status(401).json({ error: "Missing conversation token" }); return; }
+
     const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
     if (!conv) { res.status(404).json({ error: "Not found" }); return; }
+    if (conv.sessionToken !== token) { res.status(403).json({ error: "Forbidden" }); return; }
+
     const msgs = await db.select().from(messages).where(eq(messages.conversationId, id)).orderBy(asc(messages.createdAt));
     res.json({
       ...conv,
@@ -138,8 +158,15 @@ router.delete("/openai/conversations/:id", conversationLimiter, async (req, res)
   try {
     const id = parseId(req.params.id);
     if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
-    const [deleted] = await db.delete(conversations).where(eq(conversations.id, id)).returning();
-    if (!deleted) { res.status(404).json({ error: "Not found" }); return; }
+
+    const token = getRequestToken(req);
+    if (!token) { res.status(401).json({ error: "Missing conversation token" }); return; }
+
+    const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
+    if (!conv) { res.status(404).json({ error: "Not found" }); return; }
+    if (conv.sessionToken !== token) { res.status(403).json({ error: "Forbidden" }); return; }
+
+    await db.delete(conversations).where(eq(conversations.id, id));
     res.status(204).end();
   } catch (err) {
     req.log.error({ err }, "Failed to delete conversation");
@@ -151,6 +178,14 @@ router.get("/openai/conversations/:id/messages", conversationLimiter, async (req
   try {
     const id = parseId(req.params.id);
     if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
+
+    const token = getRequestToken(req);
+    if (!token) { res.status(401).json({ error: "Missing conversation token" }); return; }
+
+    const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
+    if (!conv) { res.status(404).json({ error: "Not found" }); return; }
+    if (conv.sessionToken !== token) { res.status(403).json({ error: "Forbidden" }); return; }
+
     const msgs = await db.select().from(messages).where(eq(messages.conversationId, id)).orderBy(asc(messages.createdAt));
     res.json(msgs.map(m => ({ ...m, createdAt: m.createdAt.toISOString() })));
   } catch (err) {
@@ -168,11 +203,25 @@ router.post("/openai/conversations/:id/messages", chatLimiter, async (req, res) 
     const id = parseId(req.params.id);
     if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
 
+    const token = getRequestToken(req);
+    if (!token) { res.status(401).json({ error: "Missing conversation token" }); return; }
+
     const { content } = req.body;
     if (!content) { res.status(400).json({ error: "content required" }); return; }
+    if (typeof content !== "string" || content.length > MAX_MESSAGE_LENGTH) {
+      res.status(400).json({ error: `Message exceeds maximum length of ${MAX_MESSAGE_LENGTH} characters` });
+      return;
+    }
 
     const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
     if (!conv) { res.status(404).json({ error: "Conversation not found" }); return; }
+    if (conv.sessionToken !== token) { res.status(403).json({ error: "Forbidden" }); return; }
+
+    const existingMessages = await db.select().from(messages).where(eq(messages.conversationId, id));
+    if (existingMessages.length >= MAX_MESSAGES_PER_CONVERSATION) {
+      res.status(429).json({ error: "Conversation message limit reached. Please start a new conversation." });
+      return;
+    }
 
     await db.insert(messages).values({ conversationId: id, role: "user", content });
 
@@ -200,7 +249,7 @@ router.post("/openai/conversations/:id/messages", chatLimiter, async (req, res) 
 
     const stream = await openai.chat.completions.create({
       model: "gpt-5.2",
-      max_completion_tokens: 8192,
+      max_completion_tokens: MAX_COMPLETION_TOKENS,
       messages: chatMessages,
       stream: true,
     }, { signal: controller.signal });

@@ -8,6 +8,8 @@
 export interface OpenaiConversation {
   id: number;
   title: string;
+  /** Opaque token that must be supplied as X-Conversation-Token for all subsequent requests on this conversation. */
+  sessionToken: string;
   createdAt: string;
 }
 
@@ -24,6 +26,7 @@ export interface CreateOpenaiConversationBody {
 }
 
 export interface SendOpenaiMessageBody {
+  /** @maxLength 2000 */
   content: string;
 }
 
@@ -75,12 +78,27 @@ export const CreateMarkerInputCategory = {
 } as const;
 
 export interface CreateMarkerInput {
+  /** @maxLength 200 */
   name: string;
+  /** @maxLength 2000 */
   note: string;
   category: CreateMarkerInputCategory;
+  /**
+   * @minimum 43
+   * @maximum 47
+   */
   lat: number;
+  /**
+   * @minimum -125
+   * @maximum -120.5
+   */
   lng: number;
+  /**
+   * @maxLength 500
+   * @pattern ^https?://
+   */
   website?: string | null;
+  /** @maxLength 100 */
   city?: string | null;
 }
 
@@ -95,10 +113,27 @@ export const UpdateMarkerInputCategory = {
 } as const;
 
 export interface UpdateMarkerInput {
+  /** @maxLength 200 */
   name?: string;
+  /** @maxLength 2000 */
   note?: string;
   category?: UpdateMarkerInputCategory;
+  /**
+   * @minimum 43
+   * @maximum 47
+   */
+  lat?: number;
+  /**
+   * @minimum -125
+   * @maximum -120.5
+   */
+  lng?: number;
+  /**
+   * @maxLength 500
+   * @pattern ^https?://
+   */
   website?: string | null;
+  /** @maxLength 100 */
   city?: string | null;
 }
 
