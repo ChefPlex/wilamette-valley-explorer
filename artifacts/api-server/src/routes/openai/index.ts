@@ -203,9 +203,6 @@ router.post("/openai/conversations/:id/messages", chatLimiter, async (req, res) 
     const id = parseId(req.params.id);
     if (id === null) { res.status(400).json({ error: "Invalid id" }); return; }
 
-    const token = getRequestToken(req);
-    if (!token) { res.status(401).json({ error: "Missing conversation token" }); return; }
-
     const { content } = req.body;
     if (!content) { res.status(400).json({ error: "content required" }); return; }
     if (typeof content !== "string" || content.length > MAX_MESSAGE_LENGTH) {
@@ -215,7 +212,13 @@ router.post("/openai/conversations/:id/messages", chatLimiter, async (req, res) 
 
     const [conv] = await db.select().from(conversations).where(eq(conversations.id, id));
     if (!conv) { res.status(404).json({ error: "Conversation not found" }); return; }
-    if (conv.sessionToken !== token) { res.status(403).json({ error: "Forbidden" }); return; }
+
+    // Token check: if a token is supplied it must match (rejects token guessing).
+    // If no token is supplied, allow the request — backward-compatible with
+    // 2.5.1 TestFlight binaries that predate the session-token change.
+    // Remove this exemption once the 2.6.0 binary is the minimum supported version.
+    const token = getRequestToken(req);
+    if (token && conv.sessionToken !== token) { res.status(403).json({ error: "Forbidden" }); return; }
 
     const existingMessages = await db.select().from(messages).where(eq(messages.conversationId, id));
     if (existingMessages.length >= MAX_MESSAGES_PER_CONVERSATION) {
