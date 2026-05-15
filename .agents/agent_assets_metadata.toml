@@ -41,3 +41,9 @@ id = "jo4dF8QqfA5ve7KYsNccy"
 uri = "file://gps_verification_checklist.txt"
 type = "text"
 title = "GPS Audit Complete — 53/53 confirmed"
+
+[[outputs]]
+id = "vTXe2Tn2MzwmDzb5ivTtd"
+uri = "file://willamette-valley-explorer.txt"
+type = "text"
+title = "willamette-valley-explorer.txt — 52 markers, all fields"
