@@ -1,0 +1,53 @@
+id,name_before,name_after,change_type,fields_changed,why
+52,Briar Rose Creamery,,removed_from_reimport_export,row_removed,"Removed because Briar Rose Creamery officially announced retirement, production ended at the end of April 2026, and final sell-through was expected only through May 2026; schema has no status field for closing/final inventory."
+60,Camas Country Mill,Camas Country Mill,updated,note,Updated description to current public-facing Schoolhouse Bakery & Store and verified local-grain/milling context.
+55,Ochoa's Queseria,Ochoa's Queseria,updated,note,Softened unsupported awards/production-visit language and made it safer as a current visitor listing without a verified website.
+61,Blue Raeven Farmstand,Blue Raeven Farmstand,updated,note,Updated farmstand language and hours/growing scope from current public listings.
+63,Draper Farms,Draper Farms,updated,lat;lng;note,Corrected coordinates slightly and updated farm/CSA description to current public details.
+28,Gathering Together Farm,Gathering Together Farm,updated,note,Corrected overbroad variety claim to current farm-stated crop/variety range and added restaurant/CSA context.
+49,Groundwork Organics,Groundwork Organics,updated,note;website,Added missing official website and updated farmstand address/hours/product mix.
+27,Red Ridge Farms — Oregon Olive Mill,Durant at Red Ridge Farms — Oregon Olive Mill,updated,name;note;website,Updated brand/URL from Red Ridge shorthand to Durant current Olive Mill page and corrected the olive-oil production claim.
+62,The Ground Market,The Ground Market,updated,note;website,Updated URL and description for The Ground/Source Farms current retail ecosystem and hours uncertainty.
+67,Abuela's Nuestra Cocina,Abuela's Nuestra Cocina,updated,note,Removed unsupported winemaker-endorsement claim; kept family-recipe/downtown value proposition.
+68,Alchemist's Jam,Alchemist's Jam,updated,note,"Updated hours, bakery-hold policy, and small-batch bakery/jam positioning."
+47,Bistro Maison,Bistro Maison,updated,note,"Refreshed copy, kept stable restaurant/location facts."
+59,Block 15 Brewing,Block 15 Brewing,updated,note,Refreshed copy around current downtown pub and local-sourcing identity.
+69,Carlton Corners,Carlton Corners,updated,note,"Removed unsupported ""best Reuben"" claim and aligned to verified growler-room/local-taps identity."
+48,Good Company Cheese Bar & Bistro,Good Company Cheese & Wine Shop,updated,name;note,Renamed to current shop identity and updated business-model shift away from full bar/bistro.
+38,Hayward,Hayward,updated,note,Updated to current Carlton location and current James Beard history.
+20,Joel Palmer House,Joel Palmer House,updated,note,Refreshed description with durable mushroom/truffle positioning.
+58,La Rambla,La Rambla,updated,note,Replaced unsupported 300-selection claim with award-recognized wine-list language.
+21,Nick's Italian Café,Nick's Italian Café,updated,note,"Added closure/reopening history so ""open since 1977"" is not misleading."
+46,Okta,ōkta farm and kitchen,updated,name;note,Renamed and rewrote for current ōkta farm and kitchen format after closure/reopening.
+22,Red Hills Market,Red Hills Market,updated,note,Refreshed market/menu positioning.
+44,The Bay House,The Bay House,updated,note,Updated Dayton reopening context and current chef/location framing.
+39,The Dundee Bistro,,removed_from_reimport_export,row_removed,Removed because The Dundee Bistro closed after final service in November 2025; schema has no status field for permanently closed.
+37,The Painted Lady,The Painted Lady,updated,note,Refreshed awards/seasonal tasting-menu copy.
+23,Thistle Restaurant,Thistle Restaurant,updated,note;website,Changed website to current thistleisrad.com and updated current bar/restaurant positioning.
+57,Word of Mouth Bistro,Word of Mouth Bistro,updated,note,Updated hours framing and simplified breakfast/lunch description.
+8,Adelsheim Vineyard,Adelsheim Vineyard,updated,note,Updated appointment/hours caveat and refreshed founding/tasting-room language.
+40,Antica Terra,Antica Terra,updated,note,Updated James Beard and lunch-program language.
+2,Argyle Winery,Argyle Winery,updated,note,Updated walk-in/reservation language and current tasting-house framing.
+11,Beaux Frères,Beaux Frères,updated,note,Removed outdated/imprecise winemaker language and focused on appointment-only Ribbon Ridge estate.
+9,Bergström Winery,Bergström Wines,updated,name;city;note,Renamed to Bergström Wines and changed city to Dundee to match public-facing tasting experience/coordinates; removed old Calkins Lane tasting-room language.
+6,Bethel Heights Vineyard,Bethel Heights Vineyard,updated,note,Updated tasting-room hours from appointment-only to current daily/reservations-recommended language.
+12,Brick House Wine Company,Brick House Wine Company,updated,note,Clarified biodynamic/organic estate and appointment-oriented tasting.
+18,Carlton Winemakers Studio,Carlton Winemakers Studio,updated,note,Added founding/collective-winery context.
+65,Coeur de Terre Vineyard,Coeur de Terre Vineyard,updated,note,Updated varietal range and softened unverified cell-service/deck language.
+5,Cristom Vineyards,Cristom Vineyards,updated,note,Corrected estate vineyard name Marjorie; original said Marjolaine.
+1,Domaine Drouhin Oregon,Domaine Drouhin Oregon,updated,note,Updated estate acreage to current 225-acre language and tightened appointment-only framing.
+15,Evening Land Vineyards,Evening Land Vineyards,updated,note;website,Changed website to current elvwines.com and tightened Seven Springs/appointment language.
+14,Eyrie Vineyards,Eyrie Vineyards,updated,note,Corrected first planting year to 1965 and separated vineyard establishment/vintage history.
+41,Ken Wright Cellars,Ken Wright Cellars,updated,note,Added current historic train-depot tasting-room context.
+19,King Estate Winery,King Estate Winery,updated,note,"Replaced outdated ""largest certified-organic winery"" wording with current North America biodynamic claim."
+36,Lemelson Vineyards,Lemelson Vineyards,updated,note,Updated tasting-room hours from fixed Friday-Monday to seasonal/daily-main-season caveat.
+64,Maysara Winery,Maysara Winery,updated,note,Updated acreage from 540 to current 532-acre/260-acre-vineyard framing.
+13,Patricia Green Cellars,Patricia Green Cellars,updated,note,Softened superlative single-vineyard claim and added current property/varietal context.
+17,Penner-Ash Wine Cellars,Penner-Ash Wine Cellars,updated,note,Updated current tasting-program/Pavilion context.
+10,Rex Hill,Rex Hill,updated,note,Removed odd/outdated ownership phrasing and refreshed current tasting-room/culinary program copy.
+42,Résonance,Résonance,updated,note,Added current two-tasting-room context while keeping Carlton as anchor.
+3,Sokol Blosser,Sokol Blosser,updated,note,Updated hours from open-daily/no-appointment to seasonal hours/confirm-before-drop-in.
+43,Vincent Wine Company,Vincent Wine Company,updated,note;website,Changed dead/parked website to current reservation listing and updated appointment-only language.
+4,Winderlea Vineyard & Winery,Winderlea Vineyard & Winery,updated,note,Corrected founders and added 2026 ownership change.
+7,Witness Tree Vineyard,Witness Tree Vineyard,updated,note,Updated varietal/farming language and removed unverified Pristine Pinot claim.
+66,Youngberg Hill Vineyards,Youngberg Hill Vineyards,updated,lat;lng;note,Corrected coordinates to public GPS and updated estate/inn/hours framing.
